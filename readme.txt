@@ -4,7 +4,7 @@ Contributors: MyWebsiteAdvisor, ChrisHurst
 Tags: Backup, Archive, Restore, Recover, Recovery
 Requires at least: 2.9
 Tested up to: 3.4.2
-Stable tag: 1.0
+Stable tag: 1.1
 
 Create and Download backups of your wordpress website.
 
@@ -22,14 +22,14 @@ If the plugin can not locate or create the directory you will receive an error m
 
 
 
-Developer Website: http://MyWebsiteAdvisor.com
+Developer Website: http://MyWebsiteAdvisor.com/
 
 Plugin Page: http://MyWebsiteAdvisor.com/tools/wordpress-plugins/simple-backup/
 
 Video Tutorial: http://mywebsiteadvisor.com/learning/video-tutorials/simple-backup-tutorial/
 
 We are looking for testimonials and live examples of our plugins on your website!  
-Please submit your website or testimonial here: http://MyWebsiteAdvisor.com/testimonials  
+Please submit your website or testimonial here: http://MyWebsiteAdvisor.com/testimonials/  
 If we choose your testimonial or website we can link to your site and generate some free traffic for you!
 
 
@@ -58,14 +58,14 @@ Please specify as much information as you can to help me debug the problem. Chec
 
 
 
-Developer Website: http://MyWebsiteAdvisor.com
+Developer Website: http://MyWebsiteAdvisor.com/
 
 Plugin Page: http://MyWebsiteAdvisor.com/tools/wordpress-plugins/simple-backup/
 
 Video Tutorial: http://mywebsiteadvisor.com/learning/video-tutorials/simple-backup-tutorial/
 
 We are looking for testimonials and live examples of our plugins on your website!
-Please submit your website or testimonial here: http://MyWebsiteAdvisor.com/testimonials
+Please submit your website or testimonial here: http://MyWebsiteAdvisor.com/testimonials/
 If we choose your testimonial or website we can link to your site and generate some free traffic for you!
 
 
@@ -81,3 +81,5 @@ If we choose your testimonial or website we can link to your site and generate s
 = 1.0 =
 * Initial release
 
+= 1.1 =
+* Fixed some of the links for support

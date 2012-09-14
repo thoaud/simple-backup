@@ -60,7 +60,7 @@ class Simple_Backup_Admin extends Simple_Backup {
 	 */
 	public function add_plugin_links($links, $file) {
 		if($file == plugin_basename(SB_LOADER)) {
-			$links[] = '<a href="http://MyWebsiteAdvisor.com">Visit Us Online</a>';
+			$links[] = '<a href="http://MyWebsiteAdvisor.com/">Visit Us Online</a>';
 		}
 		
 		return $links;
@@ -220,9 +220,9 @@ class Simple_Backup_Admin extends Simple_Backup {
 
 
 <?php $this->HtmlPrintBoxHeader('pl_resources',__('Plugin Resources','resources'),true); ?>
-	<p><a href='http://mywebsiteadvisor.com/wordpress-plugins/simple-backup' target='_blank'>Plugin Homepage</a></p>
-	<p><a href='http://mywebsiteadvisor.com/contact-us'  target='_blank'>Plugin Support</a></p>
-	<p><a href='http://mywebsiteadvisor.com/contact-us'  target='_blank'>Suggest a Feature</a></p>
+	<p><a href='http://mywebsiteadvisor.com/wordpress-plugins/simple-backup/' target='_blank'>Plugin Homepage</a></p>
+	<p><a href='http://mywebsiteadvisor.com/contact-us/'  target='_blank'>Plugin Support</a></p>
+	<p><a href='http://mywebsiteadvisor.com/contact-us/'  target='_blank'>Suggest a Feature</a></p>
 <?php $this->HtmlPrintBoxFooter(true); ?>
 
 </div>
