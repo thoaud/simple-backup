@@ -6,7 +6,7 @@ class Simple_Backup {
 	 *
 	 * @var string
 	 */
-	public $version                 = '1.1';
+	public $version                 = '1.2';
 	
 	/**
 	 * Array with default options
@@ -14,7 +14,11 @@ class Simple_Backup {
 	 * @var array
 	 */
 	protected $_options             = array(
-		'enabled' => true
+		'enabled' => true,
+		'db_backup' => true,
+		'db_compression' => '.sql',
+		'file_backup' => true,
+		'file_compression' => ".tar.gz"
 	);
 	
 	/**
@@ -95,6 +99,9 @@ class Simple_Backup {
 			add_option($option, $value, null, 'no');	
 		}
 	}
+	
+	
+
 	
 	
 }

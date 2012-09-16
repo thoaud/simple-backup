@@ -28,7 +28,11 @@ class Simple_Backup_Admin extends Simple_Backup {
 			
 			header("Location: " . $this->_settings_url);
 			die();	
-		
+		}elseif(array_key_exists('delete_backup_file', $_GET)){
+			$this->deleteBackupFile($_GET['delete_backup_file']);
+			
+			header("Location: " . $this->_settings_url);
+			die();	
 		} else {
 			// register installer function
 			register_activation_hook(TW_LOADER, array(&$this, 'activateSimpleBackup'));
@@ -110,7 +114,106 @@ class Simple_Backup_Admin extends Simple_Backup {
 	}
 
 
-
+	public function performDatabaseBackup(){
+	
+		$bk_dir = ABSPATH."simple-backup";
+		
+		
+		$db_compression = get_option('db_compression');
+		
+		//the syntax for mysqldump requires that there is NOT a space between the -p and the password
+		if($db_compression == ".sql"){
+			$db_bk_file = $bk_dir . "/db_backup_".date('Y-m-d_His').".sql";
+			$command = "mysqldump -u ".DB_USER." -p'".DB_PASSWORD."' ".DB_NAME." > $db_bk_file";
+			
+		}elseif($db_compression == ".sql.gz"){
+			$db_bk_file = $bk_dir . "/db_backup_".date('Y-m-d_His').".sql.gz";
+			$command = "mysqldump -u ".DB_USER." -p'".DB_PASSWORD."' ".DB_NAME." | gzip -c > $db_bk_file ";
+			
+		}elseif($db_compression == ".sql.bz2"){
+			$db_bk_file = $bk_dir . "/db_backup_".date('Y-m-d_His').".sql.bz2";
+			$command = "mysqldump -u ".DB_USER." -p'".DB_PASSWORD."' ".DB_NAME." | bzip2 -cq9 > $db_bk_file";
+	
+		}elseif($db_compression == ".sql.zip"){
+			$db_bk_file = $bk_dir . "/db_backup_".date('Y-m-d_His').".sql.zip";
+			$command = "mysqldump -u ".DB_USER." -p'".DB_PASSWORD."' ".DB_NAME." | zip > $db_bk_file";
+		}
+		
+	
+		echo "<br>";
+		echo "<b>Executing Command:</b><br>$command";
+		
+		ob_flush();
+		flush();
+		
+		echo "<br>";
+		exec($command);
+		echo "<br>";
+		
+		echo "Done!";
+		echo "<br>";
+		
+		ob_flush();
+		flush();
+				
+	}
+	
+	
+	public function performWebsiteBackup(){
+	
+		$bk_dir = ABSPATH."simple-backup";
+		//$bk_name = "$bk_dir/backup-".date('Y-m-d-His').".tar.gz";
+		$src_name = ABSPATH;
+		$exclude = $bk_dir;
+		
+		$file_compression = get_option('file_compression');
+		
+		
+		if($file_compression == ".tar.gz"){
+			$bk_name = "$bk_dir/backup-".date('Y-m-d-His').".tar.gz";
+			$command = "tar cvfz $bk_name $src_name --exclude=$exclude";
+			
+		}elseif($file_compression == ".tar.bz2"){
+			$bk_name = "$bk_dir/backup-".date('Y-m-d-His').".tar.bz2";
+			$command = "tar jcvf $bk_name $src_name --exclude=$exclude";
+			
+		}elseif($file_compression == ".tar"){
+			$bk_name = "$bk_dir/backup-".date('Y-m-d-His').".tar";
+			$command = "tar cvf $bk_name $src_name --exclude=$exclude";
+			
+		}elseif($file_compression == ".zip"){
+			$bk_name = "$bk_dir/backup-".date('Y-m-d-His').".zip";
+			$command = "zip -r $bk_name $src_name -x $exclude/*";
+		}
+		
+		
+	
+		
+		echo "<br>";
+		echo "<b>Executing Command:</b><br>$command";
+		
+		ob_flush();
+		flush();
+		
+		echo "<br>";
+		exec($command);
+		echo "<br>";
+		
+		echo "Done!";
+		echo "<br>";
+		
+		ob_flush();
+		flush();
+	
+	}
+	
+	public function deleteBackupFile($filename){
+	
+		$bk_dir = ABSPATH."simple-backup/";
+		echo $bk_dir . $filename;
+		unlink($bk_dir . $filename);
+	
+	}
 
 	
 	
@@ -207,6 +310,35 @@ class Simple_Backup_Admin extends Simple_Backup {
 				
 				echo "<p>Server OS: ".PHP_OS."</p>";
 				
+				
+				
+				if(exec('type tar')){
+					echo "<p>Command 'tar' is enabled!</p>";
+				}else{
+					echo "<p>Command 'tar' is was not found!</p>";
+				}
+				
+				if(exec('type gzip')){
+					echo "<p>Command 'gzip' is enabled!</p>";
+				}else{
+					echo "<p>Command 'gzip' is was not found!</p>";
+				}
+				
+				if(exec('type bzip2')){
+					echo "<p>Command 'bzip2' is enabled!</p>";
+				}else{
+					echo "<p>Command 'bzip2' is was not found!</p>";
+				}
+				
+				if(exec('type zip')){
+					echo "<p>Command 'zip' is enabled!</p>";
+				}else{
+					echo "<p>Command 'zip' is was not found!</p>";
+				}
+				
+			
+				
+				
 				echo "<p>Required PHP Version: 5.0+<br>";
 				echo "Current PHP Version: " . phpversion() . "</p>";
 				
@@ -233,9 +365,80 @@ class Simple_Backup_Admin extends Simple_Backup {
 	<div class="has-sidebar sm-padded" >			
 		<div id="post-body-content" class="has-sidebar-content">
 			<div class="meta-box-sortabless">
+	
+	
+	
+			<?php $this->HtmlPrintBoxHeader('wm_dir',__('Simple Backup Settings','backup-settings'),false); ?>	
 			
-								
-			<?php $this->HtmlPrintBoxHeader('wm_dir',__('Create Backup','watermark-directory'),false); ?>					
+				<form method='post'>
+					<?php $file_compression = $this->get_option('file_compression'); ?>
+					<?php $bk_types = array(".tar.gz", ".tar.bz2", ".tar", ".zip"); ?>
+					
+					<p><b>File Backup Type:</b><br /><select  name='file_compression'>
+						<option >Select a Backup Type...</option>
+						
+						<?php
+							foreach($bk_types as $bk_type){
+								if ($bk_type == $file_compression){
+									echo "<option selected='selected'>$bk_type</option>";
+								}else{
+									echo "<option>$bk_type</option>";
+								}
+							}
+						
+						?>
+						
+					</select>
+					</p>
+					
+					
+					
+					<?php $db_compression = $this->get_option('db_compression'); ?>
+					<?php $db_bk_types = array(".sql.gz", ".sql.bz2", ".sql", ".sql.zip"); ?>
+					
+						<p><b>Database Backup Type:</b><br /><select  name='db_compression'>
+						<option >Select a Backup Type...</option>
+						
+						<?php
+							foreach($db_bk_types as $db_type){
+								if ($db_type == $db_compression){
+									echo "<option selected='selected'>$db_type</option>";
+								}else{
+									echo "<option>$db_type</option>";
+								}
+							}
+						
+						?>
+						
+					</select>
+					</p>
+					
+					
+					<p><b>What do you want to back up?</b></p>
+					
+					<?php $file_backup = $this->get_option('file_backup'); ?>
+					<?php if($file_backup === "true"){$selected = "checked='checked'";}else{$selected="";}; ?>
+					<p><input name='file_backup' type='checkbox' value='true' <?php echo $selected; ?> /> Backup Files</p>
+					
+					
+					<?php $db_backup = $this->get_option('db_backup'); ?>
+					<?php if($db_backup === "true"){$selected = "checked='checked'";}else{$selected="";}; ?>
+					<p><input name='db_backup' type='checkbox' value='true' <?php echo $selected; ?> /> Backup Database</p>
+				
+				
+				
+					
+					<input type="submit" name='Submit' value='Save Settings' />
+				
+				</form>
+			
+			
+			<?php $this->HtmlPrintBoxFooter(false); ?>
+			
+			
+			
+						
+			<?php $this->HtmlPrintBoxHeader('wm_dir',__('Create Backup','create-backups'),false); ?>					
 				
 				<?php 
 					/**
@@ -278,31 +481,11 @@ class Simple_Backup_Admin extends Simple_Backup {
 
 			<?php
 			echo "<form method='post'>";
-			echo "<input type='hidden' name='watermark_backup' value='$base_dir'>";
+			echo "<input type='hidden' name='simple-backup' value='$base_dir'>";
 			echo "<input type='submit' value='Create Backup'>";
 			echo "</form>";
 			
 			$bk_dir = ABSPATH."simple-backup";
-			
-			if(array_key_exists('watermark_backup', $_POST)) {
-			
-				$bk_name = "$bk_dir/backup-".date('Y-m-d-His').".tgz";
-				$src_name = ABSPATH;
-				$exclude = $bk_dir;
-				
-				$command = "tar cvfz $bk_name $src_name --exclude=$exclude";
-				
-				echo "<br>";
-				echo "executing command: $command";
-				echo "<br>";
-				exec($command);
-				echo "<br>";
-				
-			
-			}
-			
-			
-			
 			
 			if(!is_dir($bk_dir)){
 				mkdir($bk_dir);
@@ -312,23 +495,78 @@ class Simple_Backup_Admin extends Simple_Backup {
 				echo "Can not access: $bk_dir<br>";
 			}
 			
+			if(array_key_exists('simple-backup', $_POST)) {
+			
+				if($this->get_option('file_backup') === "true"){
+					
+					$this->performWebsiteBackup();
+					
+				}
+				
+				if($this->get_option('db_backup') === "true"){
+
+					$this->performDatabaseBackup();
+
+				}
+				
+			}
+			?>
+			
+			<?php $this->HtmlPrintBoxFooter(false); ?>
+			
+			
+			
+			
+			<?php $this->HtmlPrintBoxHeader('wm_dir',__('Download Backups','download-backups'),false); ?>	
+			<?
+		
+			$allowed_file_types = array('gz', 'sql', 'zip', 'tar', 'bz2');
+			
+			$bk_file_count = 0;
+			
+			echo "<table width='100%'>";
+			echo "<tr>";
+				echo "<td>Delete</td>";
+				echo "<td>Download</td>";
+				echo "<td>Size</td>";
+				echo "<td>Date</td>";
+			echo "</tr>";
+			
 			$iterator = new RecursiveDirectoryIterator($bk_dir);
 			foreach (new RecursiveIteratorIterator($iterator, RecursiveIteratorIterator::CHILD_FIRST) as  $file) {
 				$file_info = pathinfo($file->getFilename());
-				if($file->isFile() && strtolower($file_info['extension']) == 'tgz'){ //create list of files
+				if($file->isFile() && in_array(strtolower($file_info['extension']), $allowed_file_types)){ //create list of files
 				
 					$fileUrl = site_url()."/simple-backup/".$file->getFilename();
 					$filePath = ABSPATH."/simple-backup/".$file->getFilename();
 					
-					echo "<p><a  href='$fileUrl' target='_blank'>" . $file->getFilename() . "</a> : ";
-					echo number_format(filesize($filePath), 0) . " bytes   ";
-					echo date("Y-m-d H:i:s", filectime($filePath));
-					echo "</p>";
+					echo "<tr>";
+					echo "<td><a href='".$this->_settings_url."&delete_backup_file=".$file->getFilename()."' title='Delete Backup File'>X</a></td>";
+					echo "<td><a  href='$fileUrl' target='_blank' title='Download Backup File'>" . $file->getFilename() . "</a></td>";
+					echo "<td>" . number_format(filesize($filePath), 0) . " bytes</td>";
+					echo "<td>" . date("Y-m-d H:i:s", filectime($filePath)) . "</td>";
+					echo "</tr>";
+					
+					$bk_file_count++;
 					
 				}
 			}
+			
+			echo "</table><br>";
+			
+			if($bk_file_count == 0){
+			
+				echo "No backup files have been created yet.<br>Please click on the 'Create Backup' button above to create a backup.";
+			
+			}else{
+			
+				echo "Please click on a file to download it, click on the 'X' next to each file to delete it once it has finished downloading.<br>";
+				echo "<b>Remember if you are doing a backup of both files and database, you need to download both backup files!<b>";
+			
+			}
 		
-		
+
+
 			?>
 		<?php $this->HtmlPrintBoxFooter(false); ?>
 		

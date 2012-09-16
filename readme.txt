@@ -4,7 +4,7 @@ Contributors: MyWebsiteAdvisor, ChrisHurst
 Tags: Backup, Archive, Restore, Recover, Recovery
 Requires at least: 2.9
 Tested up to: 3.4.2
-Stable tag: 1.1
+Stable tag: 1.2
 
 Create and Download backups of your wordpress website.
 
@@ -13,7 +13,7 @@ Create and Download backups of your wordpress website.
 
 Simple Backup Plugin for WordPress create and download backups of your WordPress website.
 
-Requires linux style server with tar and gzip for backup file creation.
+Requires linux style server with tar, gzip, bzip or zip for backup file creation.
 
 This plugin will create a directory in the root of your WordPress directory called 'simple-backup' to store the backup files.
 If the plugin can not locate or create the directory you will receive an error message and may have to create the directory manually, the directory will also need to be writable by the web server so you may need to chmod it.
@@ -83,3 +83,9 @@ If we choose your testimonial or website we can link to your site and generate s
 
 = 1.1 =
 * Fixed some of the links for support
+
+= 1.2 =
+* Added support for alternative methods of backup and compression
+* Added ability to back up wordpress database
+* Improved plugin diagnostic functionality to check for backup and compression functions
+
