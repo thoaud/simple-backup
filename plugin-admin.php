@@ -210,7 +210,7 @@ class Simple_Backup_Admin extends Simple_Backup {
 	public function deleteBackupFile($filename){
 	
 		$bk_dir = ABSPATH."simple-backup/";
-		echo $bk_dir . $filename;
+		//echo $bk_dir . $filename;
 		unlink($bk_dir . $filename);
 	
 	}
@@ -312,37 +312,46 @@ class Simple_Backup_Admin extends Simple_Backup {
 				
 				
 				
+				echo "<p>";
+				
 				if(exec('type tar')){
-					echo "<p>Command 'tar' is enabled!</p>";
+					echo "Command 'tar' is enabled!</br>";
 				}else{
-					echo "<p>Command 'tar' is was not found!</p>";
+					echo "Command 'tar' was not found!</br>";
 				}
 				
 				if(exec('type gzip')){
-					echo "<p>Command 'gzip' is enabled!</p>";
+					echo "Command 'gzip' is enabled!</br>";
 				}else{
-					echo "<p>Command 'gzip' is was not found!</p>";
+					echo "Command 'gzip' was not found!</br>";
 				}
 				
 				if(exec('type bzip2')){
-					echo "<p>Command 'bzip2' is enabled!</p>";
+					echo "Command 'bzip2' is enabled!</br>";
 				}else{
-					echo "<p>Command 'bzip2' is was not found!</p>";
+					echo "Command 'bzip2' was not found!</br>";
 				}
 				
 				if(exec('type zip')){
-					echo "<p>Command 'zip' is enabled!</p>";
+					echo "Command 'zip' is enabled!</br>";
 				}else{
-					echo "<p>Command 'zip' is was not found!</p>";
+					echo "Command 'zip' was not found!</br>";
 				}
 				
+				if(exec('type mysqldump')){
+					echo "Command 'mysqldump' is enabled!</br>";
+				}else{
+					echo "Command 'mysqldump' was not found!</br>";
+				}
 			
+				echo "</p>";
 				
 				
 				echo "<p>Required PHP Version: 5.0+<br>";
 				echo "Current PHP Version: " . phpversion() . "</p>";
 				
 				echo "<p>Memory Use: " . number_format(memory_get_usage()/1024/1024, 1) . " / " . ini_get('memory_limit') . "</p>";
+				
 				echo "<p>Peak Memory Use: " . number_format(memory_get_peak_usage()/1024/1024, 1) . " / " . ini_get('memory_limit') . "</p>";
 				
 				?>
