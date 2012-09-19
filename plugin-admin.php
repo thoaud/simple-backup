@@ -114,6 +114,13 @@ class Simple_Backup_Admin extends Simple_Backup {
 	}
 
 
+	public function performDatabaseBackupDebug(){
+		$bk_dir = ABSPATH."simple-backup";
+		$db_bk_file = $bk_dir . "/db_backup_".date('Y-m-d_His').".sql";
+		$command = "mysqldump -u ".DB_USER." -p'".DB_PASSWORD."' ".DB_NAME;
+			
+	}
+
 	public function performDatabaseBackup(){
 	
 		$bk_dir = ABSPATH."simple-backup";
@@ -147,7 +154,13 @@ class Simple_Backup_Admin extends Simple_Backup {
 		flush();
 		
 		echo "<br>";
-		exec($command);
+		if( $this->get_option('debug_enabled') == "true"){
+			exec($command);
+			passthru("mysqldump -u ".DB_USER." -p'".DB_PASSWORD."' ".DB_NAME);
+			
+		}else{
+			exec($command);
+		};
 		echo "<br>";
 		
 		echo "Done!";
@@ -196,7 +209,11 @@ class Simple_Backup_Admin extends Simple_Backup {
 		flush();
 		
 		echo "<br>";
-		exec($command);
+		if( $this->get_option('debug_enabled') == "true"){
+			passthru($command);
+		}else{
+			exec($command);
+		};
 		echo "<br>";
 		
 		echo "Done!";
@@ -434,6 +451,14 @@ class Simple_Backup_Admin extends Simple_Backup {
 					<?php if($db_backup === "true"){$selected = "checked='checked'";}else{$selected="";}; ?>
 					<p><input name='db_backup' type='checkbox' value='true' <?php echo $selected; ?> /> Backup Database</p>
 				
+					
+	
+					<p><b>Display Backup Command Output?</b> (Useful for debugging!)</p>
+					
+					<?php $debug_enabled = $this->get_option('debug_enabled'); ?>
+					<?php if($debug_enabled === "true"){$selected = "checked='checked'";}else{$selected="";}; ?>
+					<p><input name='debug_enabled' type='checkbox' value='true' <?php echo $selected; ?> /> Backup Debugging Enabled</p>
+	
 				
 				
 					
@@ -504,8 +529,12 @@ class Simple_Backup_Admin extends Simple_Backup {
 				echo "Can not access: $bk_dir<br>";
 			}
 			
+			
+			
 			if(array_key_exists('simple-backup', $_POST)) {
 			
+				echo "<div style='overflow:scroll; height:250px;'>";
+				
 				if($this->get_option('file_backup') === "true"){
 					
 					$this->performWebsiteBackup();
@@ -518,7 +547,12 @@ class Simple_Backup_Admin extends Simple_Backup {
 
 				}
 				
+				echo "</div>";
+				
 			}
+			
+			
+			
 			?>
 			
 			<?php $this->HtmlPrintBoxFooter(false); ?>

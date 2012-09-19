@@ -6,7 +6,7 @@ class Simple_Backup {
 	 *
 	 * @var string
 	 */
-	public $version                 = '1.3';
+	public $version                 = '1.4';
 	
 	/**
 	 * Array with default options
@@ -18,7 +18,8 @@ class Simple_Backup {
 		'db_backup' => true,
 		'db_compression' => '.sql',
 		'file_backup' => true,
-		'file_compression' => ".tar.gz"
+		'file_compression' => ".tar.gz",
+		'debug_enabled' => true
 	);
 	
 	/**
