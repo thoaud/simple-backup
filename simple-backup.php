@@ -6,7 +6,7 @@ class Simple_Backup {
 	 *
 	 * @var string
 	 */
-	public $version                 = '1.4';
+	public $version                 = '1.5';
 	
 	/**
 	 * Array with default options

@@ -125,25 +125,26 @@ class Simple_Backup_Admin extends Simple_Backup {
 	
 		$bk_dir = ABSPATH."simple-backup";
 		
+		$base_bk_command = "mysqldump -u ".DB_USER." -p'".DB_PASSWORD."' ".DB_NAME." -h ".DB_HOST;
 		
 		$db_compression = get_option('db_compression');
 		
 		//the syntax for mysqldump requires that there is NOT a space between the -p and the password
 		if($db_compression == ".sql"){
 			$db_bk_file = $bk_dir . "/db_backup_".date('Y-m-d_His').".sql";
-			$command = "mysqldump -u ".DB_USER." -p'".DB_PASSWORD."' ".DB_NAME." > $db_bk_file";
+			$command =  $base_bk_command . " > $db_bk_file";
 			
 		}elseif($db_compression == ".sql.gz"){
 			$db_bk_file = $bk_dir . "/db_backup_".date('Y-m-d_His').".sql.gz";
-			$command = "mysqldump -u ".DB_USER." -p'".DB_PASSWORD."' ".DB_NAME." | gzip -c > $db_bk_file ";
+			$command = $base_bk_command . " | gzip -c > $db_bk_file ";
 			
 		}elseif($db_compression == ".sql.bz2"){
 			$db_bk_file = $bk_dir . "/db_backup_".date('Y-m-d_His').".sql.bz2";
-			$command = "mysqldump -u ".DB_USER." -p'".DB_PASSWORD."' ".DB_NAME." | bzip2 -cq9 > $db_bk_file";
+			$command = $base_bk_command . " | bzip2 -cq9 > $db_bk_file";
 	
 		}elseif($db_compression == ".sql.zip"){
 			$db_bk_file = $bk_dir . "/db_backup_".date('Y-m-d_His').".sql.zip";
-			$command = "mysqldump -u ".DB_USER." -p'".DB_PASSWORD."' ".DB_NAME." | zip > $db_bk_file";
+			$command = $base_bk_command . " | zip > $db_bk_file";
 		}
 		
 	
@@ -156,7 +157,7 @@ class Simple_Backup_Admin extends Simple_Backup {
 		echo "<br>";
 		if( $this->get_option('debug_enabled') == "true"){
 			exec($command);
-			passthru("mysqldump -u ".DB_USER." -p'".DB_PASSWORD."' ".DB_NAME);
+			passthru($base_bk_command);
 			
 		}else{
 			exec($command);
