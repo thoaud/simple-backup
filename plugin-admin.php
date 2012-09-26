@@ -398,28 +398,7 @@ class Simple_Backup_Admin extends Simple_Backup {
 			<?php $this->HtmlPrintBoxHeader('wm_dir',__('Simple Backup Settings','backup-settings'),false); ?>	
 			
 				<form method='post'>
-					<?php $file_compression = $this->get_option('file_compression'); ?>
-					<?php $bk_types = array(".tar.gz", ".tar.bz2", ".tar", ".zip"); ?>
-					
-					<p><b>File Backup Type:</b><br /><select  name='file_compression'>
-						<option >Select a Backup Type...</option>
-						
-						<?php
-							foreach($bk_types as $bk_type){
-								if ($bk_type == $file_compression){
-									echo "<option selected='selected'>$bk_type</option>";
-								}else{
-									echo "<option>$bk_type</option>";
-								}
-							}
-						
-						?>
-						
-					</select>
-					</p>
-					
-					
-					
+				
 					<?php $db_compression = $this->get_option('db_compression'); ?>
 					<?php $db_bk_types = array(".sql.gz", ".sql.bz2", ".sql", ".sql.zip"); ?>
 					
@@ -441,17 +420,43 @@ class Simple_Backup_Admin extends Simple_Backup {
 					</p>
 					
 					
+					
+					<?php $file_compression = $this->get_option('file_compression'); ?>
+					<?php $bk_types = array(".tar.gz", ".tar.bz2", ".tar", ".zip"); ?>
+					
+					<p><b>File Backup Type:</b><br /><select  name='file_compression'>
+						<option >Select a Backup Type...</option>
+						
+						<?php
+							foreach($bk_types as $bk_type){
+								if ($bk_type == $file_compression){
+									echo "<option selected='selected'>$bk_type</option>";
+								}else{
+									echo "<option>$bk_type</option>";
+								}
+							}
+						
+						?>
+						
+					</select>
+					</p>
+
+
+
+
+					
+					
 					<p><b>What do you want to back up?</b></p>
+				
+					<?php $db_backup = $this->get_option('db_backup'); ?>
+					<?php if($db_backup === "true"){$selected = "checked='checked'";}else{$selected="";}; ?>
+					<p><input name='db_backup' type='checkbox' value='true' <?php echo $selected; ?> /> Backup Database</p>
+					
 					
 					<?php $file_backup = $this->get_option('file_backup'); ?>
 					<?php if($file_backup === "true"){$selected = "checked='checked'";}else{$selected="";}; ?>
 					<p><input name='file_backup' type='checkbox' value='true' <?php echo $selected; ?> /> Backup Files</p>
-					
-					
-					<?php $db_backup = $this->get_option('db_backup'); ?>
-					<?php if($db_backup === "true"){$selected = "checked='checked'";}else{$selected="";}; ?>
-					<p><input name='db_backup' type='checkbox' value='true' <?php echo $selected; ?> /> Backup Database</p>
-				
+			
 					
 	
 					<p><b>Display Backup Command Output?</b> (Useful for debugging!)</p>
@@ -534,18 +539,20 @@ class Simple_Backup_Admin extends Simple_Backup {
 			
 			if(array_key_exists('simple-backup', $_POST)) {
 			
+				set_time_limit(0);
+			
 				echo "<div style='overflow:scroll; height:250px;'>";
-				
-				if($this->get_option('file_backup') === "true"){
-					
-					$this->performWebsiteBackup();
-					
-				}
 				
 				if($this->get_option('db_backup') === "true"){
 
 					$this->performDatabaseBackup();
 
+				}
+				
+				if($this->get_option('file_backup') === "true"){
+					
+					$this->performWebsiteBackup();
+					
 				}
 				
 				echo "</div>";
