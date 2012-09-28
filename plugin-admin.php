@@ -569,7 +569,7 @@ class Simple_Backup_Admin extends Simple_Backup {
 			
 			
 			<?php $this->HtmlPrintBoxHeader('wm_dir',__('Download Backups','download-backups'),false); ?>	
-			<?
+			<?php
 		
 			$allowed_file_types = array('gz', 'sql', 'zip', 'tar', 'bz2');
 			
