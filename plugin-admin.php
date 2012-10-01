@@ -117,7 +117,7 @@ class Simple_Backup_Admin extends Simple_Backup {
 	public function performDatabaseBackupDebug(){
 		$bk_dir = ABSPATH."simple-backup";
 		$db_bk_file = $bk_dir . "/db_backup_".date('Y-m-d_His').".sql";
-		$command = "mysqldump -u ".DB_USER." -p'".DB_PASSWORD."' ".DB_NAME;
+		$command = "mysqldump --single-transaction -u ".DB_USER." -p'".DB_PASSWORD."' ".DB_NAME." -h ".DB_HOST;
 			
 	}
 
@@ -125,7 +125,7 @@ class Simple_Backup_Admin extends Simple_Backup {
 	
 		$bk_dir = ABSPATH."simple-backup";
 		
-		$base_bk_command = "mysqldump -u ".DB_USER." -p'".DB_PASSWORD."' ".DB_NAME." -h ".DB_HOST;
+		$base_bk_command = "mysqldump --single-transaction -u ".DB_USER." -p'".DB_PASSWORD."' ".DB_NAME." -h ".DB_HOST;
 		
 		$db_compression = get_option('db_compression');
 		
