@@ -4,7 +4,7 @@ Contributors: MyWebsiteAdvisor, ChrisHurst
 Tags: Backup, Archive, Restore, Recover, Recovery
 Requires at least: 2.9
 Tested up to: 3.4.2
-Stable tag: 2.0
+Stable tag: 2.1
 
 Create and Download backups of your wordpress website.
 
@@ -111,3 +111,6 @@ If we choose your testimonial or website we can link to your site and generate s
 = 2.0=
 * added additional links for support, other plugins, upgrades, etc.
 * added error checking to see if PHP safe mode is enabled, or if exec functions are disabled.
+
+= 2.1=
+* added database optimization feature to compress DB before backup

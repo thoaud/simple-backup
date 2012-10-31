@@ -112,6 +112,70 @@ class Simple_Backup_Admin extends Simple_Backup {
 		<?php
 		
 	}
+	
+	
+	public function performDatabaseOptimization(){
+		
+		$initial_table_size = 0;
+		$final_table_size = 0;
+		
+		$debug_enabled = $this->get_option('debug_enabled');
+		
+		
+		
+		echo "Optimizing Database...<br>";
+		
+		$local_query = 'SHOW TABLE STATUS FROM `'. DB_NAME.'`';
+		$result = mysql_query($local_query);
+		if (mysql_num_rows($result)){
+			
+			while ($row = mysql_fetch_array($result)){
+				//var_dump($row);
+				
+				$table_size = ($row[ "Data_length" ] + $row[ "Index_length" ]) / 1024;
+				
+				$optimize_query = "OPTIMIZE TABLE ".$row['Name'];
+				if(mysql_query($optimize_query)){
+				
+					if( $debug_enabled == "true"){
+						echo "Table: " . $row['Name'] . " optimized!";
+						echo "<br>";
+					}
+				}
+				
+				$initial_table_size += $table_size; 
+				
+			}
+			
+			echo "Done!<br>";
+			
+		}
+		
+		
+		
+		
+		$local_query = 'SHOW TABLE STATUS FROM `'. DB_NAME.'`';
+		$result = mysql_query($local_query);
+		if (mysql_num_rows($result)){
+			while ($row = mysql_fetch_array($result)){
+				$table_size = ($row[ "Data_length" ] + $row[ "Index_length" ]) / 1024;
+				$final_table_size += $table_size;
+			}
+		}
+		
+		
+		
+		echo "<br>";
+		echo "Initial DB Size: " . number_format($initial_table_size, 2) . " KB<br>";
+		echo "Final DB Size: " . number_format($final_table_size, 2) . " KB<br>";
+		
+		$space_saved = $initial_table_size - $final_table_size;
+		$opt_pctg = 100 * ($space_saved / $initial_table_size);
+		echo "Space Saved: " . number_format($space_saved,2) . " KB  (" .  number_format($opt_pctg, 2) . "%)<br>";
+		echo "<br>";
+	
+	}
+	
 
 
 	public function performDatabaseBackupDebug(){
@@ -371,6 +435,7 @@ class Simple_Backup_Admin extends Simple_Backup {
 				}
 				
 				
+				
 				if(strpos(ini_get('disable_functions'), 'exec')  !== false){
 					echo "<p><font color='red'>Disabled Functions: ".ini_get('disable_functions')."<br><b>Please enable 'exec' function in php.ini!</b></font></p>";
 				}
@@ -543,6 +608,18 @@ class Simple_Backup_Admin extends Simple_Backup {
 					<?php if($file_backup === "true"){$selected = "checked='checked'";}else{$selected="";}; ?>
 					<p><input name='file_backup' type='checkbox' value='true' <?php echo $selected; ?> /> Backup Files</p>
 			
+					<br />
+					
+					
+					
+					
+					<p><b>Optimize Database Before Backup</p>
+					
+					<?php $optimize_db_enabled = $this->get_option('optimize_db_enabled'); ?>
+					<?php if($optimize_db_enabled === "true"){$selected = "checked='checked'";}else{$selected="";}; ?>
+					<p><input name='optimize_db_enabled' type='checkbox' value='true' <?php echo $selected; ?> /> Database Optimization Enabled</p>
+
+					<br />
 					
 	
 					<p><b>Display Backup Command Output?</b> (Useful for debugging!)</p>
@@ -628,6 +705,14 @@ class Simple_Backup_Admin extends Simple_Backup {
 				set_time_limit(0);
 			
 				echo "<div style='overflow:scroll; height:250px;'>";
+				
+				
+				
+				if($this->get_option('optimize_db_enabled') === "true"){
+
+					$this->performDatabaseOptimization();
+
+				}
 				
 				if($this->get_option('db_backup') === "true"){
 
