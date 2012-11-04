@@ -1,10 +1,10 @@
 === Simple Backup ===
 Name: Simple Backup
 Contributors: MyWebsiteAdvisor, ChrisHurst
-Tags: Backup, Archive, Restore, Recover, Recovery
+Tags: Backup, Archive, Restore, Recover, Recovery, Optimize
 Requires at least: 2.9
 Tested up to: 3.4.2
-Stable tag: 2.1
+Stable tag: 2.2
 
 Create and Download backups of your wordpress website.
 
@@ -12,6 +12,7 @@ Create and Download backups of your wordpress website.
 == Description ==
 
 Simple Backup Plugin for WordPress create and download backups of your WordPress website.
+Plugin can also optionally perform many common optimizations to wordpress and MySQL Database before backup.
 
 Requires linux style server with tar, gzip, bzip or zip for backup file creation.
 
@@ -71,7 +72,11 @@ If we choose your testimonial or website we can link to your site and generate s
 
 == Screenshots ==
 
-1. Admin Page
+1. Admin Settings Page
+2. WordPress Optimizations Example Output
+3. MySQL Database Management Example Output
+4. Databaes and File Backup Example Output
+
 
 
 
@@ -114,3 +119,8 @@ If we choose your testimonial or website we can link to your site and generate s
 
 = 2.1=
 * added database optimization feature to compress DB before backup
+
+= 2.2=
+* added wordpress optimization functions
+* added database table check and optimize functions
+* added plugin screenshots

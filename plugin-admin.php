@@ -7,7 +7,7 @@ class Simple_Backup_Admin extends Simple_Backup {
 	 * @var array
 	 */
 	private $_messages = array();
-	
+
 	
 	/**
 	 * Class constructor
@@ -35,7 +35,7 @@ class Simple_Backup_Admin extends Simple_Backup {
 			die();	
 		} else {
 			// register installer function
-			register_activation_hook(TW_LOADER, array(&$this, 'activateSimpleBackup'));
+			register_activation_hook(SB_LOADER, array(&$this, 'activateSimpleBackup'));
 		
 			// add plugin "Settings" action on plugin list
 			add_action('plugin_action_links_' . plugin_basename(SB_LOADER), array(&$this, 'add_plugin_actions'));
@@ -50,6 +50,9 @@ class Simple_Backup_Admin extends Simple_Backup {
 		}
 	}
 	
+	
+
+		
 	/**
 	 * Add "Settings" action on installed plugin list
 	 */
@@ -111,6 +114,107 @@ class Simple_Backup_Admin extends Simple_Backup {
 		</div>
 		<?php
 		
+	}
+	
+	
+	
+	
+	public function performWordPressOptimization(){
+	
+		global $wpdb;
+		
+		$optimization_queries = array(
+			'delete_spam_comments' => "DELETE FROM $wpdb->comments WHERE comment_approved = 'spam'",
+			'delete_unapproved_comments' => "DELETE FROM $wpdb->comments WHERE comment_approved = '0'",
+			'delete_revisions' => "DELETE FROM $wpdb->posts WHERE post_type = 'revision'",
+			'delete_auto_drafts' => "DELETE FROM $wpdb->posts WHERE post_status = 'auto-draft'",
+			'delete_transient_options' => "DELETE FROM $wpdb->options WHERE option_name LIKE '_transient_%'"
+		);
+		
+		$wp_optimization_methods = $this->get_option('wp_optimization_methods');
+	
+		$queries = $optimization_queries;
+	
+		foreach($queries as $method => $query){
+			if($wp_optimization_methods[$method] === "true"){
+			
+				echo "<p>Performing Optimization: " . $method."<br>";
+				$result = $wpdb->query($query);
+				echo "$result items deleted.</p>";
+						
+			}
+		}
+	}
+	
+	
+	public function performDatabaseCheck(){
+	
+		$debug_enabled = $this->get_option('debug_enabled');
+
+		echo "Checking Database...<br>";
+		
+		$local_query = 'SHOW TABLE STATUS FROM `'. DB_NAME.'`';
+		$result = mysql_query($local_query);
+		if (mysql_num_rows($result)){
+			
+			while ($row = mysql_fetch_array($result)){
+			
+				$check_query = "CHECK TABLE ".$row['Name'];
+				$check_result = mysql_query($check_query);
+				if (mysql_num_rows($check_result)){
+					while($rrow = mysql_fetch_assoc($check_result)){
+						if( $debug_enabled == "true"){
+							echo "Table: " . $row['Name'] ." ". $rrow['Msg_text'];
+							echo "<br>";
+						}
+					}
+				}
+				
+				$initial_table_size += $table_size; 
+				
+			}
+			
+			echo "Done!<br>";
+			
+		}
+	
+		echo "<br>";
+	
+	}
+
+
+
+	public function performDatabaseRepair(){
+	
+		$debug_enabled = $this->get_option('debug_enabled');
+
+		echo "Repairing Database...<br>";
+		
+		$local_query = 'SHOW TABLE STATUS FROM `'. DB_NAME.'`';
+		$result = mysql_query($local_query);
+		if (mysql_num_rows($result)){
+			
+			while ($row = mysql_fetch_array($result)){
+			
+				$check_query = "REPAIR TABLE ".$row['Name'];
+				$check_result = mysql_query($check_query);
+				if (mysql_num_rows($check_result)){
+					while($rrow = mysql_fetch_assoc($check_result)){
+						if( $debug_enabled == "true"){
+							echo "Table: " . $row['Name'] ." ". $rrow['Msg_text'];
+							echo "<br>";
+						}
+					}
+				}
+				
+			}
+			
+			echo "Done!<br>";
+			
+		}
+	
+		echo "<br>";
+	
 	}
 	
 	
@@ -498,7 +602,8 @@ class Simple_Backup_Admin extends Simple_Backup {
 	<p><a href='http://mywebsiteadvisor.com/wordpress-plugins/simple-backup/' target='_blank'>Plugin Homepage</a></p>
 	<p><a href='http://mywebsiteadvisor.com/contact-us/'  target='_blank'>Plugin Support</a></p>
 	<p><a href='http://mywebsiteadvisor.com/contact-us/'  target='_blank'>Suggest a Feature</a></p>
-	
+	<p><a href='http://mywebsiteadvisor.com/contact-us/'  target='_blank'>Contact Us</a></p>
+		
 <?php $this->HtmlPrintBoxFooter(true); ?>
 
 
@@ -520,7 +625,7 @@ class Simple_Backup_Admin extends Simple_Backup {
 	
 	<p><a href='http://mywebsiteadvisor.com/tools/premium-wordpress-plugins/'  target='_blank'>Premium WordPress Plugins!</a></p>
 	<p><a href='http://profiles.wordpress.org/MyWebsiteAdvisor/'  target='_blank'>Free Plugins on Wordpress.org!</a></p>
-	<p><a href='http://mywebsiteadvisor.com/tools/wordpress-plugins/'  target='_blank'>Free Plugins on Our Website!</a></p>	
+	<p><a href='http://mywebsiteadvisor.com/tools/wordpress-plugins/'  target='_blank'>Free Plugins on MyWebsiteAdvisor.com!</a></p>	
 				
 <?php $this->HtmlPrintBoxFooter(true); ?>
 
@@ -550,76 +655,150 @@ class Simple_Backup_Admin extends Simple_Backup {
 			
 				<form method='post'>
 				
-					<?php $db_compression = $this->get_option('db_compression'); ?>
-					<?php $db_bk_types = array(".sql.gz", ".sql.bz2", ".sql", ".sql.zip"); ?>
-					
-						<p><b>Database Backup Type:</b><br /><select  name='db_compression'>
-						<option >Select a Backup Type...</option>
+					<table width="100%" >
+					<tr valign="top">
+					<td>	
+					<?php $this->HtmlPrintBoxHeader('wm_dir',__('Backup Settings','backup-settings'),false); ?>
+					<div style="height:250px;">
+						<?php $db_compression = $this->get_option('db_compression'); ?>
+						<?php $db_bk_types = array(".sql.gz", ".sql.bz2", ".sql", ".sql.zip"); ?>
 						
-						<?php
-							foreach($db_bk_types as $db_type){
-								if ($db_type == $db_compression){
-									echo "<option selected='selected'>$db_type</option>";
-								}else{
-									echo "<option>$db_type</option>";
+							<p><b>Database Backup Type:</b><br /><select  name='db_compression'>
+							<option >Select a Backup Type...</option>
+							
+							<?php
+								foreach($db_bk_types as $db_type){
+									if ($db_type == $db_compression){
+										echo "<option selected='selected'>$db_type</option>";
+									}else{
+										echo "<option>$db_type</option>";
+									}
 								}
-							}
+							
+							?>
+							
+						</select>
+						</p>
 						
-						?>
 						
-					</select>
-					</p>
-					
-					
-					
-					<?php $file_compression = $this->get_option('file_compression'); ?>
-					<?php $bk_types = array(".tar.gz", ".tar.bz2", ".tar", ".zip"); ?>
-					
-					<p><b>File Backup Type:</b><br /><select  name='file_compression'>
-						<option >Select a Backup Type...</option>
 						
-						<?php
-							foreach($bk_types as $bk_type){
-								if ($bk_type == $file_compression){
-									echo "<option selected='selected'>$bk_type</option>";
-								}else{
-									echo "<option>$bk_type</option>";
+						<?php $file_compression = $this->get_option('file_compression'); ?>
+						<?php $bk_types = array(".tar.gz", ".tar.bz2", ".tar", ".zip"); ?>
+						
+						<p><b>File Backup Type:</b><br /><select  name='file_compression'>
+							<option >Select a Backup Type...</option>
+							
+							<?php
+								foreach($bk_types as $bk_type){
+									if ($bk_type == $file_compression){
+										echo "<option selected='selected'>$bk_type</option>";
+									}else{
+										echo "<option>$bk_type</option>";
+									}
 								}
-							}
+							
+							?>
+							
+						</select>
+						</p>
+	
+	
+	
+	
 						
-						?>
 						
-					</select>
-					</p>
-
-
-
-
+						<p><b>What do you want to back up?</b></p>
 					
-					
-					<p><b>What do you want to back up?</b></p>
+						<?php $db_backup = $this->get_option('db_backup'); ?>
+						<?php if($db_backup === "true"){$selected = "checked='checked'";}else{$selected="";}; ?>
+						<p><input name='db_backup' type='checkbox' value='true' <?php echo $selected; ?> /> Backup Database</p>
+						
+						
+						<?php $file_backup = $this->get_option('file_backup'); ?>
+						<?php if($file_backup === "true"){$selected = "checked='checked'";}else{$selected="";}; ?>
+						<p><input name='file_backup' type='checkbox' value='true' <?php echo $selected; ?> /> Backup Files</p>
+						
+						
+					</div>	
+					<?php $this->HtmlPrintBoxFooter(true); ?>
+					</td>
+					<td>
+					<?php $this->HtmlPrintBoxHeader('wm_dir',__('Optimize WordPress Before Backup','backup-settings'),false); ?>
+					<div style="height:250px;">
 				
-					<?php $db_backup = $this->get_option('db_backup'); ?>
-					<?php if($db_backup === "true"){$selected = "checked='checked'";}else{$selected="";}; ?>
-					<p><input name='db_backup' type='checkbox' value='true' <?php echo $selected; ?> /> Backup Database</p>
+				
+						
+						<?php $wp_optimization_methods = $this->get_option('wp_optimization_methods'); ?>
+						
+						<?php 
+						
+						global $wpdb; 
+						
+						
+						
+						
+						?>
+								
+						
+						<?php $selected=($wp_optimization_methods['delete_spam_comments'] === 'true') ? "checked='checked'" : ""; ?>
+						<p><input name='wp_optimization_methods[delete_spam_comments]' type='checkbox' value='true' <?php echo $selected; ?> /> Delete Spam Comments <br />
+						Currently <?php echo $wpdb->get_var("SELECT COUNT(*) FROM $wpdb->comments WHERE comment_approved = 'spam'"); ?> Spam Comments</p>
+						
+						<?php $selected=($wp_optimization_methods['delete_unapproved_comments'] === 'true') ? "checked='checked'" : ""; ?>
+						<p><input name='wp_optimization_methods[delete_unapproved_comments]' type='checkbox' value='true' <?php echo $selected; ?> /> Delete Unapproved Comments <br />
+						Currently <?php echo $wpdb->get_var("SELECT COUNT(*) FROM $wpdb->comments WHERE comment_approved = '0'"); ?> Unapproved Comments</p>
+						
+						<?php $selected=($wp_optimization_methods['delete_revisions'] === 'true') ? "checked='checked'" : ""; ?>
+						<p><input name='wp_optimization_methods[delete_revisions]' type='checkbox' value='true' <?php echo $selected; ?> /> Delete Post Revisions <br />
+						Currently <?php echo $wpdb->get_var("SELECT COUNT(*) FROM $wpdb->posts WHERE post_status = 'revision'"); ?> Revisions</p>
+						
+						<?php $selected=($wp_optimization_methods['delete_auto_drafts'] === 'true') ? "checked='checked'" : ""; ?>
+						<p><input name='wp_optimization_methods[delete_auto_drafts]' type='checkbox' value='true' <?php echo $selected; ?> /> Delete Auto Drafts <br />
+						Currently <?php echo $wpdb->get_var("SELECT COUNT(*) FROM $wpdb->posts WHERE post_type = 'auto-draft'"); ?> Drafts</p>
+						
+						<?php $selected=($wp_optimization_methods['delete_transient_options'] === 'true') ? "checked='checked'" : ""; ?>
+						<p><input name='wp_optimization_methods[delete_transient_options]' type='checkbox' value='true' <?php echo $selected; ?> /> Delete Transient Options (Advanced)<br />
+						Currently <?php echo $wpdb->get_var("SELECT COUNT(*) FROM $wpdb->options WHERE option_name LIKE '_transient_%'"); ?> Transient Options</p>
+						
+						
+						
+						
+					</div>
+					<?php $this->HtmlPrintBoxFooter(true); ?>
+					</td>
+					<td>
+					<?php $this->HtmlPrintBoxHeader('wm_dir',__('Optimize Database Before Backup','backup-settings'),false); ?>
+					<div style="height:250px;">
 					
 					
-					<?php $file_backup = $this->get_option('file_backup'); ?>
-					<?php if($file_backup === "true"){$selected = "checked='checked'";}else{$selected="";}; ?>
-					<p><input name='file_backup' type='checkbox' value='true' <?php echo $selected; ?> /> Backup Files</p>
+						<p><b>Check Database Before Backup</b></p>
+						
+						<?php $check_db_enabled = $this->get_option('check_db_enabled'); ?>
+						<?php if($check_db_enabled === "true"){$selected = "checked='checked'";}else{$selected="";}; ?>
+						<p><input name='check_db_enabled' type='checkbox' value='true' <?php echo $selected; ?> /> Database Check </p>
+	
+						<p><b>Repair Database Before Backup</b></p>
+						
+						<?php $repair_db_enabled = $this->get_option('repair_db_enabled'); ?>
+						<?php if($repair_db_enabled === "true"){$selected = "checked='checked'";}else{$selected="";}; ?>
+						<p><input name='repair_db_enabled' type='checkbox' value='true' <?php echo $selected; ?> /> Database Repair  (Advanced)</p>
+	
 			
-					<br />
-					
-					
-					
-					
-					<p><b>Optimize Database Before Backup</p>
-					
-					<?php $optimize_db_enabled = $this->get_option('optimize_db_enabled'); ?>
-					<?php if($optimize_db_enabled === "true"){$selected = "checked='checked'";}else{$selected="";}; ?>
-					<p><input name='optimize_db_enabled' type='checkbox' value='true' <?php echo $selected; ?> /> Database Optimization Enabled</p>
+						<p><b>Optimize Database Before Backup</b></p>
+						
+						<?php $optimize_db_enabled = $this->get_option('optimize_db_enabled'); ?>
+						<?php if($optimize_db_enabled === "true"){$selected = "checked='checked'";}else{$selected="";}; ?>
+						<p><input name='optimize_db_enabled' type='checkbox' value='true' <?php echo $selected; ?> /> Database Optimization </p>
 
-					<br />
+					</div>
+					<?php $this->HtmlPrintBoxFooter(true); ?>
+					</td>
+					<td>
+					
+					</table>
+					
+					
+					
 					
 	
 					<p><b>Display Backup Command Output?</b> (Useful for debugging!)</p>
@@ -643,43 +822,7 @@ class Simple_Backup_Admin extends Simple_Backup {
 						
 			<?php $this->HtmlPrintBoxHeader('wm_dir',__('Create Backup','create-backups'),false); ?>					
 				
-				<?php 
-					/**
-					$base_dir = $_SERVER['DOCUMENT_ROOT'];
-					
-					$dir_info = $this->listFiles($base_dir);
-
-					echo "<form method='post'><select name='base_dir'>";
-						foreach($dir_info['dirs'] as $dir){
-							$selected = "";
-							if($_POST['base_dir'] == $dir){
-								$selected = "selected='selected'";
-							}
-							echo "<option $selected>$dir</option>";
-							
-						}
-					echo "</select> ";
-					echo " <input type='submit'>";
-					echo "</form>";
-					echo "<br>";
-					echo "<br>";
-					
-					
-					echo "<b>" . count($dir_info['files']) . "</b> files found in: <b>" . str_replace($_SERVER['DOCUMENT_ROOT'], '', $base_dir) . "</b><br>";
-					echo "<br>";
-					
-					echo "<form method='post'>";
-					echo "<input type='hidden' name='bulk_watermark_action'>";
-					echo "<div style='overflow-y:scroll; height:250px; border:1px solid grey; padding:5px;'>";
-					foreach($dir_info['files'] as $file){
-						echo $file;
-					}
-					echo "</div>";
-					echo "<br>";
-					echo "<input type='submit' value='Apply Bulk Watermark'>";
-					echo "</form>";
-					**/
-				?>
+		
 				
 
 			<?php
@@ -707,6 +850,25 @@ class Simple_Backup_Admin extends Simple_Backup {
 				echo "<div style='overflow:scroll; height:250px;'>";
 				
 				
+				
+				
+				if($this->get_option('wp_optimization_methods') ){
+
+					$this->performWordPressOptimization();
+
+				}
+				
+				if($this->get_option('check_db_enabled') === "true"){
+
+					$this->performDatabaseCheck();
+
+				}
+				
+				if($this->get_option('repair_db_enabled') === "true"){
+
+					$this->performDatabaseRepair();
+
+				}
 				
 				if($this->get_option('optimize_db_enabled') === "true"){
 
