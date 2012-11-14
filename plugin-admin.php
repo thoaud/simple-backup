@@ -46,7 +46,8 @@ class Simple_Backup_Admin extends Simple_Backup {
 			// push options page link, when generating admin menu
 			add_action('admin_menu', array(&$this, 'adminMenu'));
 	
-			
+			//add help menu
+			add_filter('contextual_help', array(&$this,'adminHelp'), 10, 3);
 		}
 	}
 	
@@ -78,10 +79,56 @@ class Simple_Backup_Admin extends Simple_Backup {
 	 */
 	public function adminMenu() {		
 		// add option in admin menu, for setting details on watermarking
-		$plugin_page = add_options_page('Simple Backup Plugin Options', 'Simple Backup', 8, __FILE__, array(&$this, 'optionsPage'));
+		global $simple_backup_admin_page;
+		$simple_backup_admin_page = add_options_page('Simple Backup Plugin Options', 'Simple Backup', 8, __FILE__, array(&$this, 'optionsPage'));
 
-		add_action('admin_print_styles-' . $plugin_page,     array(&$this, 'installStyles'));
+		add_action('admin_print_styles-' . $simple_backup_admin_page,     array(&$this, 'installStyles'));
 	}
+	
+	
+	
+	public function adminHelp($contextual_help, $screen_id, $screen){
+	
+		global $simple_backup_admin_page;
+		
+		if ($screen_id == $simple_backup_admin_page) {
+			
+			$screen->add_help_tab(array(
+				'id' => 'plugin-support',
+				'title' => "Plugin Support",
+				'content' => "<h2>Support</h2><p>For Plugin Support please visit <a href='http://mywebsiteadvisor.com/support/' target='_blank'>MyWebsiteAdvisor.com</a></p>"
+			));
+			
+			$faqs = "<p><b>Question: How do I restore a backup created by simple-backup plugin?</b><br>Answer: This plugin can create backup files in many standard formats and they can be restored using commonly avaiable tools.  The MySQL Database backups could be restored using any MySQL tools, such as phpMyAdmin or MySQL Workbench.  The File Backups could be restored using FTP.</p>";
+			
+			
+			$faqs .= "<p><b>Question: What are Transient Options and what happens if they are removed?</b><br>Answer: Transient Options are used by WordPress like a basic cache system.  Rather than performing a query every time a page is loaded, the results of that query could be saved as a WordPress Transient Option.  Clearing the Transient Options before a backup will help to save space in your backup files and should not effect the functionality of your website.  The only side-effect may be a minor slowdown as all of the necessary transient options would be re-queried and saved again. </p>";
+			
+			
+			
+			
+			$screen->add_help_tab(array(
+				'id' => 'plugin-faq',
+				'title' => "Plugin FAQ's",
+				'content' => "<h2>Frequently Asked Questions</h2>".$faqs
+			));
+			
+			$screen->add_help_tab(array(
+				'id' => 'plugin-upgrades',
+				'title' => "Plugin Upgrades",
+				'content' => "<h2>Plugin Upgrades</h2><p>Upgrade to Simple Backup Ultra for Scheduled, Automatic Optimizations and Backups: <a href='http://mywebsiteadvisor.com/tools/wordpress-plugins/simple-backup/' target='_blank'>MyWebsiteAdvisor.com</a></p><p>Learn about all of our free plugins for WordPress here: <a href='http://mywebsiteadvisor.com/tools/wordpress-plugins/' target='_blank'>MyWebsiteAdvisor.com</a></p>"
+			));
+	
+			$screen->set_help_sidebar("<p>Please Visit us online for more Free WordPress Plugins!</p><p><a href='http://mywebsiteadvisor.com/tools/wordpress-plugins/' target='_blank'>MyWebsiteAdvisor.com</a></p><br>");
+			//$contextual_help = 'HELP!';
+		}
+			
+		//return $contextual_help;
+
+	}
+
+	
+	
 	
 	/**
 	 * Include styles used by Simple Backup Plugin
@@ -90,9 +137,6 @@ class Simple_Backup_Admin extends Simple_Backup {
 		//wp_enqueue_style('simple-backup', WP_PLUGIN_URL . $this->_plugin_dir . 'style.css');
 	}
 	
-
-
-
 
 
 
@@ -325,7 +369,12 @@ class Simple_Backup_Admin extends Simple_Backup {
 		echo "<br>";
 		if( $this->get_option('debug_enabled') == "true"){
 			exec($command);
+			
+			ob_start();
 			passthru($base_bk_command);
+			$debug_output = htmlentities(ob_get_clean());
+			echo $debug_output;
+			
 			
 		}else{
 			exec($command);
@@ -599,8 +648,8 @@ class Simple_Backup_Admin extends Simple_Backup {
 
 <?php $this->HtmlPrintBoxHeader('pl_resources',__('Plugin Resources','resources'),true); ?>
 
-	<p><a href='http://mywebsiteadvisor.com/wordpress-plugins/simple-backup/' target='_blank'>Plugin Homepage</a></p>
-	<p><a href='http://mywebsiteadvisor.com/contact-us/'  target='_blank'>Plugin Support</a></p>
+	<p><a href='http://mywebsiteadvisor.com/tools/wordpress-plugins/simple-backup/' target='_blank'>Plugin Homepage</a></p>
+	<p><a href='http://mywebsiteadvisor.com/support/'  target='_blank'>Plugin Support</a></p>
 	<p><a href='http://mywebsiteadvisor.com/contact-us/'  target='_blank'>Suggest a Feature</a></p>
 	<p><a href='http://mywebsiteadvisor.com/contact-us/'  target='_blank'>Contact Us</a></p>
 		

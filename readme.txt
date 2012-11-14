@@ -1,10 +1,10 @@
 === Simple Backup ===
 Name: Simple Backup
 Contributors: MyWebsiteAdvisor, ChrisHurst
-Tags: Backup, Archive, Restore, Recover, Recovery, Optimize
+Tags: Backup, Archive, Restore, Recover, Recovery, Optimize, Admin, Administration
 Requires at least: 2.9
 Tested up to: 3.4.2
-Stable tag: 2.2
+Stable tag: 2.3
 
 Create and Download backups of your wordpress website.
 
@@ -124,3 +124,7 @@ If we choose your testimonial or website we can link to your site and generate s
 * added wordpress optimization functions
 * added database table check and optimize functions
 * added plugin screenshots
+
+= 2.3=
+* added contextual help menu with faqs and support link
+* fixed broken links
