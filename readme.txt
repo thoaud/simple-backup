@@ -128,3 +128,6 @@ If we choose your testimonial or website we can link to your site and generate s
 = 2.3=
 * added contextual help menu with faqs and support link
 * fixed broken links
+
+= 2.3.1 =
+*updated plugin activation php version check which was causing out of place errors.
