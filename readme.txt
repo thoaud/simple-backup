@@ -4,7 +4,7 @@ Contributors: MyWebsiteAdvisor, ChrisHurst
 Tags: Backup, Archive, Restore, Recover, Recovery, Optimize, Admin, Administration
 Requires at least: 2.9
 Tested up to: 3.4.2
-Stable tag: 2.3
+Stable tag: 2.3.2
 
 Create and Download backups of your wordpress website.
 
@@ -113,21 +113,24 @@ If we choose your testimonial or website we can link to your site and generate s
 = 1.8 =
 * added --single-transaction option to mysqldump command
 
-= 2.0=
+= 2.0 =
 * added additional links for support, other plugins, upgrades, etc.
 * added error checking to see if PHP safe mode is enabled, or if exec functions are disabled.
 
-= 2.1=
+= 2.1 =
 * added database optimization feature to compress DB before backup
 
-= 2.2=
+= 2.2 =
 * added wordpress optimization functions
 * added database table check and optimize functions
 * added plugin screenshots
 
-= 2.3=
+= 2.3 =
 * added contextual help menu with faqs and support link
 * fixed broken links
 
 = 2.3.1 =
-*updated plugin activation php version check which was causing out of place errors.
+* updated plugin activation php version check which was causing out of place errors.
+
+= 2.3.2 =
+* fixed readme file syntax
