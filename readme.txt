@@ -136,4 +136,4 @@ If we choose your testimonial or website we can link to your site and generate s
 * fixed readme file syntax
 
 = 2.3.3 =
-* added link to rate and review this plugin on WordPress.org
+* added link to rate and review this plugin on WordPress.org.
