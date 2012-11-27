@@ -4,7 +4,7 @@ Contributors: MyWebsiteAdvisor, ChrisHurst
 Tags: Backup, Archive, Restore, Recover, Recovery, Optimize, Admin, Administration
 Requires at least: 2.9
 Tested up to: 3.4.2
-Stable tag: 2.3.2
+Stable tag: 2.3.3
 
 Create and Download backups of your wordpress website.
 
@@ -134,3 +134,6 @@ If we choose your testimonial or website we can link to your site and generate s
 
 = 2.3.2 =
 * fixed readme file syntax
+
+= 2.3.3 =
+* added link to rate and review this plugin on WordPress.org

@@ -650,8 +650,8 @@ class Simple_Backup_Admin extends Simple_Backup {
 
 	<p><a href='http://mywebsiteadvisor.com/tools/wordpress-plugins/simple-backup/' target='_blank'>Plugin Homepage</a></p>
 	<p><a href='http://mywebsiteadvisor.com/support/'  target='_blank'>Plugin Support</a></p>
-	<p><a href='http://mywebsiteadvisor.com/contact-us/'  target='_blank'>Suggest a Feature</a></p>
 	<p><a href='http://mywebsiteadvisor.com/contact-us/'  target='_blank'>Contact Us</a></p>
+	<p><a href='http://wordpress.org/support/view/plugin-reviews/simple-backup?rate=5'  target='_blank'>Rate and Review This Plugin</a></p>
 		
 <?php $this->HtmlPrintBoxFooter(true); ?>
 
