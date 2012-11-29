@@ -6,7 +6,7 @@ class Simple_Backup {
 	 *
 	 * @var string
 	 */
-	public $version                 = '2.3.3';
+	public $version                 = '2.3.4';
 	
 	/**
 	 * Array with default options
@@ -23,7 +23,13 @@ class Simple_Backup {
 		'optimize_db_enabled' => true,
 		'check_db_enabled' => true,
 		'repair_db_enabled' => true,
-		'wp_optimization_methods'=>array()
+		'wp_optimization_methods'=>array(
+			'delete_transient_options' => false,
+			'delete_auto_drafts' => false,
+			'delete_revisions' => false,
+			'delete_unapproved_comments' => false,
+			'delete_spam_comments' => false
+		)
 	);
 	
 	/**

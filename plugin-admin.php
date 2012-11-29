@@ -68,11 +68,17 @@ class Simple_Backup_Admin extends Simple_Backup {
 	 */
 	public function add_plugin_links($links, $file) {
 		if($file == plugin_basename(SB_LOADER)) {
-			$links[] = '<a href="http://MyWebsiteAdvisor.com/">Visit Us Online</a>';
+			$upgrade_url = 'http://mywebsiteadvisor.com/tools/wordpress-plugins/simple-backup/';
+			$links[] = '<a href="'.$upgrade_url.'" target="_blank" title="Click Here to Upgrade this Plugin!">Upgrade Plugin</a>';
+		
+			$rate_url = 'http://wordpress.org/support/view/plugin-reviews/' . basename(dirname(__FILE__)) . '?rate=5#postform';
+			$links[] = '<a href="'.$rate_url.'" target="_blank" title="Click Here to Rate and Review this Plugin on WordPress.org">Rate This Plugin</a>';
+			
 		}
 		
 		return $links;
 	}
+	
 	
 	/**
 	 * Add menu entry for Simple Backup settings and attach style and script include methods
