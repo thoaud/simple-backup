@@ -6,7 +6,7 @@ class Simple_Backup {
 	 *
 	 * @var string
 	 */
-	public $version                 = '2.3.4';
+	public $version                 = '2.3.5';
 	
 	/**
 	 * Array with default options
@@ -101,7 +101,7 @@ class Simple_Backup {
 	/**
 	 * Plugin installation method
 	 */
-	public function activateSimpleBackup() {
+	public function activate_simple_backup() {
 		// record install time
 		add_option('simple_backup_installed', time(), null, 'no');
 				
@@ -109,6 +109,11 @@ class Simple_Backup {
 		foreach($this->_options as $option => $value) {
 			add_option($option, $value, null, 'no');	
 		}
+		
+		//7 day initial nag
+		$expiration = 60 * 60 * 24 * 7;
+		$simple_backup_nag = "true";
+		set_transient( 'simple_backup_nag', $simple_backup_nag, $expiration );
 	}
 	
 	

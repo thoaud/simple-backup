@@ -35,7 +35,7 @@ class Simple_Backup_Admin extends Simple_Backup {
 			die();	
 		} else {
 			// register installer function
-			register_activation_hook(SB_LOADER, array(&$this, 'activateSimpleBackup'));
+			register_activation_hook(SB_LOADER, array(&$this, 'activate_simple_backup'));
 		
 			// add plugin "Settings" action on plugin list
 			add_action('plugin_action_links_' . plugin_basename(SB_LOADER), array(&$this, 'add_plugin_actions'));
@@ -44,10 +44,13 @@ class Simple_Backup_Admin extends Simple_Backup {
 			add_filter('plugin_row_meta', array(&$this, 'add_plugin_links'), 10, 2);
 			
 			// push options page link, when generating admin menu
-			add_action('admin_menu', array(&$this, 'adminMenu'));
+			add_action('admin_menu', array(&$this, 'admin_menu'));
 	
 			//add help menu
-			add_filter('contextual_help', array(&$this,'adminHelp'), 10, 3);
+			add_filter('contextual_help', array(&$this,'admin_help'), 10, 3);
+			
+			add_action('admin_notices', array($this, 'activation_notice_settings'));
+			add_action('admin_init', array($this, 'nag_ignore'));
 		}
 	}
 	
@@ -83,7 +86,7 @@ class Simple_Backup_Admin extends Simple_Backup {
 	/**
 	 * Add menu entry for Simple Backup settings and attach style and script include methods
 	 */
-	public function adminMenu() {		
+	public function admin_menu() {		
 		// add option in admin menu, for setting details on watermarking
 		global $simple_backup_admin_page;
 		$simple_backup_admin_page = add_options_page('Simple Backup Plugin Options', 'Simple Backup', 8, __FILE__, array(&$this, 'optionsPage'));
@@ -93,11 +96,70 @@ class Simple_Backup_Admin extends Simple_Backup {
 	
 	
 	
-	public function adminHelp($contextual_help, $screen_id, $screen){
+	
+	function activation_notice_settings(){
+		global $current_user ;
+		global $pagenow;
+		if(isset($_GET['page'])){
+			if ( $pagenow == 'options-general.php' ){
+				if ( $_GET['page'] == 'simple-backup/plugin-admin.php'  ) {
+					$user_id = $current_user->ID;
+					if ( false === ( $simple_security_nag = get_transient( 'simple_backup_nag' ) ) ) {
+						echo '<div class="updated">';
+						echo $this->display_support_us();
+						echo "<br>";
+						echo '<p><a href="'.$_SERVER['REQUEST_URI'].'&simple_backup_nag_ignore=0" >Click Here to Dismiss this Message.</a></p>';
+						echo "</div>";
+					}
+				}
+			}
+		}
+	}
+	
+
+	function nag_ignore() {
+		if ( isset($_GET['simple_backup_nag_ignore']) && '0' == $_GET['simple_backup_nag_ignore'] ) {
+			 $expiration = 60 * 60 * 24 * 30;
+			 $simple_backup_nag = "true";
+			 set_transient( 'simple_backup_nag', $simple_backup_nag, $expiration );
+		}
+	}
+	
+	
+	
+	
+		
+	public function display_support_us(){
+				
+		$string = '<p><b>Thank You for using the Simple Backup Plugin for WordPress!</b></p>';
+		$string .= "<p>Please take a moment to <b>Support the Developer</b> by doing some of the following items:</p>";
+		
+		$rate_url = 'http://wordpress.org/support/view/plugin-reviews/' . basename(dirname(__FILE__)) . '?rate=5#postform';
+		$string .= "<li><a href='$rate_url' target='_blank' title='Click Here to Rate and Review this Plugin on WordPress.org'>Click Here</a> to Rate and Review this Plugin on WordPress.org!</li>";
+		
+		$string .= "<li><a href='http://facebook.com/MyWebsiteAdvisor' target='_blank' title='Click Here to Follow us on Facebook'>Click Here</a> to Follow MyWebsiteAdvisor on Facebook!</li>";
+		$string .= "<li><a href='http://twitter.com/MWebsiteAdvisor' target='_blank' title='Click Here to Follow us on Twitter'>Click Here</a> to Follow MyWebsiteAdvisor on Twitter!</li>";
+		$string .= "<li><a href='http://mywebsiteadvisor.com/tools/premium-wordpress-plugins/' target='_blank' title='Click Here to Purchase one of our Premium WordPress Plugins'>Click Here</a> to Purchase Premium WordPress Plugins!</li>";
+	
+		return $string;
+	}
+
+
+
+	public function admin_help($contextual_help, $screen_id, $screen){
 	
 		global $simple_backup_admin_page;
 		
 		if ($screen_id == $simple_backup_admin_page) {
+			
+			
+			$support_the_dev = $this->display_support_us();
+			$screen->add_help_tab(array(
+				'id' => 'developer-support',
+				'title' => "Support the Developer",
+				'content' => "<h2>Support the Developer</h2><p>".$support_the_dev."</p>"
+			));
+			
 			
 			$screen->add_help_tab(array(
 				'id' => 'plugin-support',
@@ -105,13 +167,13 @@ class Simple_Backup_Admin extends Simple_Backup {
 				'content' => "<h2>Support</h2><p>For Plugin Support please visit <a href='http://mywebsiteadvisor.com/support/' target='_blank'>MyWebsiteAdvisor.com</a></p>"
 			));
 			
+			
+			
+			
 			$faqs = "<p><b>Question: How do I restore a backup created by simple-backup plugin?</b><br>Answer: This plugin can create backup files in many standard formats and they can be restored using commonly avaiable tools.  The MySQL Database backups could be restored using any MySQL tools, such as phpMyAdmin or MySQL Workbench.  The File Backups could be restored using FTP.</p>";
 			
 			
 			$faqs .= "<p><b>Question: What are Transient Options and what happens if they are removed?</b><br>Answer: Transient Options are used by WordPress like a basic cache system.  Rather than performing a query every time a page is loaded, the results of that query could be saved as a WordPress Transient Option.  Clearing the Transient Options before a backup will help to save space in your backup files and should not effect the functionality of your website.  The only side-effect may be a minor slowdown as all of the necessary transient options would be re-queried and saved again. </p>";
-			
-			
-			
 			
 			$screen->add_help_tab(array(
 				'id' => 'plugin-faq',
@@ -119,11 +181,13 @@ class Simple_Backup_Admin extends Simple_Backup {
 				'content' => "<h2>Frequently Asked Questions</h2>".$faqs
 			));
 			
+			
 			$screen->add_help_tab(array(
 				'id' => 'plugin-upgrades',
 				'title' => "Plugin Upgrades",
 				'content' => "<h2>Plugin Upgrades</h2><p>Upgrade to Simple Backup Ultra for Scheduled, Automatic Optimizations and Backups: <a href='http://mywebsiteadvisor.com/tools/wordpress-plugins/simple-backup/' target='_blank'>MyWebsiteAdvisor.com</a></p><p>Learn about all of our free plugins for WordPress here: <a href='http://mywebsiteadvisor.com/tools/wordpress-plugins/' target='_blank'>MyWebsiteAdvisor.com</a></p>"
 			));
+	
 	
 			$screen->set_help_sidebar("<p>Please Visit us online for more Free WordPress Plugins!</p><p><a href='http://mywebsiteadvisor.com/tools/wordpress-plugins/' target='_blank'>MyWebsiteAdvisor.com</a></p><br>");
 			//$contextual_help = 'HELP!';
@@ -783,7 +847,7 @@ class Simple_Backup_Admin extends Simple_Backup {
 				
 				
 						
-						<?php $wp_optimization_methods = $this->get_option('wp_optimization_methods'); ?>
+						<?php $wp_optimization_methods = get_option('wp_optimization_methods'); ?>
 						
 						<?php 
 						

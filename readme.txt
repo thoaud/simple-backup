@@ -4,7 +4,7 @@ Contributors: MyWebsiteAdvisor, ChrisHurst
 Tags: Backup, Archive, Restore, Recover, Recovery, Optimize, Admin, Administration
 Requires at least: 2.9
 Tested up to: 3.4.2
-Stable tag: 2.3.4
+Stable tag: 2.3.5
 
 Create and Download backups of your wordpress website.
 
@@ -144,3 +144,6 @@ If we choose your testimonial or website we can link to your site and generate s
 * added rate this plugin link in plugin row meta links on plugin screen
 * added upgrade plugin link in plugin row meta links on plugin screen
 * resolved notices and warnings about undefined index
+
+= 2.3.5 =
+* resolved array_merge function warning
