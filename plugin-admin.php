@@ -472,15 +472,15 @@ class Simple_Backup_Admin extends Simple_Backup {
 		
 		if($file_compression == ".tar.gz"){
 			$bk_name = "$bk_dir/backup-".date('Y-m-d-His').".tar.gz";
-			$command = "tar cvfz $bk_name $src_name --exclude=$exclude";
+			$command = "tar cvfz $bk_name --exclude=$exclude $src_name ";
 			
 		}elseif($file_compression == ".tar.bz2"){
 			$bk_name = "$bk_dir/backup-".date('Y-m-d-His').".tar.bz2";
-			$command = "tar jcvf $bk_name $src_name --exclude=$exclude";
+			$command = "tar jcvf $bk_name --exclude=$exclude $src_name";
 			
 		}elseif($file_compression == ".tar"){
 			$bk_name = "$bk_dir/backup-".date('Y-m-d-His').".tar";
-			$command = "tar cvf $bk_name $src_name --exclude=$exclude";
+			$command = "tar cvf $bk_name --exclude=$exclude $src_name";
 			
 		}elseif($file_compression == ".zip"){
 			$bk_name = "$bk_dir/backup-".date('Y-m-d-His').".zip";

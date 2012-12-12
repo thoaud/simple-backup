@@ -4,7 +4,7 @@ Contributors: MyWebsiteAdvisor, ChrisHurst
 Tags: Backup, Archive, Restore, Recover, Recovery, Optimize, Admin, Administration
 Requires at least: 2.9
 Tested up to: 3.5
-Stable tag: 2.3.6
+Stable tag: 2.4
 
 Create and Download backups of your wordpress website.
 
@@ -152,3 +152,5 @@ If we choose your testimonial or website we can link to your site and generate s
 * tested and tagged for compatibility with WordPress version 3.5
 * updated incorrect plugin link
 
+= 2.4 =
+* updated the filesystem backup function, resolved issue with backing up the excluded directory.
