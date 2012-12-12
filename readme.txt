@@ -3,8 +3,8 @@ Name: Simple Backup
 Contributors: MyWebsiteAdvisor, ChrisHurst
 Tags: Backup, Archive, Restore, Recover, Recovery, Optimize, Admin, Administration
 Requires at least: 2.9
-Tested up to: 3.4.2
-Stable tag: 2.3.5
+Tested up to: 3.5
+Stable tag: 2.3.6
 
 Create and Download backups of your wordpress website.
 
@@ -147,3 +147,8 @@ If we choose your testimonial or website we can link to your site and generate s
 
 = 2.3.5 =
 * resolved array_merge function warning
+
+= 2.3.6 =
+* tested and tagged for compatibility with WordPress version 3.5
+* updated incorrect plugin link
+

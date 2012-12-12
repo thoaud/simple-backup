@@ -721,7 +721,7 @@ class Simple_Backup_Admin extends Simple_Backup {
 	<p><a href='http://mywebsiteadvisor.com/tools/wordpress-plugins/simple-backup/' target='_blank'>Plugin Homepage</a></p>
 	<p><a href='http://mywebsiteadvisor.com/support/'  target='_blank'>Plugin Support</a></p>
 	<p><a href='http://mywebsiteadvisor.com/contact-us/'  target='_blank'>Contact Us</a></p>
-	<p><a href='http://wordpress.org/support/view/plugin-reviews/simple-backup?rate=5'  target='_blank'>Rate and Review This Plugin</a></p>
+	<p><a href='http://wordpress.org/support/view/plugin-reviews/simple-backup?rate=5#postform'  target='_blank'>Rate and Review This Plugin</a></p>
 		
 <?php $this->HtmlPrintBoxFooter(true); ?>
 
@@ -735,6 +735,7 @@ class Simple_Backup_Admin extends Simple_Backup {
 	-Automatic Backup Function<br />
 	-Email Backup Notification<br />
 	-Daily, Weekly or Monthly Schedule<br />
+	-Much More!</br>
 	</p>
 	
 <?php $this->HtmlPrintBoxFooter(true); ?>
@@ -929,7 +930,7 @@ class Simple_Backup_Admin extends Simple_Backup {
 				
 				
 					
-					<input type="submit" name='Submit' value='Save Settings' />
+					<input type="submit" name='Submit' value='Save Settings' class='button-primary' />
 				
 				</form>
 			
@@ -947,7 +948,7 @@ class Simple_Backup_Admin extends Simple_Backup {
 			<?php
 			echo "<form method='post'>";
 			echo "<input type='hidden' name='simple-backup' value='$base_dir'>";
-			echo "<input type='submit' value='Create Backup'>";
+			echo "<input type='submit' value='Create Backup' class='button-primary'>";
 			echo "</form>";
 			
 			$bk_dir = ABSPATH."simple-backup";
