@@ -89,7 +89,7 @@ class Simple_Backup_Admin extends Simple_Backup {
 	public function admin_menu() {		
 		// add option in admin menu, for setting details on watermarking
 		global $simple_backup_admin_page;
-		$simple_backup_admin_page = add_options_page('Simple Backup Plugin Options', 'Simple Backup', 8, __FILE__, array(&$this, 'optionsPage'));
+		$simple_backup_admin_page = add_options_page('Simple Backup Plugin Options', 'Simple Backup', 'manage_options', __FILE__, array(&$this, 'optionsPage'));
 
 		add_action('admin_print_styles-' . $simple_backup_admin_page,     array(&$this, 'installStyles'));
 	}
@@ -170,7 +170,7 @@ class Simple_Backup_Admin extends Simple_Backup {
 			
 			
 			
-			$faqs = "<p><b>Question: How do I restore a backup created by simple-backup plugin?</b><br>Answer: This plugin can create backup files in many standard formats and they can be restored using commonly avaiable tools.  The MySQL Database backups could be restored using any MySQL tools, such as phpMyAdmin or MySQL Workbench.  The File Backups could be restored using FTP.</p>";
+			$faqs = "<p><b>Question: How do I restore a backup created by simple-backup plugin?</b><br>Answer: This plugin can create backup files in many standard formats and they can be restored using commonly available tools.  The MySQL Database backups could be restored using any MySQL tools, such as phpMyAdmin or MySQL Workbench.  The File Backups could be restored using FTP.</p>";
 			
 			
 			$faqs .= "<p><b>Question: What are Transient Options and what happens if they are removed?</b><br>Answer: Transient Options are used by WordPress like a basic cache system.  Rather than performing a query every time a page is loaded, the results of that query could be saved as a WordPress Transient Option.  Clearing the Transient Options before a backup will help to save space in your backup files and should not effect the functionality of your website.  The only side-effect may be a minor slowdown as all of the necessary transient options would be re-queried and saved again. </p>";
@@ -284,7 +284,7 @@ class Simple_Backup_Admin extends Simple_Backup {
 					}
 				}
 				
-				$initial_table_size += $table_size; 
+				//$initial_table_size += $table_size; 
 				
 			}
 			
@@ -645,6 +645,8 @@ class Simple_Backup_Admin extends Simple_Backup {
 
 				<?php
 				
+				echo "<p>Plugin Version: $this->version</p>";
+				
 				echo "<p>Server OS: ".PHP_OS."</p>";
 				
 				echo "<p>Required PHP Version: 5.0+<br>";
@@ -947,7 +949,8 @@ class Simple_Backup_Admin extends Simple_Backup {
 
 			<?php
 			echo "<form method='post'>";
-			echo "<input type='hidden' name='simple-backup' value='$base_dir'>";
+			//echo "<input type='hidden' name='simple-backup' value='$base_dir'>";
+			echo "<input type='hidden' name='simple-backup' value='simple-backup'>";
 			echo "<input type='submit' value='Create Backup' class='button-primary'>";
 			echo "</form>";
 			
@@ -1044,11 +1047,16 @@ class Simple_Backup_Admin extends Simple_Backup {
 					$fileUrl = site_url()."/simple-backup/".$file->getFilename();
 					$filePath = ABSPATH."/simple-backup/".$file->getFilename();
 					
+
 					echo "<tr>";
 					echo "<td><a href='".$this->_settings_url."&delete_backup_file=".$file->getFilename()."' title='Delete Backup File'>X</a></td>";
 					echo "<td><a  href='$fileUrl' target='_blank' title='Download Backup File'>" . $file->getFilename() . "</a></td>";
 					echo "<td>" . number_format(filesize($filePath), 0) . " bytes</td>";
-					echo "<td>" . date("Y-m-d H:i:s", filectime($filePath)) . "</td>";
+					
+					$date = new DateTime("@".filectime($filePath));
+					$date->setTimezone(new DateTimeZone(get_option('timezone_string')));  
+					echo "<td>" . $date->format('Y-m-d g:i:s A T') . "</td>";
+					
 					echo "</tr>";
 					
 					$bk_file_count++;
