@@ -4,11 +4,11 @@ Contributors: MyWebsiteAdvisor, ChrisHurst
 Tags: Backup, Archive, Restore, Recover, Recovery, Optimize, Admin, Administration
 Requires at least: 2.9
 Tested up to: 3.5
-Stable tag: 2.4.1
+Stable tag: 2.5
 Donate link: http://MyWebsiteAdvisor.com/donations
 
 
-Create and Download backups of your wordpress website.
+Simple Tools to Optimize and Backup Your WordPress Website.
 
 
 == Description ==
@@ -38,7 +38,7 @@ If we choose your testimonial or website we can link to your site and generate s
 
 Requirements:
 
-* PHP5
+* PHP 5.3
 
 
 To-do:
@@ -85,6 +85,15 @@ If we choose your testimonial or website we can link to your site and generate s
 
 
 == Changelog ==
+
+= 2.5 =
+* added Backup Manager under Tools Menu
+* updated backup file display to use WP_List_Table class
+* added check for timezone, if time zone is not set, the backup files do not display the correct time.
+* updated settings page interface so it will display better on small screens.
+* added check for PHP version 5.3 for compatibility with DateTime class
+
+
 
 = 2.4.1 =
 * fixed several issues causing notices in debug.log

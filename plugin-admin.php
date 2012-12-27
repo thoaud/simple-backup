@@ -9,6 +9,10 @@ class Simple_Backup_Admin extends Simple_Backup {
 	private $_messages = array();
 
 	
+	public $backup_manager;
+	
+	
+	
 	/**
 	 * Class constructor
 	 *
@@ -22,17 +26,13 @@ class Simple_Backup_Admin extends Simple_Backup {
 		);
 		
 		// set watermark options
-		if(array_key_exists('option_name', $_GET) && array_key_exists('option_value', $_GET)
-			&& in_array($_GET['option_name'], $allowed_options)) {
-			update_option($_GET['option_name'], $_GET['option_value']);
-			
-			header("Location: " . $this->_settings_url);
-			die();	
-		}elseif(array_key_exists('delete_backup_file', $_GET)){
+		if(array_key_exists('delete_backup_file', $_GET)){
+		
 			$this->deleteBackupFile($_GET['delete_backup_file']);
 			
-			header("Location: " . $this->_settings_url);
+			header("Location: ".admin_url()."tools.php?page=backup_files" );
 			die();	
+			
 		} else {
 			// register installer function
 			register_activation_hook(SB_LOADER, array(&$this, 'activate_simple_backup'));
@@ -51,9 +51,25 @@ class Simple_Backup_Admin extends Simple_Backup {
 			
 			add_action('admin_notices', array($this, 'activation_notice_settings'));
 			add_action('admin_init', array($this, 'nag_ignore'));
+			
+			
+			$backup_manager = new Simple_Backup_Manager();
+			$this->backup_manager = $backup_manager;
+
+			add_action( 'admin_head', array($backup_manager, 'screen_options') );
+			add_action( 'admin_menu', array($backup_manager, 'simple_cron_admin_menu') );
+
+
 		}
 	}
 	
+	
+	
+
+	
+	
+	
+
 	
 
 		
@@ -92,8 +108,13 @@ class Simple_Backup_Admin extends Simple_Backup {
 		$simple_backup_admin_page = add_options_page('Simple Backup Plugin Options', 'Simple Backup', 'manage_options', __FILE__, array(&$this, 'optionsPage'));
 
 		add_action('admin_print_styles-' . $simple_backup_admin_page,     array(&$this, 'installStyles'));
+				
 	}
 	
+	
+
+	
+
 	
 	
 	
@@ -148,9 +169,9 @@ class Simple_Backup_Admin extends Simple_Backup {
 
 	public function admin_help($contextual_help, $screen_id, $screen){
 	
-		global $simple_backup_admin_page;
+		global $simple_backup_admin_page, $simple_backup_file_manager_page;
 		
-		if ($screen_id == $simple_backup_admin_page) {
+		if ($screen_id == $simple_backup_admin_page || $screen_id == $simple_backup_file_manager_page) {
 			
 			
 			$support_the_dev = $this->display_support_us();
@@ -231,286 +252,7 @@ class Simple_Backup_Admin extends Simple_Backup {
 	}
 	
 	
-	
-	
-	public function performWordPressOptimization(){
-	
-		global $wpdb;
-		
-		$optimization_queries = array(
-			'delete_spam_comments' => "DELETE FROM $wpdb->comments WHERE comment_approved = 'spam'",
-			'delete_unapproved_comments' => "DELETE FROM $wpdb->comments WHERE comment_approved = '0'",
-			'delete_revisions' => "DELETE FROM $wpdb->posts WHERE post_type = 'revision'",
-			'delete_auto_drafts' => "DELETE FROM $wpdb->posts WHERE post_status = 'auto-draft'",
-			'delete_transient_options' => "DELETE FROM $wpdb->options WHERE option_name LIKE '_transient_%'"
-		);
-		
-		$wp_optimization_methods = $this->get_option('wp_optimization_methods');
-	
-		$queries = $optimization_queries;
-	
-		foreach($queries as $method => $query){
-			if($wp_optimization_methods[$method] === "true"){
-			
-				echo "<p>Performing Optimization: " . $method."<br>";
-				$result = $wpdb->query($query);
-				echo "$result items deleted.</p>";
-						
-			}
-		}
-	}
-	
-	
-	public function performDatabaseCheck(){
-	
-		$debug_enabled = $this->get_option('debug_enabled');
 
-		echo "Checking Database...<br>";
-		
-		$local_query = 'SHOW TABLE STATUS FROM `'. DB_NAME.'`';
-		$result = mysql_query($local_query);
-		if (mysql_num_rows($result)){
-			
-			while ($row = mysql_fetch_array($result)){
-			
-				$check_query = "CHECK TABLE ".$row['Name'];
-				$check_result = mysql_query($check_query);
-				if (mysql_num_rows($check_result)){
-					while($rrow = mysql_fetch_assoc($check_result)){
-						if( $debug_enabled == "true"){
-							echo "Table: " . $row['Name'] ." ". $rrow['Msg_text'];
-							echo "<br>";
-						}
-					}
-				}
-				
-				//$initial_table_size += $table_size; 
-				
-			}
-			
-			echo "Done!<br>";
-			
-		}
-	
-		echo "<br>";
-	
-	}
-
-
-
-	public function performDatabaseRepair(){
-	
-		$debug_enabled = $this->get_option('debug_enabled');
-
-		echo "Repairing Database...<br>";
-		
-		$local_query = 'SHOW TABLE STATUS FROM `'. DB_NAME.'`';
-		$result = mysql_query($local_query);
-		if (mysql_num_rows($result)){
-			
-			while ($row = mysql_fetch_array($result)){
-			
-				$check_query = "REPAIR TABLE ".$row['Name'];
-				$check_result = mysql_query($check_query);
-				if (mysql_num_rows($check_result)){
-					while($rrow = mysql_fetch_assoc($check_result)){
-						if( $debug_enabled == "true"){
-							echo "Table: " . $row['Name'] ." ". $rrow['Msg_text'];
-							echo "<br>";
-						}
-					}
-				}
-				
-			}
-			
-			echo "Done!<br>";
-			
-		}
-	
-		echo "<br>";
-	
-	}
-	
-	
-	public function performDatabaseOptimization(){
-		
-		$initial_table_size = 0;
-		$final_table_size = 0;
-		
-		$debug_enabled = $this->get_option('debug_enabled');
-		
-		
-		
-		echo "Optimizing Database...<br>";
-		
-		$local_query = 'SHOW TABLE STATUS FROM `'. DB_NAME.'`';
-		$result = mysql_query($local_query);
-		if (mysql_num_rows($result)){
-			
-			while ($row = mysql_fetch_array($result)){
-				//var_dump($row);
-				
-				$table_size = ($row[ "Data_length" ] + $row[ "Index_length" ]) / 1024;
-				
-				$optimize_query = "OPTIMIZE TABLE ".$row['Name'];
-				if(mysql_query($optimize_query)){
-				
-					if( $debug_enabled == "true"){
-						echo "Table: " . $row['Name'] . " optimized!";
-						echo "<br>";
-					}
-				}
-				
-				$initial_table_size += $table_size; 
-				
-			}
-			
-			echo "Done!<br>";
-			
-		}
-		
-		
-		
-		
-		$local_query = 'SHOW TABLE STATUS FROM `'. DB_NAME.'`';
-		$result = mysql_query($local_query);
-		if (mysql_num_rows($result)){
-			while ($row = mysql_fetch_array($result)){
-				$table_size = ($row[ "Data_length" ] + $row[ "Index_length" ]) / 1024;
-				$final_table_size += $table_size;
-			}
-		}
-		
-		
-		
-		echo "<br>";
-		echo "Initial DB Size: " . number_format($initial_table_size, 2) . " KB<br>";
-		echo "Final DB Size: " . number_format($final_table_size, 2) . " KB<br>";
-		
-		$space_saved = $initial_table_size - $final_table_size;
-		$opt_pctg = 100 * ($space_saved / $initial_table_size);
-		echo "Space Saved: " . number_format($space_saved,2) . " KB  (" .  number_format($opt_pctg, 2) . "%)<br>";
-		echo "<br>";
-	
-	}
-	
-
-
-	public function performDatabaseBackupDebug(){
-		$bk_dir = ABSPATH."simple-backup";
-		$db_bk_file = $bk_dir . "/db_backup_".date('Y-m-d_His').".sql";
-		$command = "mysqldump --single-transaction -u ".DB_USER." -p'".DB_PASSWORD."' ".DB_NAME." -h ".DB_HOST;
-			
-	}
-
-	public function performDatabaseBackup(){
-	
-		$bk_dir = ABSPATH."simple-backup";
-		
-		$base_bk_command = "mysqldump --single-transaction -u ".DB_USER." -p'".DB_PASSWORD."' ".DB_NAME." -h ".DB_HOST;
-		
-		$db_compression = get_option('db_compression');
-		
-		//the syntax for mysqldump requires that there is NOT a space between the -p and the password
-		if($db_compression == ".sql"){
-			$db_bk_file = $bk_dir . "/db_backup_".date('Y-m-d_His').".sql";
-			$command =  $base_bk_command . " > $db_bk_file";
-			
-		}elseif($db_compression == ".sql.gz"){
-			$db_bk_file = $bk_dir . "/db_backup_".date('Y-m-d_His').".sql.gz";
-			$command = $base_bk_command . " | gzip -c > $db_bk_file ";
-			
-		}elseif($db_compression == ".sql.bz2"){
-			$db_bk_file = $bk_dir . "/db_backup_".date('Y-m-d_His').".sql.bz2";
-			$command = $base_bk_command . " | bzip2 -cq9 > $db_bk_file";
-	
-		}elseif($db_compression == ".sql.zip"){
-			$db_bk_file = $bk_dir . "/db_backup_".date('Y-m-d_His').".sql.zip";
-			$command = $base_bk_command . " | zip > $db_bk_file";
-		}
-		
-	
-		echo "<br>";
-		echo "<b>Executing Command:</b><br>$command";
-		
-		ob_flush();
-		flush();
-		
-		echo "<br>";
-		if( $this->get_option('debug_enabled') == "true"){
-			exec($command);
-			
-			ob_start();
-			passthru($base_bk_command);
-			$debug_output = htmlentities(ob_get_clean());
-			echo $debug_output;
-			
-			
-		}else{
-			exec($command);
-		};
-		echo "<br>";
-		
-		echo "Done!";
-		echo "<br>";
-		
-		ob_flush();
-		flush();
-				
-	}
-	
-	
-	public function performWebsiteBackup(){
-	
-		$bk_dir = ABSPATH."simple-backup";
-		//$bk_name = "$bk_dir/backup-".date('Y-m-d-His').".tar.gz";
-		$src_name = ABSPATH;
-		$exclude = $bk_dir;
-		
-		$file_compression = get_option('file_compression');
-		
-		
-		if($file_compression == ".tar.gz"){
-			$bk_name = "$bk_dir/backup-".date('Y-m-d-His').".tar.gz";
-			$command = "tar cvfz $bk_name --exclude=$exclude $src_name ";
-			
-		}elseif($file_compression == ".tar.bz2"){
-			$bk_name = "$bk_dir/backup-".date('Y-m-d-His').".tar.bz2";
-			$command = "tar jcvf $bk_name --exclude=$exclude $src_name";
-			
-		}elseif($file_compression == ".tar"){
-			$bk_name = "$bk_dir/backup-".date('Y-m-d-His').".tar";
-			$command = "tar cvf $bk_name --exclude=$exclude $src_name";
-			
-		}elseif($file_compression == ".zip"){
-			$bk_name = "$bk_dir/backup-".date('Y-m-d-His').".zip";
-			$command = "zip -r $bk_name $src_name -x $exclude/*";
-		}
-		
-		
-	
-		
-		echo "<br>";
-		echo "<b>Executing Command:</b><br>$command";
-		
-		ob_flush();
-		flush();
-		
-		echo "<br>";
-		if( $this->get_option('debug_enabled') == "true"){
-			passthru($command);
-		}else{
-			exec($command);
-		};
-		echo "<br>";
-		
-		echo "Done!";
-		echo "<br>";
-		
-		ob_flush();
-		flush();
-	
-	}
 	
 	public function deleteBackupFile($filename){
 	
@@ -556,6 +298,49 @@ class Simple_Backup_Admin extends Simple_Backup {
 	}
 	
 
+
+
+
+		public function display_social_media(){
+	
+	$social = '<style>
+
+.fb_edge_widget_with_comment {
+	position: absolute;
+	top: 0px;
+	right: 200px;
+}
+
+</style>
+
+<div  style="height:20px; vertical-align:top; width:50%; float:right; text-align:right; margin-top:5px; padding-right:16px; position:relative;">
+
+	<div id="fb-root"></div>
+	<script>(function(d, s, id) {
+	  var js, fjs = d.getElementsByTagName(s)[0];
+	  if (d.getElementById(id)) return;
+	  js = d.createElement(s); js.id = id;
+	  js.src = "//connect.facebook.net/en_US/all.js#xfbml=1&appId=253053091425708";
+	  fjs.parentNode.insertBefore(js, fjs);
+	}(document, "script", "facebook-jssdk"));</script>
+	
+	<div class="fb-like" data-href="http://www.facebook.com/MyWebsiteAdvisor" data-send="true" data-layout="button_count" data-width="450" data-show-faces="false"></div>
+	
+	
+	<a href="https://twitter.com/MWebsiteAdvisor" class="twitter-follow-button" data-show-count="false"  >Follow @MWebsiteAdvisor</a>
+	<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
+
+
+</div>';
+
+return $social;
+
+
+}			
+
+
+
+
 	
 	/**
 	 * Display options page
@@ -600,42 +385,14 @@ class Simple_Backup_Admin extends Simple_Backup {
 									  
 <script type="text/javascript">var wpurl = "<?php bloginfo('wpurl'); ?>";</script>
 
-<style>
-
-.fb_edge_widget_with_comment {
-	position: absolute;
-	top: 0px;
-	right: 200px;
-}
-
-</style>
-
-<div  style="height:20px; vertical-align:top; width:50%; float:right; text-align:right; margin-top:5px; padding-right:16px; position:relative;">
-
-	<div id="fb-root"></div>
-	<script>(function(d, s, id) {
-	  var js, fjs = d.getElementsByTagName(s)[0];
-	  if (d.getElementById(id)) return;
-	  js = d.createElement(s); js.id = id;
-	  js.src = "//connect.facebook.net/en_US/all.js#xfbml=1&appId=253053091425708";
-	  fjs.parentNode.insertBefore(js, fjs);
-	}(document, 'script', 'facebook-jssdk'));</script>
-	
-	<div class="fb-like" data-href="http://www.facebook.com/MyWebsiteAdvisor" data-send="true" data-layout="button_count" data-width="450" data-show-faces="false"></div>
-	
-	
-	<a href="https://twitter.com/MWebsiteAdvisor" class="twitter-follow-button" data-show-count="false"  >Follow @MWebsiteAdvisor</a>
-	<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
-
-
-</div>
+<?php echo $this->display_social_media(); ?>
 
 <div class="wrap" id="sm_div">
 
 	<div id="icon-options-general" class="icon32"><br /></div>
 	<h2>Simple Backup Plugin Settings</h2>
 	
-		
+	<p><a href='<?php echo get_option('siteurl'); ?>/wp-admin/tools.php?page=backup_files'>View Simple Backup File Manager</a></p>	
 		
 	<div id="poststuff" class="metabox-holder has-right-sidebar">
 		<div class="inner-sidebar">
@@ -649,7 +406,7 @@ class Simple_Backup_Admin extends Simple_Backup {
 				
 				echo "<p>Server OS: ".PHP_OS."</p>";
 				
-				echo "<p>Required PHP Version: 5.0+<br>";
+				echo "<p>Required PHP Version: 5.3+<br>";
 				echo "Current PHP Version: " . phpversion() . "</p>";
 
 				
@@ -668,6 +425,7 @@ class Simple_Backup_Admin extends Simple_Backup {
 				if( strpos(ini_get('disable_functions'), 'passthru') !== false){
 					echo "<p><font color='red'>Disabled Functions: ".ini_get('disable_functions')."<br><b>Please enable 'passthru' function in php.ini!</b></font></p>";
 				}
+				
 				
 				echo "<p>";
 				
@@ -771,21 +529,45 @@ class Simple_Backup_Admin extends Simple_Backup {
 		<div id="post-body-content" class="has-sidebar-content">
 			<div class="meta-box-sortabless">
 	
+			<?php
+			$opt_count = 0;
+			foreach(get_option('wp_optimization_methods') as $opt_method){
+				if($opt_method == true){
+					$opt_count ++;
+				}
+			}
+			?>
 	
-	
-			<?php $this->HtmlPrintBoxHeader('wm_dir',__('Simple Backup Settings','backup-settings'),false); ?>	
+			<?php if( (get_option('db_backup') === "true") || (get_option('file_backup') === "true") || ($opt_count > 0) ) { ?>
+			
+				<?php $this->HtmlPrintBoxHeader('wm_dir',__('Create Backup','create-backups'),false); ?>					
+					
+				<?php
+				echo "<form method='post' action='".admin_url()."tools.php?page=backup_files'>";
+				echo "<input type='hidden' name='simple-backup' value='simple-backup'>";
+				echo "<input type='submit' value='Create Backup' class='button-primary'>";
+				echo "</form>";
+				?>
+				
+				<?php $this->HtmlPrintBoxFooter(false); ?>
+			
+			<?php } ?>
+			
 			
 				<form method='post'>
 				
-					<table width="100%" >
-					<tr valign="top">
-					<td>	
+
 					<?php $this->HtmlPrintBoxHeader('wm_dir',__('Backup Settings','backup-settings'),false); ?>
-					<div style="height:250px;">
+					
+					
+						<table class='form-table'>
+						<tr>
+						<th>Database Backup Type</th>		
+						<td>
 						<?php $db_compression = $this->get_option('db_compression'); ?>
 						<?php $db_bk_types = array(".sql.gz", ".sql.bz2", ".sql", ".sql.zip"); ?>
 						
-							<p><b>Database Backup Type:</b><br /><select  name='db_compression'>
+							<p><select  name='db_compression'>
 							<option >Select a Backup Type...</option>
 							
 							<?php
@@ -801,13 +583,16 @@ class Simple_Backup_Admin extends Simple_Backup {
 							
 						</select>
 						</p>
+						</td>
+						</tr>
 						
-						
-						
+						<tr>
+						<th>File Backup Type</th>		
+						<td>
 						<?php $file_compression = $this->get_option('file_compression'); ?>
 						<?php $bk_types = array(".tar.gz", ".tar.bz2", ".tar", ".zip"); ?>
 						
-						<p><b>File Backup Type:</b><br /><select  name='file_compression'>
+						<p><select  name='file_compression'>
 							<option >Select a Backup Type...</option>
 							
 							<?php
@@ -823,267 +608,176 @@ class Simple_Backup_Admin extends Simple_Backup {
 							
 						</select>
 						</p>
-	
-	
-	
-	
+						</td>
+						</tr>
 						
-						
-						<p><b>What do you want to back up?</b></p>
-					
+						<tr>
+						<th>Backup Database</th>		
+						<td>
+
 						<?php $db_backup = $this->get_option('db_backup'); ?>
 						<?php if($db_backup === "true"){$selected = "checked='checked'";}else{$selected="";}; ?>
 						<p><input name='db_backup' type='checkbox' value='true' <?php echo $selected; ?> /> Backup Database</p>
+						</td>
+						</tr>
 						
-						
+						<tr>
+						<th>Backup Files</th>		
+						<td>
 						<?php $file_backup = $this->get_option('file_backup'); ?>
 						<?php if($file_backup === "true"){$selected = "checked='checked'";}else{$selected="";}; ?>
 						<p><input name='file_backup' type='checkbox' value='true' <?php echo $selected; ?> /> Backup Files</p>
+						</td>
+						</tr>
+						
+						<tr>
+						<th>Display Debug Output</th>		
+						<td>
+						
+						<?php $debug_enabled = $this->get_option('debug_enabled'); ?>
+						<?php if($debug_enabled === "true"){$selected = "checked='checked'";}else{$selected="";}; ?>
+						<p><input name='debug_enabled' type='checkbox' value='true' <?php echo $selected; ?> /> Backup Debugging Enabled</p>
+						<p> (Useful for debugging!)</p>
+						</td>
+						</tr>
+						</table>
 						
 						
-					</div>	
+						<p><input type="submit" name='Submit' value='Save Settings' class='button-primary' /></p>
+						
+					
 					<?php $this->HtmlPrintBoxFooter(true); ?>
-					</td>
-					<td>
+					
+					
+					
 					<?php $this->HtmlPrintBoxHeader('wm_dir',__('Optimize WordPress Before Backup','backup-settings'),false); ?>
-					<div style="height:250px;">
+					
 				
 				
 						
-						<?php $wp_optimization_methods = get_option('wp_optimization_methods'); ?>
+						<?php $wp_optimization_methods = get_option('wp_optimization_methods', array()); ?>
 						
 						<?php 
 						
 						global $wpdb; 
 						
-						
-						
-						
+	
 						?>
-								
 						
-						<?php $selected=($wp_optimization_methods['delete_spam_comments'] === 'true') ? "checked='checked'" : ""; ?>
+						
+						<table class='form-table'>
+						<tr>
+						<th>Delete Spam Comments</th>		
+						<td>
+						<?php $selected=(isset($wp_optimization_methods['delete_spam_comments']) && $wp_optimization_methods['delete_spam_comments'] == 'true') ? "checked='checked'" : ""; ?>
 						<p><input name='wp_optimization_methods[delete_spam_comments]' type='checkbox' value='true' <?php echo $selected; ?> /> Delete Spam Comments <br />
 						Currently <?php echo $wpdb->get_var("SELECT COUNT(*) FROM $wpdb->comments WHERE comment_approved = 'spam'"); ?> Spam Comments</p>
+						</td>
+						</tr>
 						
-						<?php $selected=($wp_optimization_methods['delete_unapproved_comments'] === 'true') ? "checked='checked'" : ""; ?>
+						<tr>
+						<th>Delete Unapproved Comments</th>		
+						<td>
+						<?php $selected=(isset($wp_optimization_methods['delete_unapproved_comments']) && $wp_optimization_methods['delete_unapproved_comments'] == 'true') ? "checked='checked'" : ""; ?>
 						<p><input name='wp_optimization_methods[delete_unapproved_comments]' type='checkbox' value='true' <?php echo $selected; ?> /> Delete Unapproved Comments <br />
 						Currently <?php echo $wpdb->get_var("SELECT COUNT(*) FROM $wpdb->comments WHERE comment_approved = '0'"); ?> Unapproved Comments</p>
+						</td>
+						</tr>
 						
-						<?php $selected=($wp_optimization_methods['delete_revisions'] === 'true') ? "checked='checked'" : ""; ?>
+						<tr>
+						<th>Delete Revisions</th>		
+						<td>
+						<?php $selected=(isset($wp_optimization_methods['delete_revisions']) && $wp_optimization_methods['delete_revisions'] == 'true') ? "checked='checked'" : ""; ?>
 						<p><input name='wp_optimization_methods[delete_revisions]' type='checkbox' value='true' <?php echo $selected; ?> /> Delete Post Revisions <br />
 						Currently <?php echo $wpdb->get_var("SELECT COUNT(*) FROM $wpdb->posts WHERE post_status = 'revision'"); ?> Revisions</p>
+						</td>
+						</tr>
 						
-						<?php $selected=($wp_optimization_methods['delete_auto_drafts'] === 'true') ? "checked='checked'" : ""; ?>
+						<tr>
+						<th>Delete Auto Drafts</th>		
+						<td>
+						<?php $selected=(isset($wp_optimization_methods['delete_auto_drafts']) && $wp_optimization_methods['delete_auto_drafts'] == 'true') ? "checked='checked'" : ""; ?>
 						<p><input name='wp_optimization_methods[delete_auto_drafts]' type='checkbox' value='true' <?php echo $selected; ?> /> Delete Auto Drafts <br />
 						Currently <?php echo $wpdb->get_var("SELECT COUNT(*) FROM $wpdb->posts WHERE post_type = 'auto-draft'"); ?> Drafts</p>
+						</td>
+						</tr>
 						
-						<?php $selected=($wp_optimization_methods['delete_transient_options'] === 'true') ? "checked='checked'" : ""; ?>
+						<tr>
+						<th>Delete Transient Options</th>		
+						<td>
+						<?php $selected=(isset($wp_optimization_methods['delete_transient_options']) && $wp_optimization_methods['delete_transient_options'] == 'true') ? "checked='checked'" : ""; ?>
 						<p><input name='wp_optimization_methods[delete_transient_options]' type='checkbox' value='true' <?php echo $selected; ?> /> Delete Transient Options (Advanced)<br />
 						Currently <?php echo $wpdb->get_var("SELECT COUNT(*) FROM $wpdb->options WHERE option_name LIKE '_transient_%'"); ?> Transient Options</p>
+						</td>
+						</tr>
+						</table>
 						
 						
 						
+						<p><input type="submit" name='Submit' value='Save Settings' class='button-primary' /></p>
 						
-					</div>
+					
 					<?php $this->HtmlPrintBoxFooter(true); ?>
-					</td>
-					<td>
+					
 					<?php $this->HtmlPrintBoxHeader('wm_dir',__('Optimize Database Before Backup','backup-settings'),false); ?>
-					<div style="height:250px;">
 					
 					
-						<p><b>Check Database Before Backup</b></p>
-						
+						<table class='form-table'>
+						<tr>
+						<th>Check Database</th>		
+						<td>					
 						<?php $check_db_enabled = $this->get_option('check_db_enabled'); ?>
 						<?php if($check_db_enabled === "true"){$selected = "checked='checked'";}else{$selected="";}; ?>
-						<p><input name='check_db_enabled' type='checkbox' value='true' <?php echo $selected; ?> /> Database Check </p>
-	
-						<p><b>Repair Database Before Backup</b></p>
+						<p><input name='check_db_enabled' type='checkbox' value='true' <?php echo $selected; ?> /> Check Database Before Backup </p>
+						</td>
+						</tr>
 						
+						<tr>
+						<th>Repair Database</th>
+						<td>					
 						<?php $repair_db_enabled = $this->get_option('repair_db_enabled'); ?>
 						<?php if($repair_db_enabled === "true"){$selected = "checked='checked'";}else{$selected="";}; ?>
-						<p><input name='repair_db_enabled' type='checkbox' value='true' <?php echo $selected; ?> /> Database Repair  (Advanced)</p>
-	
-			
-						<p><b>Optimize Database Before Backup</b></p>
+						<p><input name='repair_db_enabled' type='checkbox' value='true' <?php echo $selected; ?> /> Repair Database Before Backup  (Advanced)</p>
+						</td>
+						</tr>
 						
+						<tr>
+						<th>Optimize Database</th>
+						<td>						
 						<?php $optimize_db_enabled = $this->get_option('optimize_db_enabled'); ?>
 						<?php if($optimize_db_enabled === "true"){$selected = "checked='checked'";}else{$selected="";}; ?>
-						<p><input name='optimize_db_enabled' type='checkbox' value='true' <?php echo $selected; ?> /> Database Optimization </p>
-
-					</div>
+						<p><input name='optimize_db_enabled' type='checkbox' value='true' <?php echo $selected; ?> /> Optimize Database Before Backup </p>
+						</td>
+						</tr>
+						</table>
+						
+						<p><input type="submit" name='Submit' value='Save Settings' class='button-primary' /></p>
+					
 					<?php $this->HtmlPrintBoxFooter(true); ?>
-					</td>
-					<td>
-					
-					</table>
 					
 					
-					
-					
-	
-					<p><b>Display Backup Command Output?</b> (Useful for debugging!)</p>
-					
-					<?php $debug_enabled = $this->get_option('debug_enabled'); ?>
-					<?php if($debug_enabled === "true"){$selected = "checked='checked'";}else{$selected="";}; ?>
-					<p><input name='debug_enabled' type='checkbox' value='true' <?php echo $selected; ?> /> Backup Debugging Enabled</p>
-	
-				
-				
-					
-					<input type="submit" name='Submit' value='Save Settings' class='button-primary' />
-				
+							
 				</form>
 			
 			
-			<?php $this->HtmlPrintBoxFooter(false); ?>
-			
-			
-			
-						
-			<?php $this->HtmlPrintBoxHeader('wm_dir',__('Create Backup','create-backups'),false); ?>					
-				
 		
-				
-
-			<?php
-			echo "<form method='post'>";
-			//echo "<input type='hidden' name='simple-backup' value='$base_dir'>";
-			echo "<input type='hidden' name='simple-backup' value='simple-backup'>";
-			echo "<input type='submit' value='Create Backup' class='button-primary'>";
-			echo "</form>";
 			
-			$bk_dir = ABSPATH."simple-backup";
+			<?php if( get_option('db_backup') === "true" ) { ?>
 			
-			if(!is_dir($bk_dir)){
-				mkdir($bk_dir);
-			}
-			
-			if(!is_dir($bk_dir)){
-				echo "Can not access: $bk_dir<br>";
-			}
-			
-			
-			
-			if(array_key_exists('simple-backup', $_POST)) {
-			
-				set_time_limit(0);
-			
-				echo "<div style='overflow:scroll; height:250px;'>";
-				
-				
-				
-				
-				if($this->get_option('wp_optimization_methods') ){
-
-					$this->performWordPressOptimization();
-
-				}
-				
-				if($this->get_option('check_db_enabled') === "true"){
-
-					$this->performDatabaseCheck();
-
-				}
-				
-				if($this->get_option('repair_db_enabled') === "true"){
-
-					$this->performDatabaseRepair();
-
-				}
-				
-				if($this->get_option('optimize_db_enabled') === "true"){
-
-					$this->performDatabaseOptimization();
-
-				}
-				
-				if($this->get_option('db_backup') === "true"){
-
-					$this->performDatabaseBackup();
-
-				}
-				
-				if($this->get_option('file_backup') === "true"){
+				<?php $this->HtmlPrintBoxHeader('wm_dir',__('Create Backup','create-backups'),false); ?>					
 					
-					$this->performWebsiteBackup();
-					
-				}
+				<?php
+				echo "<form method='post' action='".admin_url()."tools.php?page=backup_files'>";
+				echo "<input type='hidden' name='simple-backup' value='simple-backup'>";
+				echo "<input type='submit' value='Create Backup' class='button-primary'>";
+				echo "</form>";
+				?>
 				
-				echo "</div>";
-				
-			}
+				<?php $this->HtmlPrintBoxFooter(false); ?>
 			
+			<?php } ?>
 			
-			
-			?>
-			
-			<?php $this->HtmlPrintBoxFooter(false); ?>
-			
-			
-			
-			
-			<?php $this->HtmlPrintBoxHeader('wm_dir',__('Download Backups','download-backups'),false); ?>	
-			<?php
-		
-			$allowed_file_types = array('gz', 'sql', 'zip', 'tar', 'bz2');
-			
-			$bk_file_count = 0;
-			
-			echo "<table width='100%'>";
-			echo "<tr>";
-				echo "<td>Delete</td>";
-				echo "<td>Download</td>";
-				echo "<td>Size</td>";
-				echo "<td>Date</td>";
-			echo "</tr>";
-			
-			$iterator = new RecursiveDirectoryIterator($bk_dir);
-			foreach (new RecursiveIteratorIterator($iterator, RecursiveIteratorIterator::CHILD_FIRST) as  $file) {
-				$file_info = pathinfo($file->getFilename());
-				if($file->isFile() && in_array(strtolower($file_info['extension']), $allowed_file_types)){ //create list of files
-				
-					$fileUrl = site_url()."/simple-backup/".$file->getFilename();
-					$filePath = ABSPATH."/simple-backup/".$file->getFilename();
-					
-
-					echo "<tr>";
-					echo "<td><a href='".$this->_settings_url."&delete_backup_file=".$file->getFilename()."' title='Delete Backup File'>X</a></td>";
-					echo "<td><a  href='$fileUrl' target='_blank' title='Download Backup File'>" . $file->getFilename() . "</a></td>";
-					echo "<td>" . number_format(filesize($filePath), 0) . " bytes</td>";
-					
-					$date = new DateTime("@".filectime($filePath));
-					$date->setTimezone(new DateTimeZone(get_option('timezone_string')));  
-					echo "<td>" . $date->format('Y-m-d g:i:s A T') . "</td>";
-					
-					echo "</tr>";
-					
-					$bk_file_count++;
-					
-				}
-			}
-			
-			echo "</table><br>";
-			
-			if($bk_file_count == 0){
-			
-				echo "No backup files have been created yet.<br>Please click on the 'Create Backup' button above to create a backup.";
-			
-			}else{
-			
-				echo "Please click on a file to download it, click on the 'X' next to each file to delete it once it has finished downloading.<br>";
-				echo "<b>Remember if you are doing a backup of both files and database, you need to download both backup files!<b>";
-			
-			}
-		
-
-
-			?>
-		<?php $this->HtmlPrintBoxFooter(false); ?>
-		
 	
-		
 </div></div></div></div>
 
 </div>
