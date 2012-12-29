@@ -425,7 +425,7 @@ class Simple_Backup_Manager{
 				 
 				
 				$bk_files[ $bk_file_count ]['date'] = $date->format('Y-m-d g:i:s A T');
-				$bk_files[ $bk_file_count ]['timestamp'] = $date->getTimestamp();
+				//$bk_files[ $bk_file_count ]['timestamp'] = $date->getTimestamp();
 				$bk_files[ $bk_file_count ]['filename'] = $file->getFilename();
 				$bk_files[ $bk_file_count ]['size'] = size_format(filesize($filePath));
 				$bk_files[ $bk_file_count ]['link'] = $fileUrl;

@@ -381,6 +381,9 @@ return $social;
 				
 ?>
 
+<style>
+.form-table{clear:left;};
+</style>
 	
 									  
 <script type="text/javascript">var wpurl = "<?php bloginfo('wpurl'); ?>";</script>
@@ -406,7 +409,7 @@ return $social;
 				
 				echo "<p>Server OS: ".PHP_OS."</p>";
 				
-				echo "<p>Required PHP Version: 5.3+<br>";
+				echo "<p>Required PHP Version: 5.2+<br>";
 				echo "Current PHP Version: " . phpversion() . "</p>";
 
 				
@@ -648,13 +651,11 @@ return $social;
 					
 					<?php $this->HtmlPrintBoxFooter(true); ?>
 					
-					
+				
 					
 					<?php $this->HtmlPrintBoxHeader('wm_dir',__('Optimize WordPress Before Backup','backup-settings'),false); ?>
 					
-				
-				
-						
+									
 						<?php $wp_optimization_methods = get_option('wp_optimization_methods', array()); ?>
 						
 						<?php 

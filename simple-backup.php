@@ -6,7 +6,7 @@ class Simple_Backup {
 	 *
 	 * @var string
 	 */
-	public $version                 = '2.5';
+	public $version                 = '2.5.1';
 	
 	/**
 	 * Array with default options
@@ -19,10 +19,10 @@ class Simple_Backup {
 		'db_compression' => '.sql',
 		'file_backup' => true,
 		'file_compression' => ".tar.gz",
-		'debug_enabled' => true,
+		'debug_enabled' => false,
 		'optimize_db_enabled' => true,
 		'check_db_enabled' => true,
-		'repair_db_enabled' => true,
+		'repair_db_enabled' => false,
 		'wp_optimization_methods'=>array(
 			'delete_transient_options' => false,
 			'delete_auto_drafts' => false,

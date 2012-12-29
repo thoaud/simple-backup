@@ -4,7 +4,7 @@ Contributors: MyWebsiteAdvisor, ChrisHurst
 Tags: Backup, Archive, Restore, Recover, Recovery, Optimize, Admin, Administration
 Requires at least: 2.9
 Tested up to: 3.5
-Stable tag: 2.5
+Stable tag: 2.5.1
 Donate link: http://MyWebsiteAdvisor.com/donations
 
 
@@ -38,7 +38,7 @@ If we choose your testimonial or website we can link to your site and generate s
 
 Requirements:
 
-* PHP 5.3
+* PHP 5.2
 
 
 To-do:
@@ -85,6 +85,11 @@ If we choose your testimonial or website we can link to your site and generate s
 
 
 == Changelog ==
+
+= 2.5.1 =
+* fixed plugin settings screen
+* updated plugin to be compatible with PHP 5.2
+
 
 = 2.5 =
 * added Backup Manager under Tools Menu
