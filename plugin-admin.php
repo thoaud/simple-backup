@@ -470,9 +470,11 @@ return $social;
 				
 				echo "<p>Peak Memory Use: " . number_format(memory_get_peak_usage()/1024/1024, 1) . " / " . ini_get('memory_limit') . "</p>";
 				
-				$lav = sys_getloadavg();
-				echo "<p>Server Load Average: ".$lav[0].", ".$lav[1].", ".$lav[2]."</p>";
-				
+				if(function_exists('sys_getloadavg')){
+					$lav = sys_getloadavg();
+					echo "<p>Server Load Average: ".$lav[0].", ".$lav[1].", ".$lav[2]."</p>";
+				}
+								
 				?>
 
 <?php $this->HtmlPrintBoxFooter(true); ?>
@@ -620,7 +622,7 @@ return $social;
 
 						<?php $db_backup = $this->get_option('db_backup'); ?>
 						<?php if($db_backup === "true"){$selected = "checked='checked'";}else{$selected="";}; ?>
-						<p><input name='db_backup' type='checkbox' value='true' <?php echo $selected; ?> /> Backup Database</p>
+						<p><label><input name='db_backup' type='checkbox' value='true' <?php echo $selected; ?> /> Backup Database</label></p>
 						</td>
 						</tr>
 						
@@ -629,7 +631,7 @@ return $social;
 						<td>
 						<?php $file_backup = $this->get_option('file_backup'); ?>
 						<?php if($file_backup === "true"){$selected = "checked='checked'";}else{$selected="";}; ?>
-						<p><input name='file_backup' type='checkbox' value='true' <?php echo $selected; ?> /> Backup Files</p>
+						<p><label><input name='file_backup' type='checkbox' value='true' <?php echo $selected; ?> /> Backup Files</label></p>
 						</td>
 						</tr>
 						
@@ -639,7 +641,7 @@ return $social;
 						
 						<?php $debug_enabled = $this->get_option('debug_enabled'); ?>
 						<?php if($debug_enabled === "true"){$selected = "checked='checked'";}else{$selected="";}; ?>
-						<p><input name='debug_enabled' type='checkbox' value='true' <?php echo $selected; ?> /> Backup Debugging Enabled</p>
+						<p><label><input name='debug_enabled' type='checkbox' value='true' <?php echo $selected; ?> /> Backup Debugging Enabled</label></p>
 						<p> (Useful for debugging!)</p>
 						</td>
 						</tr>
@@ -671,7 +673,7 @@ return $social;
 						<th>Delete Spam Comments</th>		
 						<td>
 						<?php $selected=(isset($wp_optimization_methods['delete_spam_comments']) && $wp_optimization_methods['delete_spam_comments'] == 'true') ? "checked='checked'" : ""; ?>
-						<p><input name='wp_optimization_methods[delete_spam_comments]' type='checkbox' value='true' <?php echo $selected; ?> /> Delete Spam Comments <br />
+						<p><label><input name='wp_optimization_methods[delete_spam_comments]' type='checkbox' value='true' <?php echo $selected; ?> /> Delete Spam Comments </label><br />
 						Currently <?php echo $wpdb->get_var("SELECT COUNT(*) FROM $wpdb->comments WHERE comment_approved = 'spam'"); ?> Spam Comments</p>
 						</td>
 						</tr>
@@ -680,7 +682,7 @@ return $social;
 						<th>Delete Unapproved Comments</th>		
 						<td>
 						<?php $selected=(isset($wp_optimization_methods['delete_unapproved_comments']) && $wp_optimization_methods['delete_unapproved_comments'] == 'true') ? "checked='checked'" : ""; ?>
-						<p><input name='wp_optimization_methods[delete_unapproved_comments]' type='checkbox' value='true' <?php echo $selected; ?> /> Delete Unapproved Comments <br />
+						<p><label><input name='wp_optimization_methods[delete_unapproved_comments]' type='checkbox' value='true' <?php echo $selected; ?> /> Delete Unapproved Comments </label><br />
 						Currently <?php echo $wpdb->get_var("SELECT COUNT(*) FROM $wpdb->comments WHERE comment_approved = '0'"); ?> Unapproved Comments</p>
 						</td>
 						</tr>
@@ -689,7 +691,7 @@ return $social;
 						<th>Delete Revisions</th>		
 						<td>
 						<?php $selected=(isset($wp_optimization_methods['delete_revisions']) && $wp_optimization_methods['delete_revisions'] == 'true') ? "checked='checked'" : ""; ?>
-						<p><input name='wp_optimization_methods[delete_revisions]' type='checkbox' value='true' <?php echo $selected; ?> /> Delete Post Revisions <br />
+						<p><label><input name='wp_optimization_methods[delete_revisions]' type='checkbox' value='true' <?php echo $selected; ?> /> Delete Post Revisions </label><br />
 						Currently <?php echo $wpdb->get_var("SELECT COUNT(*) FROM $wpdb->posts WHERE post_status = 'revision'"); ?> Revisions</p>
 						</td>
 						</tr>
@@ -698,7 +700,7 @@ return $social;
 						<th>Delete Auto Drafts</th>		
 						<td>
 						<?php $selected=(isset($wp_optimization_methods['delete_auto_drafts']) && $wp_optimization_methods['delete_auto_drafts'] == 'true') ? "checked='checked'" : ""; ?>
-						<p><input name='wp_optimization_methods[delete_auto_drafts]' type='checkbox' value='true' <?php echo $selected; ?> /> Delete Auto Drafts <br />
+						<p><label><input name='wp_optimization_methods[delete_auto_drafts]' type='checkbox' value='true' <?php echo $selected; ?> /> Delete Auto Drafts </label><br />
 						Currently <?php echo $wpdb->get_var("SELECT COUNT(*) FROM $wpdb->posts WHERE post_type = 'auto-draft'"); ?> Drafts</p>
 						</td>
 						</tr>
@@ -707,7 +709,7 @@ return $social;
 						<th>Delete Transient Options</th>		
 						<td>
 						<?php $selected=(isset($wp_optimization_methods['delete_transient_options']) && $wp_optimization_methods['delete_transient_options'] == 'true') ? "checked='checked'" : ""; ?>
-						<p><input name='wp_optimization_methods[delete_transient_options]' type='checkbox' value='true' <?php echo $selected; ?> /> Delete Transient Options (Advanced)<br />
+						<p><label><input name='wp_optimization_methods[delete_transient_options]' type='checkbox' value='true' <?php echo $selected; ?> /> Delete Transient Options (Advanced)</label><br />
 						Currently <?php echo $wpdb->get_var("SELECT COUNT(*) FROM $wpdb->options WHERE option_name LIKE '_transient_%'"); ?> Transient Options</p>
 						</td>
 						</tr>
@@ -729,7 +731,7 @@ return $social;
 						<td>					
 						<?php $check_db_enabled = $this->get_option('check_db_enabled'); ?>
 						<?php if($check_db_enabled === "true"){$selected = "checked='checked'";}else{$selected="";}; ?>
-						<p><input name='check_db_enabled' type='checkbox' value='true' <?php echo $selected; ?> /> Check Database Before Backup </p>
+						<p><label><input name='check_db_enabled' type='checkbox' value='true' <?php echo $selected; ?> /> Check Database Before Backup </label></p>
 						</td>
 						</tr>
 						
@@ -738,7 +740,7 @@ return $social;
 						<td>					
 						<?php $repair_db_enabled = $this->get_option('repair_db_enabled'); ?>
 						<?php if($repair_db_enabled === "true"){$selected = "checked='checked'";}else{$selected="";}; ?>
-						<p><input name='repair_db_enabled' type='checkbox' value='true' <?php echo $selected; ?> /> Repair Database Before Backup  (Advanced)</p>
+						<p><label><input name='repair_db_enabled' type='checkbox' value='true' <?php echo $selected; ?> /> Repair Database Before Backup  (Advanced)</label></p>
 						</td>
 						</tr>
 						
@@ -747,7 +749,7 @@ return $social;
 						<td>						
 						<?php $optimize_db_enabled = $this->get_option('optimize_db_enabled'); ?>
 						<?php if($optimize_db_enabled === "true"){$selected = "checked='checked'";}else{$selected="";}; ?>
-						<p><input name='optimize_db_enabled' type='checkbox' value='true' <?php echo $selected; ?> /> Optimize Database Before Backup </p>
+						<p><label><input name='optimize_db_enabled' type='checkbox' value='true' <?php echo $selected; ?> /> Optimize Database Before Backup </label></p>
 						</td>
 						</tr>
 						</table>
