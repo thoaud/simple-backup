@@ -4,7 +4,7 @@ Contributors: MyWebsiteAdvisor, ChrisHurst
 Tags: Backup, Archive, Restore, Recover, Recovery, Optimize, Admin, Administration
 Requires at least: 2.9
 Tested up to: 3.5
-Stable tag: 2.5.2
+Stable tag: 2.6
 Donate link: http://MyWebsiteAdvisor.com/donations
 
 
@@ -85,6 +85,15 @@ If we choose your testimonial or website we can link to your site and generate s
 
 
 == Changelog ==
+
+= 2.6 = 
+* updated plugin to use WordPress settings API
+* consolidated the plugin settings so they are all stored in one main setting, rather than individual settings in wp-options table
+* updated plugin settings page with tabs, rather than scrolling down the page
+* reorgainzed entire plugin file layout
+* resolved issues with large file backups causing timeout errors
+
+
 
 = 2.5.2 =
 * added label elements around checkboxes to make the label text clickable.

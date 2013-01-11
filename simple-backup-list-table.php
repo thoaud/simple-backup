@@ -1,5 +1,6 @@
 <?php
 
+
 if(!class_exists('WP_List_Table')){
     require_once( ABSPATH . 'wp-admin/includes/class-wp-list-table.php' );
 }
@@ -25,11 +26,13 @@ class Backup_List_Table extends WP_List_Table{
 
 	function column_filename($item) {
 	  	$actions = array(
-				'Download'    => sprintf('<a href="%s">Download</a>',$item['link']),
-				'Delete'    => sprintf('<a href="'.admin_url().'options-general.php?page=%s&delete_backup_file=%s">Delete</a>',"simple-backup/plugin-admin.php",$item['filename']),
-				
-			);
-			$link = sprintf('<strong><a href="%s">%s</a></strong>',$item['link'], $item['filename']);
+			'Download'    => sprintf('<a href="%s">Download</a>',$item['link']),
+			'Delete'    => sprintf('<a href="'.admin_url().'tools.php?page=%s&delete_backup_file=%s">Delete</a>',"backup_manager",$item['filename']),
+			
+		);
+		
+		$link = sprintf('<strong><a href="%s">%s</a></strong>',$item['link'], $item['filename']);
+		
 	  	return sprintf('%1$s %2$s', $link, $this->row_actions($actions) );
 	}
 
@@ -71,8 +74,8 @@ class Backup_List_Table extends WP_List_Table{
 			$link .=  "<input type='submit' value='Create Backup' class='button-primary'>";
 			$link .=  "</form > ";
 			
-			$link .=  "<form method='post' action='".admin_url()."options-general.php?page=simple-backup/plugin-admin.php'  style='display:inline;'>";
-			$link .=  "<input type='submit' value='Change Settings' class='button-primary'>";
+			$link .=  "<form method='post' action='".admin_url()."options-general.php?page=simple-backup-settings'  style='display:inline;'>";
+			$link .=  "<input type='submit' value='Change Settings' class='button-secondary'>";
 			$link .=  "</form>";
 			
 			$link .= "</div>";
@@ -86,8 +89,8 @@ class Backup_List_Table extends WP_List_Table{
 			$link .=  "<input type='submit' value='Create Backup' class='button-primary'>";
 			$link .=  "</form> ";
 			
-			$link .=  "<form method='post' action='".admin_url()."options-general.php?page=simple-backup/plugin-admin.php'  style='display:inline;'>";
-			$link .=  "<input type='submit' value='Change Settings' class='button-primary'>";
+			$link .=  "<form method='post' action='".admin_url()."options-general.php?page=simple-backup-settings'  style='display:inline;'>";
+			$link .=  "<input type='submit' value='Change Settings' class='button-secondary'>";
 			$link .=  "</form>";
 			
 			$link .= "</div>";

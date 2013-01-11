@@ -4,23 +4,41 @@
 class Simple_Backup_Manager{
 
 	private $backup_table;
+	
+	public $opt;
+	
+	
+	public function __construct(){
+		// set watermark options
+		if(array_key_exists('delete_backup_file', $_GET)){
+		
+			$this->deleteBackupFile($_GET['delete_backup_file']);
+			
+			header("Location: ".admin_url()."tools.php?page=backup_manager" );
+			die();	
+		}		
+	}
+	
+	
+	private function deleteBackupFile($filename){
+	
+		$bk_dir = ABSPATH."simple-backup/";
+		//echo $bk_dir . $filename;
+		unlink($bk_dir . $filename);
+	
+	}
 
-	function simple_cron_admin_menu(){
+	function simple_backup_admin_menu(){
+	
         global $simple_backup_file_manager_page;
-		$simple_backup_file_manager_page = add_submenu_page( 'tools.php', __('Simple Backup File Manager', 'simple_backup'), __('Backup Manager', 'simple_backup'), 'manage_options', 'backup_files', array(&$this, 'backup_manager') );
+		
+		$simple_backup_file_manager_page = add_submenu_page( 'tools.php', __('Simple Backup File Manager', 'simple_backup'), __('Backup Manager', 'simple_backup'), 'manage_options', 'backup_manager', array(&$this, 'backup_manager') );
 		
     }
 	
 	
 	
 	public function backup_processor_form(){
-	
-
-		//echo "<form method='post'>";
-		//echo "<input type='hidden' name='simple-backup' value='$base_dir'>";
-		//echo "<input type='hidden' name='simple-backup' value='simple-backup'>";
-		//echo "<input type='submit' value='Create Backup' class='button-primary'>";
-		//echo "</form>";
 		
 		$bk_dir = ABSPATH."simple-backup";
 		
@@ -34,50 +52,74 @@ class Simple_Backup_Manager{
 		
 		
 		
+		
+		
 		if(array_key_exists('simple-backup', $_POST)) {
 		
 			set_time_limit(0);
-		
-			echo "<div style='overflow-y:scroll; max-height:250px; border:1px solid #CCC; padding:10px;'>";
 			
+
 			
+			echo "<div class='updated' style='overflow-y:auto; max-height:250px;  padding-left:10px;'>";
 			
+			if($this->opt == NULL){
+				echo "Nothing to do... <a href='".admin_url()."/options-general.php?page=simple-backup-settings'>Change Backup Settings</a>";
+				//return false;
+			}
 			
-			if(get_option('wp_optimization_methods') ){
+			$wp_opt = $this->opt['wp_optimizer_settings'];
+
+			if( isset($wp_opt) ){
 
 				$this->performWordPressOptimization();
 
 			}
 			
-			if(get_option('check_db_enabled') === "true"){
+			
+			
+			$db_opt = $this->opt['db_optimizer_settings'];
+			
+			if( isset($db_opt) && $db_opt['check_database'] == "true"){
 
 				$this->performDatabaseCheck();
 
 			}
-			
-			if(get_option('repair_db_enabled') === "true"){
 
+			if( isset($db_opt) && $db_opt['repair_database'] == "true"){
+			
 				$this->performDatabaseRepair();
 
 			}
-			
-			if(get_option('optimize_db_enabled') === "true"){
+
+			if( isset($db_opt) && $db_opt['optimize_database'] == "true"){			
 
 				$this->performDatabaseOptimization();
 
 			}
 			
-			if(get_option('db_backup') === "true"){
+			
+			
+			$opt = $this->opt['backup_settings'];
+			
+			if( isset($opt) && $opt['enable_db_backup'] === "true"){
 
 				$this->performDatabaseBackup();
 
 			}
 			
-			if(get_option('file_backup') === "true"){
+			if( isset($opt) && $opt['enable_file_backup'] === "true"){
+			
+				echo "<div class='updated'>";
+				echo "<p><img src='".site_url()."/wp-admin/images/loading.gif' style='vertical-align: top;'>";
+				echo "  File Backup is Processing in the Background!  <a href=''>(Refresh)</a></p></div>";
+	
+				ob_flush(); 
+				flush();
 				
 				$this->performWebsiteBackup();
 				
 			}
+			
 			
 			echo "</div>";
 			
@@ -101,7 +143,7 @@ class Simple_Backup_Manager{
 			'delete_transient_options' => "DELETE FROM $wpdb->options WHERE option_name LIKE '_transient_%'"
 		);
 		
-		$wp_optimization_methods = get_option('wp_optimization_methods');
+		$wp_optimization_methods = $this->opt['wp_optimizer_settings'];
 	
 		$queries = $optimization_queries;
 	
@@ -118,9 +160,10 @@ class Simple_Backup_Manager{
 	
 	
 	public function performDatabaseCheck(){
-	
-		$debug_enabled = get_option('debug_enabled');
+		$debug_enabled = 'false';
+		//$debug_enabled = get_option('debug_enabled');
 
+		echo "<p>";
 		echo "Checking Database...<br>";
 		
 		$local_query = 'SHOW TABLE STATUS FROM `'. DB_NAME.'`';
@@ -148,16 +191,17 @@ class Simple_Backup_Manager{
 			
 		}
 	
-		echo "<br>";
+		echo "</p>";
 	
 	}
 
 
 
 	public function performDatabaseRepair(){
-	
-		$debug_enabled = get_option('debug_enabled');
+		$debug_enabled = 'false';
+		//$debug_enabled = get_option('debug_enabled');
 
+		echo "<p>";
 		echo "Repairing Database...<br>";
 		
 		$local_query = 'SHOW TABLE STATUS FROM `'. DB_NAME.'`';
@@ -183,7 +227,7 @@ class Simple_Backup_Manager{
 			
 		}
 	
-		echo "<br>";
+		echo "</p>";
 	
 	}
 	
@@ -193,10 +237,11 @@ class Simple_Backup_Manager{
 		$initial_table_size = 0;
 		$final_table_size = 0;
 		
-		$debug_enabled = get_option('debug_enabled');
+		$debug_enabled = 'false';
+		//$debug_enabled = get_option('debug_enabled');
 		
-		
-		
+			
+		echo "<p>";	
 		echo "Optimizing Database...<br>";
 		
 		$local_query = 'SHOW TABLE STATUS FROM `'. DB_NAME.'`';
@@ -246,7 +291,7 @@ class Simple_Backup_Manager{
 		$space_saved = $initial_table_size - $final_table_size;
 		$opt_pctg = 100 * ($space_saved / $initial_table_size);
 		echo "Space Saved: " . number_format($space_saved,2) . " KB  (" .  number_format($opt_pctg, 2) . "%)<br>";
-		echo "<br>";
+		echo "</p";
 	
 	}
 	
@@ -265,7 +310,7 @@ class Simple_Backup_Manager{
 		
 		$base_bk_command = "mysqldump --single-transaction -u ".DB_USER." -p'".DB_PASSWORD."' ".DB_NAME." -h ".DB_HOST;
 		
-		$db_compression = get_option('db_compression');
+		$db_compression = $this->opt['backup_settings']['db_compression'];
 		
 		//the syntax for mysqldump requires that there is NOT a space between the -p and the password
 		if($db_compression == ".sql"){
@@ -286,14 +331,17 @@ class Simple_Backup_Manager{
 		}
 		
 	
-		echo "<br>";
+		echo "<p>";
 		echo "<b>Executing Command:</b><br>$command";
 		
 		ob_flush();
 		flush();
 		
 		echo "<br>";
-		if( get_option('debug_enabled') == "true"){
+		
+		$debug_enabled = false;
+		
+		if( $debug_enabled == "true"){
 			exec($command);
 			
 			ob_start();
@@ -308,7 +356,7 @@ class Simple_Backup_Manager{
 		echo "<br>";
 		
 		echo "Done!";
-		echo "<br>";
+		echo "</p>";
 		
 		ob_flush();
 		flush();
@@ -323,8 +371,8 @@ class Simple_Backup_Manager{
 		$src_name = ABSPATH;
 		$exclude = $bk_dir;
 		
-		$file_compression = get_option('file_compression');
-		
+
+		$file_compression = $this->opt['backup_settings']['file_compression'];
 		
 		if($file_compression == ".tar.gz"){
 			$bk_name = "$bk_dir/backup-".date('Y-m-d-His').".tar.gz";
@@ -346,27 +394,47 @@ class Simple_Backup_Manager{
 		
 	
 		
-		echo "<br>";
-		echo "<b>Executing Command:</b><br>$command";
+		echo "<p>";
+		echo "<b>Executing Command in Background:</b><br>$command";
 		
 		ob_flush();
 		flush();
 		
 		echo "<br>";
-		if( get_option('debug_enabled') == "true"){
+		
+		
+		$debug_enabled = false;
+		
+		if( $debug_enabled == "true"){
 			passthru($command);
 		}else{
-			exec($command);
+		
+			$this->exec_backup($command, $bk_name);
+	
 		};
+		
+		
+		
 		echo "<br>";
 		
-		echo "Done!";
-		echo "<br>";
+		echo "Processing!";
+		echo "</p>";
 		
 		ob_flush();
 		flush();
 	
 	}
+	
+	
+	private function exec_backup($command, $bk_name){
+		
+		update_option('simple-backup-background-processing', $bk_name);
+			
+		exec($command . " > /dev/null &");
+		
+	}
+	
+	
 
 
 	
@@ -427,7 +495,7 @@ class Simple_Backup_Manager{
 				$bk_files[ $bk_file_count ]['date'] = $date->format('Y-m-d g:i:s A T');
 				//$bk_files[ $bk_file_count ]['timestamp'] = $date->getTimestamp();
 				$bk_files[ $bk_file_count ]['filename'] = $file->getFilename();
-				$bk_files[ $bk_file_count ]['size'] = size_format(filesize($filePath));
+				$bk_files[ $bk_file_count ]['size'] = size_format(filesize($filePath),2);
 				$bk_files[ $bk_file_count ]['link'] = $fileUrl;
 				
 				$bk_file_count++;
@@ -447,7 +515,7 @@ class Simple_Backup_Manager{
 
         //execute only on login_log page, othewise return null
         $page = ( isset($_GET['page']) ) ? esc_attr($_GET['page']) : false;
-        if( 'backup_files' != $page )
+        if( 'backup_manager' != $page )
             return;
 
         $current_screen = get_current_screen();
@@ -477,6 +545,27 @@ class Simple_Backup_Manager{
     }
 
 
+	private function background_process_check(){
+	
+		$background = get_option('simple-backup-background-processing', 'false');
+	
+		if(isset($background) && ("false" <> $background)){
+			
+			clearstatcache();
+		
+			if( filemtime($background) == time() ){
+				echo "<div class='updated'>";
+				echo "<p><img src='".site_url()."/wp-admin/images/loading.gif' style='vertical-align: top;'>";
+				echo "  File Backup is Processing in the Background!  <a href=''>(Refresh)</a></p></div>";
+			}else{
+				update_option('simple-backup-background-processing', 'false');
+				echo "<div class='updated'><p>File Backup Processing is Finished!  <a href=''>(Close)</a></p></div>";
+			}
+
+		}
+	
+	}
+
 
 	function backup_manager(){
 	
@@ -486,10 +575,13 @@ class Simple_Backup_Manager{
 		echo '</style>';
 		
 		
-		echo Simple_Backup_Admin::display_social_media();
+		echo Simple_Backup_Plugin::display_social_media();
+		
 		
 		
 		echo '<div class="wrap" id="sm_div">';
+		
+		
 		
 		echo '<div id="icon-tools" class="icon32"><br /></div>';
         echo '<h2>' . __('Simple Backup File Manager', 'simple-backup') . '</h2>';
@@ -500,8 +592,9 @@ class Simple_Backup_Manager{
 		
 		echo '<div id="post-body" class="metabox-holder columns-2">';
 
-
+		$this->background_process_check();
 		$this->backup_processor_form();
+		
 
 		$backup_table = $this->backup_table;
 
