@@ -44,6 +44,9 @@ class Simple_Backup_Settings_Page{
 	private $sidebar_info = array();	
 	
 	
+	public $extra_tabs = array();
+	
+	
 	
 	
 	function __construct( $option_name ){
@@ -219,6 +222,11 @@ class Simple_Backup_Settings_Page{
 			echo "<a class='nav-tab$class' href='?page=".$this->option_name."&tab=".$section['id']."'>".$section['title']."</a>";
 	
 		}
+		foreach( $this->extra_tabs as $extra_tab ){
+			$class = ( $tab == $extra_tab['id'] ) ? ' nav-tab-active' : '';
+			echo "<a class='nav-tab$class' href='".$extra_tab['link']."'>".$extra_tab['title']."</a>";
+		}
+		
 		echo '</h3>';
 
 	}

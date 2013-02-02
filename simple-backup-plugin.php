@@ -4,13 +4,17 @@
 class Simple_Backup_Plugin{
 
 	//plugin version number
-	private $version = "2.6";
+	private $version = "2.6.1";
 	
+	private $debug = false;
 
 
 	//holds simple security settings page class
 	private $settings_page;
 	
+	//holds ftp tools object
+	private $ftp_tools;
+
 
 	
 	//options are: edit, upload, link-manager, pages, comments, themes, plugins, users, tools, options-general
@@ -38,6 +42,8 @@ class Simple_Backup_Plugin{
 		
 		$this->opt = get_option($this->setting_name);
 		
+		//check pluign settings and display alert to configure and save plugin settings
+		add_action( 'admin_init', array(&$this, 'check_plugin_settings') );
 		
 		//initialize plugin settings
         add_action( 'admin_init', array(&$this, 'settings_page_init') );
@@ -56,14 +62,17 @@ class Simple_Backup_Plugin{
 		
 		
 		
-		$backup_manager = new Simple_Backup_Manager();
+		$backup_manager = new Simple_Backup_Manager($this->opt);
 		$this->backup_manager = $backup_manager;
-		$this->backup_manager->opt = $this->opt;
 		
 		add_action( 'admin_head', array($backup_manager, 'screen_options') );
 		add_action( 'admin_menu', array($backup_manager, 'simple_backup_admin_menu') );
-
 		
+		
+		if(isset($this->opt['backup_settings']['enable_ftp_backup_system']) && "true" == $this->opt['backup_settings']['enable_ftp_backup_system']){
+			$this->ftp_tools = new Simple_Backup_FTP_Tools();
+		}
+	
 	}
 
 
@@ -72,6 +81,8 @@ class Simple_Backup_Plugin{
 	public function settings_page_init() {
 
 		$this->settings_page  = new Simple_Backup_Settings_Page( $this->setting_name );
+		
+		$this->settings_page->extra_tabs = array(array('id'=>'backup', 'title'=>'Backup Manager', 'link' => admin_url()."tools.php?page=backup_manager"));
 		
         //set the settings
         $this->settings_page->set_sections( $this->get_settings_sections() );
@@ -83,6 +94,21 @@ class Simple_Backup_Plugin{
         //initialize settings
         $this->settings_page->init();
     }
+
+
+
+	public function check_plugin_settings(){
+		if( isset($_GET['page']) ){
+			if ($_GET['page'] == "backup_manager" || $_GET['page'] == "simple-backup-settings" ){
+				if(false === get_option($this->setting_name)){
+					$link = admin_url()."options-general.php?page=simple-backup-settings&tab=backup_settings";
+					$message = '<div class="error"><p>Welcome!<br>This plugin needs to be configured before you can make a backup.';
+					$message .= '<br>Please Configure and Save the <a href="%1$s">Plugin Settings</a> before you continue!!</p></div>';
+					echo sprintf($message, $link);
+				}
+			}
+		}
+	}
 
 
 
@@ -108,6 +134,14 @@ class Simple_Backup_Plugin{
 				'title' => __( 'Database Optimization', $this->plugin_name )
 			)
 		);
+		
+		
+		if(isset($this->opt['backup_settings']['enable_ftp_backup_system']) && "true" == $this->opt['backup_settings']['enable_ftp_backup_system']){
+			$settings_sections[] = array(
+				'id' => 'ftp_server_settings',
+				'title' => __( 'FTP Server Settings', $this->plugin_name )
+			);
+		}
 
 								
         return $settings_sections;
@@ -134,17 +168,6 @@ class Simple_Backup_Plugin{
                     )
                 ),
 				array(
-                    'name' => 'enable_db_backup',
-                    'label' => __( 'Database Backup', $this->plugin_name ),
-                    'desc' => 'Enable WordPress Database Backup',
-                    'type' => 'radio',
-					//'default' => 'true',
-                    'options' => array(
-                        'true' => 'Enabled',
-                        'false' => 'Disabled'
-                    )
-                ),
-				array(
                     'name' => 'file_compression',
                     'label' => __( 'File Backup Format', $this->plugin_name ),
                     'desc' => 'Files Backup Format and Compression',
@@ -158,6 +181,18 @@ class Simple_Backup_Plugin{
                     )
                 ),
 				array(
+                    'name' => 'enable_db_backup',
+                    'label' => __( 'Database Backup', $this->plugin_name ),
+                    'desc' => 'Enable WordPress Database Backup',
+                    'type' => 'radio',
+					//'default' => 'true',
+                    'options' => array(
+                        'true' => 'Enabled',
+                        'false' => 'Disabled'
+                    )
+                ),
+				
+				array(
                     'name' => 'db_compression',
                     'label' => __( 'Database Backup Format', $this->plugin_name ),
                     'desc' => 'Database Backup Format and Compression',
@@ -168,6 +203,17 @@ class Simple_Backup_Plugin{
                         '.sql.zip' => '.sql.zip',
                         '.sql.gz' => '.sql.gz',
 						'.sql.bz2' => '.sql.bz2',
+                    )
+                ),
+				array(
+                    'name' => 'enable_ftp_backup_system',
+                    'label' => __( 'FTP Storage', $this->plugin_name ),
+                    'desc' => 'Enable FTP Storage for Backup Files',
+                    'type' => 'radio',
+					//'default' => 'true',
+                    'options' => array(
+                        'true' => 'Enabled',
+                        'false' => 'Disabled'
                     )
                 )
 			),
@@ -262,6 +308,40 @@ class Simple_Backup_Plugin{
                         'false' => 'Disabled'
                     )
                 )
+			),
+			'ftp_server_settings' => array(
+				array(
+                    'name' => 'ftp_server_hostname',
+                    'label' => __( 'Server Name', $this->plugin_name ),
+                    'desc' => 'FTP Server Name or IP Address',
+                    'type' => 'text'
+                ),
+				array(
+                    'name' => 'ftp_server_port',
+                    'label' => __( 'Server Port', $this->plugin_name ),
+                    'desc' => 'FTP Server Port Number',
+                    'type' => 'text',
+					'default' => '21'
+                ),
+				array(
+                    'name' => 'ftp_server_username',
+                    'label' => __( 'Server Username', $this->plugin_name ),
+                    'desc' => 'FTP Server Username',
+                    'type' => 'text'
+                ),
+				array(
+                    'name' => 'ftp_server_password',
+                    'label' => __( 'Server Password', $this->plugin_name ),
+                    'desc' => 'FTP Server Password',
+                    'type' => 'text'
+                ),
+				array(
+                    'name' => 'ftp_server_directory',
+                    'label' => __( 'Server Directory', $this->plugin_name ),
+                    'desc' => 'Directory to Store Backups on FTP Server',
+                    'type' => 'text',
+					'default' => 'simple-backup'
+                )
 			)
 		);
 		
@@ -288,7 +368,8 @@ class Simple_Backup_Plugin{
 			
 			echo "<h2>".$this->plugin_title." Plugin Settings</h2>";
 			
-			$this->show_backup_manager_link();
+			//$this->show_backup_manager_link();
+			$this->show_do_backup_button();
 			
 			$this->settings_page->show_tab_nav();
 			
@@ -307,6 +388,10 @@ class Simple_Backup_Plugin{
 						
 						$this->settings_page->show_settings_forms();
 						
+						//$this->show_do_backup_button();
+						
+						$this->show_ftp_tools();
+						
 					echo '</div>';
 				echo '</div>';
 				
@@ -315,10 +400,68 @@ class Simple_Backup_Plugin{
         echo '</div>';
 		
     }
+	
+	
+	
+	private function show_ftp_tools(){
+	
+	
+		if(isset($_GET['tab']) && ($_GET['tab'] == 'ftp_server_settings')){
+		
+			echo "<form method='post'  style='display:inline;'>";
+				echo '<div style=" margin-left:10px; margin-top:-10px;">';
+					echo "<input type='hidden' name='test-ftp-server' value='test-ftp-server'>";
+					echo "<input type='submit' class='button-secondary' value='Test FTP  Settings'>";
+					
+				echo "</div>";
+			echo "</form>";
+				
+		}
+		
+		
+		
+		if( isset($_GET['tab']) && ($_GET['tab'] == 'ftp_server_settings') && isset($_POST['test-ftp-server']) && ($_POST['test-ftp-server'] == "test-ftp-server") ){
+		
+			$this->ftp_tools->connection_test();
+			
+		}
+		
+	}
+	
+	
+	/**
+	
+	function ftp_recursive_file_listing($ftp_connection, $path = ".") { 
+		static $allFiles = array(); 
+		$contents = ftp_nlist($ftp_connection, $path); 
+	
+		foreach($contents as $currentFile) { 
+			// assuming its a folder if there's no dot in the name 
+			if (strpos($currentFile, '.') === false) { 
+				$this->ftp_recursive_file_listing($ftp_connection, $currentFile); 
+			} 
+			//$allFiles[$path][] = substr($currentFile, strlen($path) + 1); 
+			$allFiles[$path][] = $currentFile; 
+		} 
+		return $allFiles; 
+	} 
+	**/
 
 
-
-
+	private function show_do_backup_button(){
+	
+		//if(!isset($_GET['tab']) || ($_GET['tab'] != 'ftp_server_settings')){
+		
+			echo "<form method='post' action='".admin_url()."tools.php?page=backup_manager' style='display:inline;'>";
+				echo '<div style=" margin-left:10px; margin-top:10px;">';
+					echo "<input type='hidden' name='simple-backup' value='simple-backup'>";
+					echo "<input type='submit' class='button-primary' value='Create WordPress Backup'>";
+					
+				echo "</div>";
+			echo "</form>";
+				
+		//}
+	}
 
 	private function show_backup_manager_link(){
 		echo "<p float='left'><a  href='".get_option('siteurl')."/wp-admin/tools.php?page=backup_manager' >View Backup Manager</a></p>";
@@ -390,40 +533,43 @@ class Simple_Backup_Plugin{
 			}
 			
 			
-			echo "<p>";
+			if(function_exists('exec')){
 			
-			if(exec('type tar')){
-				echo "Command 'tar' is enabled!</br>";
-			}else{
-				echo "Command 'tar' was not found!</br>";
+				echo "<p>";
+				
+				if(exec('type tar')){
+					echo "Command 'tar' is enabled!</br>";
+				}else{
+					echo "Command 'tar' was not found!</br>";
+				}
+				
+				if(exec('type gzip')){
+					echo "Command 'gzip' is enabled!</br>";
+				}else{
+					echo "Command 'gzip' was not found!</br>";
+				}
+				
+				if(exec('type bzip2')){
+					echo "Command 'bzip2' is enabled!</br>";
+				}else{
+					echo "Command 'bzip2' was not found!</br>";
+				}
+				
+				if(exec('type zip')){
+					echo "Command 'zip' is enabled!</br>";
+				}else{
+					echo "Command 'zip' was not found!</br>";
+				}
+				
+				if(exec('type mysqldump')){
+					echo "Command 'mysqldump' is enabled!</br>";
+				}else{
+					echo "Command 'mysqldump' was not found!</br>";
+				}
+			
+				echo "</p>";
+				
 			}
-			
-			if(exec('type gzip')){
-				echo "Command 'gzip' is enabled!</br>";
-			}else{
-				echo "Command 'gzip' was not found!</br>";
-			}
-			
-			if(exec('type bzip2')){
-				echo "Command 'bzip2' is enabled!</br>";
-			}else{
-				echo "Command 'bzip2' was not found!</br>";
-			}
-			
-			if(exec('type zip')){
-				echo "Command 'zip' is enabled!</br>";
-			}else{
-				echo "Command 'zip' was not found!</br>";
-			}
-			
-			if(exec('type mysqldump')){
-				echo "Command 'mysqldump' is enabled!</br>";
-			}else{
-				echo "Command 'mysqldump' was not found!</br>";
-			}
-		
-			echo "</p>";
-			
 			
 						
 			echo "<p>Memory Use: " . number_format(memory_get_usage()/1024/1024, 1) . " / " . ini_get('memory_limit') . "</p>";
@@ -434,6 +580,24 @@ class Simple_Backup_Plugin{
 				$lav = sys_getloadavg();
 				echo "<p>Server Load Average: ".$lav[0].", ".$lav[1].", ".$lav[2]."</p>";
 			}
+			
+			
+			$bytes = disk_free_space("."); 
+			echo "<p>Disk Space Available: " . size_format( $bytes, 2 ) . " (Approx.)</p>";
+			
+			$bytes = exec("du -s " . ABSPATH . " --exclude '".ABSPATH."simple-backup/*'"); 
+			$size = explode("	", $bytes);
+			echo "<p>WordPress File Size: " . size_format(($size[0] * 1024)) . " (Approx.)</p>";
+				
+	
+			global $wpdb;
+			$status_rows = $wpdb->get_results( "SHOW TABLE STATUS" );
+			$size = 0;
+			foreach($status_rows as $row){
+				$size += $row->Data_length;  
+			}
+			
+			echo "<p>WordPress DB Size: " . size_format($size) . " (Approx.)</p>";
 	
 		return ob_get_clean();
 				
@@ -509,18 +673,19 @@ class Simple_Backup_Plugin{
 
 		//build optional tabs, using debug tools class worker methods as callbacks
 	private function build_optional_tabs(){
+		if(true === $this->debug){
+			//general debug settings
+			$plugin_debug = array(
+				'id' => 'plugin_debug',
+				'title' => __( 'Plugin Settings Debug', $this->plugin_name ),
+				'callback' => array(&$this, 'show_plugin_settings')
+			);
 	
-		//general debug settings
-		$plugin_debug = array(
-			'id' => 'plugin_debug',
-			'title' => __( 'Plugin Settings Debug', $this->plugin_name ),
-			'callback' => array(&$this, 'show_plugin_settings')
-		);
-
-		//$enabled = isset($this->opt['debug_settings']['enable_display_plugin_settings']) ? $this->opt['debug_settings']['enable_display_plugin_settings'] : 'false';
-		//if( $enabled === 'true' ){ 	
-		$this->settings_page->add_section( $plugin_debug );
-		//}
+			//$enabled = isset($this->opt['debug_settings']['enable_display_plugin_settings']) ? $this->opt['debug_settings']['enable_display_plugin_settings'] : 'false';
+			//if( $enabled === 'true' ){ 	
+			$this->settings_page->add_section( $plugin_debug );
+			//}
+		}
 		
 	}
 	
@@ -593,7 +758,7 @@ class Simple_Backup_Plugin{
 		
 		</style>
 		
-		<div  style="height:20px; vertical-align:top; width:25%; float:right; text-align:right; margin-top:5px; padding-right:16px; position:relative;">
+		<div  style="height:20px; vertical-align:top; width:45%; float:right; text-align:right; margin-top:5px; padding-right:16px; position:relative;">
 		
 			<div id="fb-root"></div>
 			<script>(function(d, s, id) {

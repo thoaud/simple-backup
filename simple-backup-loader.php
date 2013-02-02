@@ -3,13 +3,13 @@
 Plugin Name: Simple Backup
 Plugin URI: http://MyWebsiteAdvisor.com/tools/wordpress-plugins/simple-backup/
 Description: Simple Backup System, You can create and download backups for your WordPress Website
-Version: 2.6
+Version: 2.6.1
 Author: MyWebsiteAdvisor
 Author URI: http://MyWebsiteAdvisor.com
 */
 
 register_activation_hook(__FILE__, 'simple_backup_activate');
-register_activation_hook(__FILE__, 'simple_backup_cleanup_options');
+
 
 function simple_backup_activate() {
 
@@ -19,28 +19,9 @@ function simple_backup_activate() {
 	}
 	
 	if ( version_compare( phpversion(), '5.2', '<' ) ) {
-		trigger_error('', E_USER_ERROR);
+		trigger_error("", E_USER_ERROR);
 	}
 	
-}
-
-function simple_backup_cleanup_options(){
-	$options = array(
-		'simple_backup_installed' => true,
-		'db_backup' => true,
-		'db_compression' => '.sql',
-		'file_backup' => true,
-		'file_compression' => ".tar.gz",
-		'debug_enabled' => false,
-		'optimize_db_enabled' => true,
-		'check_db_enabled' => true,
-		'repair_db_enabled' => false,
-		'wp_optimization_methods'=>array()
-	);
-	
-	foreach($options as $key => $val){
-		delete_option($key);
-	}
 }
 
 
@@ -52,12 +33,13 @@ if ( version_compare( phpversion(), '5.2', '>=') ) {
 	require_once(dirname(__FILE__) . '/simple-backup-settings-page.php');
 	
 	require_once(dirname(__FILE__) . '/simple-backup-manager.php');
-	
+	require_once(dirname(__FILE__) . '/simple-backup-ftp-tools.php');
+
+	require_once(dirname(__FILE__) . '/simple-backup-ftp-list-table.php');	
 	require_once(dirname(__FILE__) . '/simple-backup-list-table.php');
 	
 	require_once(dirname(__FILE__) . '/simple-backup-plugin.php');
 	
-	//require_once(dirname(__FILE__) . '/plugin-admin.php');
 	
 	$simple_backup = new Simple_Backup_Plugin();
 

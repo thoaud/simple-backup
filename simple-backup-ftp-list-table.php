@@ -6,10 +6,8 @@ if(!class_exists('WP_List_Table')){
 }
 
 
-class Backup_List_Table extends WP_List_Table{
+class FTP_Backup_List_Table extends WP_List_Table{
 
-	private $opt;
-	
 
 	function __construct(){
 		
@@ -18,8 +16,6 @@ class Backup_List_Table extends WP_List_Table{
             'plural'    => 'backups',   	//plural name of the listed records
             'ajax'      => true        //does this table support ajax?
     	);
-		
-		$this->opt 			= get_option('simple-backup-settings');
 		
 		parent::__construct($parent_args);
 		 	 
@@ -30,17 +26,13 @@ class Backup_List_Table extends WP_List_Table{
 
 	function column_filename($item) {
 	  	$actions = array(
-			//'Download'    => sprintf('<a href="%s">Download</a>',$item['link']),
-			'Download'    => sprintf('<a href="'.admin_url().'tools.php?page=%s&download_backup_file=%s">Download</a>',"backup_manager",$item['filename']),
-			'Delete'    => sprintf('<a href="'.admin_url().'tools.php?page=%s&delete_backup_file=%s">Delete</a>',"backup_manager",$item['filename'])
+			//'Download'    => sprintf('<a href="'.admin_url().'tools.php?page=%s&ftp_download_backup_file=%s">Download</a>',"backup_manager",$item['filename']),
+			'Delete'    => sprintf('<a href="'.admin_url().'tools.php?page=%s&ftp_delete_backup_file=%s">Delete</a>',"backup_manager",$item['filename']),
+			'Copy to Server'    => sprintf('<a href="'.admin_url().'tools.php?page=%s&ftp_get_backup_file=%s">Copy to Server</a>',"backup_manager",$item['filename']),
 		);
 		
-		if(isset($this->opt['backup_settings']['enable_ftp_backup_system']) && "true" == $this->opt['backup_settings']['enable_ftp_backup_system']){
-			$actions['Copy to FTP'] = sprintf('<a href="'.admin_url().'tools.php?page=%s&ftp_put_backup_file=%s">Copy to FTP</a>',"backup_manager",$item['filename']);
-		}
-		
 		//$link = sprintf('<strong><a href="%s">%s</a></strong>',$item['link'], $item['filename']);
-		$link = sprintf('<strong><a href="'.admin_url().'tools.php?page=%1$s&download_backup_file=%2$s">%2$s</a></strong>',"backup_manager",$item['filename']);
+		$link = sprintf('<strong>%s</strong>', $item['filename']);
 		
 	  	return sprintf('%1$s %2$s', $link, $this->row_actions($actions) );
 	}
@@ -83,10 +75,15 @@ class Backup_List_Table extends WP_List_Table{
 			//$link .=  "<input type='submit' value='Create WordPress Backup' class='button-primary'>";
 			//$link .=  "</form > ";
 			
-			$link .=  "<form method='post' action='".admin_url()."options-general.php?page=simple-backup-settings'  style='display:inline;'>";
-			$link .=  "<input type='submit' value='Change Backup Settings' class='button-secondary'>";
+			$link .=  "<form method='post' action='".admin_url()."options-general.php?page=simple-backup-settings&tab=ftp_server_settings'  style='display:inline; margin-right:5px;'>";
+			$link .=  "<input type='submit' value='Change FTP Settings' class='button-secondary'>";
 			$link .=  "</form>";
-						
+			
+			$link .=  "<form method='post' action='".admin_url()."options-general.php?page=simple-backup-settings&tab=ftp_server_settings'  style='display:inline;'>";
+			$link .=  "<input type='hidden' name='test-ftp-server' value='test-ftp-server'>";
+			$link .=  "<input type='submit' value='Test FTP Settings' class='button-secondary'>";
+			$link .=  "</form>";
+			
 			$link .= "</div>";
 			echo $link;
 			
@@ -171,7 +168,10 @@ class Backup_List_Table extends WP_List_Table{
 		/**
 		 * Fetch the data for use in this table. 
 		 */
-		$this->items = Simple_Backup_Manager::get_backup_files();
+		$backup_tools = new Simple_Backup_FTP_Tools($this->opt);
+		
+		$this->items = $backup_tools->get_ftp_backup_files();
+		
 		$data = $this->items;
 		
 		
@@ -229,6 +229,11 @@ class Backup_List_Table extends WP_List_Table{
 		return ($order==='asc') ? $result : -$result; //Send final sort direction to usort
 	}
 
+
+
+
+	
+	
 
 }
 

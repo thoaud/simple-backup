@@ -3,8 +3,8 @@ Name: Simple Backup
 Contributors: MyWebsiteAdvisor, ChrisHurst
 Tags: Backup, Archive, Restore, Recover, Recovery, Optimize, Admin, Administration
 Requires at least: 2.9
-Tested up to: 3.5
-Stable tag: 2.6
+Tested up to: 3.5.1
+Stable tag: 2.6.1
 Donate link: http://MyWebsiteAdvisor.com/donations
 
 
@@ -85,6 +85,14 @@ If we choose your testimonial or website we can link to your site and generate s
 
 
 == Changelog ==
+
+= 2.6.1 =
+* added ftp storage system
+* added .htaccess security for local backup storage
+* added secure file download system to compliment the .htaccess security
+* updated admin interface with create backup button always at the top
+* added to diagnostics, display estimated file and database backup sizes as well as disk free space
+
 
 = 2.6 = 
 * updated plugin to use WordPress settings API
