@@ -4,7 +4,7 @@ Contributors: MyWebsiteAdvisor, ChrisHurst
 Tags: Backup, Archive, Restore, Recover, Recovery, Optimize, Admin, Administration
 Requires at least: 2.9
 Tested up to: 3.5.1
-Stable tag: 2.6.1
+Stable tag: 2.6.2
 Donate link: http://MyWebsiteAdvisor.com/donations
 
 
@@ -29,7 +29,10 @@ Developer Website: http://MyWebsiteAdvisor.com/
 
 Plugin Page: http://MyWebsiteAdvisor.com/tools/wordpress-plugins/simple-backup/
 
-Video Tutorial: http://mywebsiteadvisor.com/learning/video-tutorials/simple-backup-tutorial/
+Tutorial: http://mywebsiteadvisor.com/learning/video-tutorials/simple-backup-tutorial/
+
+Restoring WordPress Backups Tutorial: http://mywebsiteadvisor.com/learning/software-tutorials/restoring-wordpress-backups/
+
 
 We are looking for testimonials and live examples of our plugins on your website!  
 Please submit your website or testimonial here: http://MyWebsiteAdvisor.com/testimonials/  
@@ -67,7 +70,10 @@ Developer Website: http://MyWebsiteAdvisor.com/
 
 Plugin Page: http://MyWebsiteAdvisor.com/tools/wordpress-plugins/simple-backup/
 
-Video Tutorial: http://mywebsiteadvisor.com/learning/video-tutorials/simple-backup-tutorial/
+Tutorial: http://mywebsiteadvisor.com/learning/video-tutorials/simple-backup-tutorial/
+
+Restoring WordPress Backups Tutorial: http://mywebsiteadvisor.com/learning/software-tutorials/restoring-wordpress-backups/
+
 
 We are looking for testimonials and live examples of our plugins on your website!
 Please submit your website or testimonial here: http://MyWebsiteAdvisor.com/testimonials/
@@ -76,15 +82,21 @@ If we choose your testimonial or website we can link to your site and generate s
 
 == Screenshots ==
 
-1. Admin Settings Page
-2. WordPress Optimizations Example Output
-3. MySQL Database Management Example Output
-4. Databaes and File Backup Example Output
-
+1. Basic Backup Settings Page
+2. WordPress Optimizations Settings Page
+3. MySQL Database Management Settings Page
+4. Simple Backup File Manager
+5. FTP Storage Settings Page
 
 
 
 == Changelog ==
+
+= 2.6.2 =
+* fixed issue with Simple_Backup_FTP_Tools::connection_test() method causing warnings.
+* updated screenshots
+* updated readme, added link to Restoring Backups Tutorial
+
 
 = 2.6.1 =
 * added ftp storage system

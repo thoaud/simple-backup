@@ -525,9 +525,7 @@ class Simple_Backup_FTP_Tools{
 
 		
 		$files = array();
-		foreach($data['simple-backup'] as $item){
-			
-		
+		foreach($data[$this->directory] as $item){
 			$files[] = $item;
 		}
 
