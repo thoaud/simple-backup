@@ -4,7 +4,7 @@ Contributors: MyWebsiteAdvisor, ChrisHurst
 Tags: Backup, Archive, Restore, Recover, Recovery, Optimize, Admin, Administration
 Requires at least: 2.9
 Tested up to: 3.5.1
-Stable tag: 2.6.2
+Stable tag: 2.6.3
 Donate link: http://MyWebsiteAdvisor.com/donations
 
 
@@ -22,6 +22,10 @@ This plugin will create a directory in the root of your WordPress directory call
 If the plugin can not locate or create the directory you will receive an error message and may have to create the directory manually, the directory will also need to be writable by the web server so you may need to chmod it.
 
 
+
+Check out the [Simple Backup Plugin for WordPress Video Tutorial](http://www.youtube.com/watch?v=P3UT9unrGa4&hd=1):
+
+http://www.youtube.com/watch?v=P3UT9unrGa4&hd=1
 
 
 
@@ -91,6 +95,11 @@ If we choose your testimonial or website we can link to your site and generate s
 
 
 == Changelog ==
+
+= 2.6.3 =
+* updated readme file, added tutorial video.
+* updated plugin help menu, added tutorial video.
+
 
 = 2.6.2 =
 * fixed issue with Simple_Backup_FTP_Tools::connection_test() method causing warnings.

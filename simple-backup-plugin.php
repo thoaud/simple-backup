@@ -4,7 +4,7 @@
 class Simple_Backup_Plugin{
 
 	//plugin version number
-	private $version = "2.6.2";
+	private $version = "2.6.3";
 	
 	private $debug = false;
 
@@ -488,6 +488,15 @@ class Simple_Backup_Plugin{
 				'content' => "<h2>Support the Developer</h2><p>".$support_the_dev."</p>"
 			));
 			
+			
+			$video_code = '<iframe width="500" height="350" src="http://www.youtube.com/embed/P3UT9unrGa4?rel=0&vq=hd720" frameborder="0" allowfullscreen></iframe>';
+
+			$screen->add_help_tab(array(
+				'id' => 'tutorial-video',
+				'title' => "Tutorial Video",
+				'content' => "<h2>{$this->plugin_title} Tutorial Video</h2><p>$video_code</p>"
+			));
+			
 			$screen->add_help_tab(array(
 				'id' => 'plugin-support',
 				'title' => "Plugin Support",
@@ -611,6 +620,7 @@ class Simple_Backup_Plugin{
 	private function get_settings_sidebar(){
 	
 		$plugin_resources = "<p><a href='http://mywebsiteadvisor.com/tools/wordpress-plugins/simple-backup/' target='_blank'>Plugin Homepage</a></p>
+			<p><a href='http://mywebsiteadvisor.com/learning/video-tutorials/simple-backup-tutorial/'  target='_blank'>Plugin Tutorial</a></p>
 			<p><a href='http://mywebsiteadvisor.com/contact-us/'  target='_blank'>Plugin Support</a></p>
 			<p><a href='http://mywebsiteadvisor.com/contact-us/'  target='_blank'>Contact Us</a></p>
 			<p><a href='http://wordpress.org/support/view/plugin-reviews/simple-security?rate=5#postform'  target='_blank'>Rate and Review This Plugin</a></p>";
