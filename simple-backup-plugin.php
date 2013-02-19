@@ -4,7 +4,7 @@
 class Simple_Backup_Plugin{
 
 	//plugin version number
-	private $version = "2.6.3";
+	private $version = "2.6.4";
 	
 	private $debug = false;
 
@@ -489,7 +489,23 @@ class Simple_Backup_Plugin{
 			));
 			
 			
-			$video_code = '<iframe width="500" height="350" src="http://www.youtube.com/embed/P3UT9unrGa4?rel=0&vq=hd720" frameborder="0" allowfullscreen></iframe>';
+			$video_code = "<style>
+		.videoWrapper {
+			position: relative;
+			padding-bottom: 56.25%; /* 16:9 */
+			padding-top: 25px;
+			height: 0;
+		}
+		.videoWrapper iframe {
+			position: absolute;
+			top: 0;
+			left: 0;
+			width: 100%;
+			height: 100%;
+		}
+		</style>";
+		
+			$video_code .= '<div class="videoWrapper"><iframe width="640" height="360" src="http://www.youtube.com/embed/P3UT9unrGa4?rel=0&vq=hd720" frameborder="0" allowfullscreen></iframe></div>';
 
 			$screen->add_help_tab(array(
 				'id' => 'tutorial-video',
@@ -521,7 +537,7 @@ class Simple_Backup_Plugin{
 		
 			echo "<p>Plugin Version: $this->version</p>";
 				
-			echo "<p>Server OS: ".PHP_OS."</p>";
+			echo "<p>Server OS: ".PHP_OS." (" . strlen(decbin(~0)) . " bit)</p>";
 			
 			echo "<p>Required PHP Version: 5.2+<br>";
 			echo "Current PHP Version: " . phpversion() . "</p>";
@@ -697,6 +713,12 @@ class Simple_Backup_Plugin{
 			//}
 		}
 		
+		$plugin_tutorial = array(
+			'id' => 'plugin_tutorial',
+			'title' => __( 'Plugin Tutorial Video', $this->plugin_name ),
+			'callback' => array(&$this, 'show_plugin_tutorual')
+		);
+		$this->settings_page->add_section( $plugin_tutorial );
 	}
 	
 
@@ -712,6 +734,30 @@ class Simple_Backup_Plugin{
 	}
 
 
+
+	public function show_plugin_tutorual(){
+	
+		echo "<style>
+		.videoWrapper {
+			position: relative;
+			padding-bottom: 56.25%; /* 16:9 */
+			padding-top: 25px;
+			height: 0;
+		}
+		.videoWrapper iframe {
+			position: absolute;
+			top: 0;
+			left: 0;
+			width: 100%;
+			height: 100%;
+		}
+		</style>";
+
+		$video_id = "P3UT9unrGa4";
+		echo sprintf( '<div class="videoWrapper"><iframe width="640" height="360" src="http://www.youtube.com/embed/%1$s?rel=0&vq=hd720" frameborder="0" allowfullscreen ></iframe></div>', $video_id);
+		
+	
+	}
 
 
 
@@ -729,6 +775,12 @@ class Simple_Backup_Plugin{
 	 */
 	public function add_plugin_links($links, $file) {
 		if($file == plugin_basename(SB_LOADER)) {
+			$upgrade_url = 'http://mywebsiteadvisor.com/products-page/premium-wordpress-plugin/simple-backup-ultra/';
+			$links[] = '<a href="'.$upgrade_url.'" target="_blank" title="Click Here to Upgrade this Plugin!">Upgrade Plugin</a>';
+			
+			$tutorial_url = 'http://mywebsiteadvisor.com/learning/video-tutorials/simple-backup-tutorial/';
+			$links[] = '<a href="'.$tutorial_url.'" target="_blank" title="Click Here to View the Plugin Video Tutorial!">Tutorial Video</a>';
+			
 			$rate_url = 'http://wordpress.org/support/view/plugin-reviews/' . basename(dirname(__FILE__)) . '?rate=5#postform';
 			$links[] = '<a href="'.$rate_url.'" target="_blank" title="Click Here to Rate and Review this Plugin on WordPress.org">Rate This Plugin</a>';
 		}

@@ -4,7 +4,7 @@ Contributors: MyWebsiteAdvisor, ChrisHurst
 Tags: Backup, Archive, Restore, Recover, Recovery, Optimize, Admin, Administration
 Requires at least: 2.9
 Tested up to: 3.5.1
-Stable tag: 2.6.3
+Stable tag: 2.6.4
 Donate link: http://MyWebsiteAdvisor.com/donations
 
 
@@ -51,11 +51,23 @@ Requirements:
 To-do:
 
 
+
+
+
 == Installation ==
 
 1. Upload `simple-backup/` to the `/wp-content/plugins/` directory.
 2. Activate the plugin through the 'Plugins' menu in WordPress.
 3. Go to Simple Backup Plugin settings and enable Simple Backup Plugin.
+
+
+Check out the [Simple Backup Plugin for WordPress Video Tutorial](http://www.youtube.com/watch?v=P3UT9unrGa4&hd=1):
+
+http://www.youtube.com/watch?v=P3UT9unrGa4&hd=1
+
+
+
+
 
 
 == Frequently Asked Questions ==
@@ -84,6 +96,9 @@ Please submit your website or testimonial here: http://MyWebsiteAdvisor.com/test
 If we choose your testimonial or website we can link to your site and generate some free traffic for you!
 
 
+
+
+
 == Screenshots ==
 
 1. Basic Backup Settings Page
@@ -94,7 +109,17 @@ If we choose your testimonial or website we can link to your site and generate s
 
 
 
+
+
+
 == Changelog ==
+
+= 2.6.4 =
+* updated backup manager FTP system to work better with large files (2+ GB)
+* added tab for tutorial video on plugin settings tabs
+* added a link for plugin tutorial page on our website on the plugin row meta links on plugins page
+
+
 
 = 2.6.3 =
 * updated readme file, added tutorial video.

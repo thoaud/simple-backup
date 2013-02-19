@@ -606,7 +606,11 @@ class Simple_Backup_FTP_Tools{
 			
 			$new_file['filename'] = substr($currentFile, strlen($path) + 1);
 			
-			$new_file['size'] = ftp_size( $ftp_connection , $currentFile );
+			//$new_file['size'] = ftp_size( $ftp_connection , $currentFile );
+			
+			$response =  ftp_raw($ftp_connection, "SIZE $currentFile"); 
+			$filesize = floatval(str_replace('213 ', '', $response[0])); 
+			$new_file['size'] = $filesize;
 			
 			$new_file['date'] = ftp_mdtm( $ftp_connection , $currentFile );
 			$new_file['date']= date_i18n('Y-m-d g:i:s A T', $new_file['date']);

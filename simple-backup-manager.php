@@ -806,6 +806,9 @@ class Simple_Backup_Manager{
 			$tabs[] = array('id' => 'backup-settings', 'title' => 'FTP Server Settings', 'link' => admin_url().'options-general.php?page=simple-backup-settings&tab=ftp_server_settings');		
 		}
 			
+		
+		$tabs[] = array('id' => 'plugin_tutorial', 'title' => 'Plugin Tutorial Video', 'link' => admin_url().'options-general.php?page=simple-backup-settings&tab=plugin_tutorial');
+		
 		$tabs[] = array('id' => 'backup-manager', 'title' => 'Backup Manager', 'link' => '');
 		
 	
