@@ -2,9 +2,9 @@
 Name: Simple Backup
 Contributors: MyWebsiteAdvisor, ChrisHurst
 Tags: Backup, Archive, Restore, Recover, Recovery, Optimize, Admin, Administration
-Requires at least: 2.9
+Requires at least: 3.3
 Tested up to: 3.5.1
-Stable tag: 2.6.4
+Stable tag: 2.6.5
 Donate link: http://MyWebsiteAdvisor.com/donations
 
 
@@ -45,7 +45,8 @@ If we choose your testimonial or website we can link to your site and generate s
 
 Requirements:
 
-* PHP 5.2
+* PHP 5.2+
+* WordPress 3.3+
 
 
 To-do:
@@ -113,6 +114,11 @@ If we choose your testimonial or website we can link to your site and generate s
 
 
 == Changelog ==
+
+= 2.6.5 =
+* updated readme file, due to the add_help_tab() function, the plugin requires at least WordPress version 3.3
+* added notification about required version if an older version of WP is installed
+
 
 = 2.6.4 =
 * updated backup manager FTP system to work better with large files (2+ GB)

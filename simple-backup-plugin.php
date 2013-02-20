@@ -4,7 +4,7 @@
 class Simple_Backup_Plugin{
 
 	//plugin version number
-	private $version = "2.6.4";
+	private $version = "2.6.5";
 	
 	private $debug = false;
 
@@ -100,12 +100,26 @@ class Simple_Backup_Plugin{
 	public function check_plugin_settings(){
 		if( isset($_GET['page']) ){
 			if ($_GET['page'] == "backup_manager" || $_GET['page'] == "simple-backup-settings" ){
+				
+				//check for plugin settings, make sure they are saved
 				if(false === get_option($this->setting_name)){
 					$link = admin_url()."options-general.php?page=simple-backup-settings&tab=backup_settings";
 					$message = '<div class="error"><p>Welcome!<br>This plugin needs to be configured before you can make a backup.';
 					$message .= '<br>Please Configure and Save the <a href="%1$s">Plugin Settings</a> before you continue!!</p></div>';
 					echo sprintf($message, $link);
 				}
+				
+				
+				global $wp_version;
+				$req_wp_version = "3.3";
+				//check for proper WP version.
+				if (version_compare($wp_version, $req_wp_version, '<')) {
+					$message = '<div class="error"><p>Warning!<br>This plugin requires WordPress version '.$req_wp_version.' or later.';
+					$message .= '<br>Please <a href="'.admin_url().'update-core.php">Update WordPress</a> before you continue!</p></div>';
+					echo $message;
+				}
+				
+				
 			}
 		}
 	}
