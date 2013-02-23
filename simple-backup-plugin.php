@@ -4,7 +4,7 @@
 class Simple_Backup_Plugin{
 
 	//plugin version number
-	private $version = "2.6.5";
+	private $version = "2.6.6";
 	
 	private $debug = false;
 
@@ -519,7 +519,7 @@ class Simple_Backup_Plugin{
 		}
 		</style>";
 		
-			$video_code .= '<div class="videoWrapper"><iframe width="640" height="360" src="http://www.youtube.com/embed/P3UT9unrGa4?rel=0&vq=hd720" frameborder="0" allowfullscreen></iframe></div>';
+			$video_code .= '<div class="videoWrapper"><iframe width="640" height="360" src="http://www.youtube.com/embed/W2YoEneu8H0?rel=0&vq=hd720" frameborder="0" allowfullscreen></iframe></div>';
 
 			$screen->add_help_tab(array(
 				'id' => 'tutorial-video',
@@ -767,7 +767,7 @@ class Simple_Backup_Plugin{
 		}
 		</style>";
 
-		$video_id = "P3UT9unrGa4";
+		$video_id = "W2YoEneu8H0";
 		echo sprintf( '<div class="videoWrapper"><iframe width="640" height="360" src="http://www.youtube.com/embed/%1$s?rel=0&vq=hd720" frameborder="0" allowfullscreen ></iframe></div>', $video_id);
 		
 	

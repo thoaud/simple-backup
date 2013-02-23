@@ -4,7 +4,7 @@ Contributors: MyWebsiteAdvisor, ChrisHurst
 Tags: Backup, Archive, Restore, Recover, Recovery, Optimize, Admin, Administration
 Requires at least: 3.3
 Tested up to: 3.5.1
-Stable tag: 2.6.5
+Stable tag: 2.6.6
 Donate link: http://MyWebsiteAdvisor.com/donations
 
 
@@ -23,9 +23,9 @@ If the plugin can not locate or create the directory you will receive an error m
 
 
 
-Check out the [Simple Backup Plugin for WordPress Video Tutorial](http://www.youtube.com/watch?v=P3UT9unrGa4&hd=1):
+Check out the [Simple Backup Plugin for WordPress Video Tutorial](http://www.youtube.com/watch?v=W2YoEneu8H0&hd=1):
 
-http://www.youtube.com/watch?v=P3UT9unrGa4&hd=1
+http://www.youtube.com/watch?v=W2YoEneu8H0&hd=1
 
 
 
@@ -62,9 +62,9 @@ To-do:
 3. Go to Simple Backup Plugin settings and enable Simple Backup Plugin.
 
 
-Check out the [Simple Backup Plugin for WordPress Video Tutorial](http://www.youtube.com/watch?v=P3UT9unrGa4&hd=1):
+Check out the [Simple Backup Plugin for WordPress Video Tutorial](http://www.youtube.com/watch?v=W2YoEneu8H0&hd=1):
 
-http://www.youtube.com/watch?v=P3UT9unrGa4&hd=1
+http://www.youtube.com/watch?v=W2YoEneu8H0&hd=1
 
 
 
@@ -114,6 +114,10 @@ If we choose your testimonial or website we can link to your site and generate s
 
 
 == Changelog ==
+
+= 2.6.6 =
+* created new tutorial vid, updated tutorial video links
+
 
 = 2.6.5 =
 * updated readme file, due to the add_help_tab() function, the plugin requires at least WordPress version 3.3
