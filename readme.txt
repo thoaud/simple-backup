@@ -4,8 +4,8 @@ Contributors: MyWebsiteAdvisor, ChrisHurst
 Tags: Backup, Archive, Restore, Recover, Recovery, Optimize, Admin, Administration
 Requires at least: 3.3
 Tested up to: 3.5.1
-Stable tag: 2.6.6
-Donate link: http://MyWebsiteAdvisor.com/donations
+Stable tag: 2.6.7
+Donate link: http://MyWebsiteAdvisor.com/donations/
 
 
 Simple Tools to Optimize and Backup Your WordPress Website.
@@ -22,6 +22,14 @@ This plugin will create a directory in the root of your WordPress directory call
 If the plugin can not locate or create the directory you will receive an error message and may have to create the directory manually, the directory will also need to be writable by the web server so you may need to chmod it.
 
 
+<a href="http://mywebsiteadvisor.com/products-page/premium-wordpress-plugin/simple-backup-ultra/">**Upgrade to Simple Backup Ultra**</a> for advanced features including:
+
+* Schedule Automatic WordPress Backups
+* Scheduled Automatic WordPress and Database Optimizations
+* Recieve email notification of the scheduled backup status
+
+
+
 
 Check out the [Simple Backup Plugin for WordPress Video Tutorial](http://www.youtube.com/watch?v=W2YoEneu8H0&hd=1):
 
@@ -30,6 +38,8 @@ http://www.youtube.com/watch?v=W2YoEneu8H0&hd=1
 
 
 Developer Website: http://MyWebsiteAdvisor.com/
+
+Plugin Support: http://MyWebsiteAdvisor.com/support/
 
 Plugin Page: http://MyWebsiteAdvisor.com/tools/wordpress-plugins/simple-backup/
 
@@ -80,10 +90,16 @@ Check in your error.log if you can.
 Please send screenshots as well as a detailed description of the problem.
 
 
+<a href="http://mywebsiteadvisor.com/products-page/premium-wordpress-plugin/simple-backup-ultra/">**Upgrade to Simple Backup Ultra**</a> for advanced features including:
 
+* Schedule Automatic WordPress Backups
+* Scheduled Automatic WordPress and Database Optimizations
+* Recieve email notification of the scheduled backup status
 
 
 Developer Website: http://MyWebsiteAdvisor.com/
+
+Plugin Support: http://MyWebsiteAdvisor.com/support/
 
 Plugin Page: http://MyWebsiteAdvisor.com/tools/wordpress-plugins/simple-backup/
 
@@ -114,6 +130,9 @@ If we choose your testimonial or website we can link to your site and generate s
 
 
 == Changelog ==
+
+= 2.6.7 =
+* updated readme file
 
 = 2.6.6 =
 * created new tutorial vid, updated tutorial video links

@@ -4,7 +4,7 @@
 class Simple_Backup_Plugin{
 
 	//plugin version number
-	private $version = "2.6.6";
+	private $version = "2.6.7";
 	
 	private $debug = false;
 
