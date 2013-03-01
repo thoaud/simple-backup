@@ -4,7 +4,7 @@ Contributors: MyWebsiteAdvisor, ChrisHurst
 Tags: Backup, Archive, Restore, Recover, Recovery, Optimize, Admin, Administration
 Requires at least: 3.3
 Tested up to: 3.5.1
-Stable tag: 2.6.7
+Stable tag: 2.6.8
 Donate link: http://MyWebsiteAdvisor.com/donations/
 
 
@@ -27,6 +27,7 @@ If the plugin can not locate or create the directory you will receive an error m
 * Schedule Automatic WordPress Backups
 * Scheduled Automatic WordPress and Database Optimizations
 * Recieve email notification of the scheduled backup status
+* Priority Support
 
 
 
@@ -47,10 +48,6 @@ Tutorial: http://mywebsiteadvisor.com/learning/video-tutorials/simple-backup-tut
 
 Restoring WordPress Backups Tutorial: http://mywebsiteadvisor.com/learning/software-tutorials/restoring-wordpress-backups/
 
-
-We are looking for testimonials and live examples of our plugins on your website!  
-Please submit your website or testimonial here: http://MyWebsiteAdvisor.com/testimonials/  
-If we choose your testimonial or website we can link to your site and generate some free traffic for you!
 
 
 Requirements:
@@ -95,6 +92,7 @@ Please send screenshots as well as a detailed description of the problem.
 * Schedule Automatic WordPress Backups
 * Scheduled Automatic WordPress and Database Optimizations
 * Recieve email notification of the scheduled backup status
+* Priority Support
 
 
 Developer Website: http://MyWebsiteAdvisor.com/
@@ -107,10 +105,6 @@ Tutorial: http://mywebsiteadvisor.com/learning/video-tutorials/simple-backup-tut
 
 Restoring WordPress Backups Tutorial: http://mywebsiteadvisor.com/learning/software-tutorials/restoring-wordpress-backups/
 
-
-We are looking for testimonials and live examples of our plugins on your website!
-Please submit your website or testimonial here: http://MyWebsiteAdvisor.com/testimonials/
-If we choose your testimonial or website we can link to your site and generate some free traffic for you!
 
 
 
@@ -130,6 +124,13 @@ If we choose your testimonial or website we can link to your site and generate s
 
 
 == Changelog ==
+
+
+
+= 2.6.8 =
+* updated readme file
+* added plugin upgrades tab on plugin settings page
+
 
 = 2.6.7 =
 * updated readme file

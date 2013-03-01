@@ -808,6 +808,7 @@ class Simple_Backup_Manager{
 			
 		
 		$tabs[] = array('id' => 'plugin_tutorial', 'title' => 'Plugin Tutorial Video', 'link' => admin_url().'options-general.php?page=simple-backup-settings&tab=plugin_tutorial');
+		$tabs[] = array('id' => 'upgrade_plugin', 'title' => 'Plugin Upgrades', 'link' => admin_url().'options-general.php?page=simple-backup-settings&tab=upgrade_plugin');
 		
 		$tabs[] = array('id' => 'backup-manager', 'title' => 'Backup Manager', 'link' => '');
 		

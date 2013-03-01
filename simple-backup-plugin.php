@@ -4,7 +4,7 @@
 class Simple_Backup_Plugin{
 
 	//plugin version number
-	private $version = "2.6.7";
+	private $version = "2.6.8";
 	
 	private $debug = false;
 
@@ -534,6 +534,11 @@ class Simple_Backup_Plugin{
 			));
 			
 			
+			$screen->add_help_tab(array(
+				'id' => 'upgrade_plugin',
+				'title' => __( 'Plugin Upgrades', $this->plugin_name ),
+				'content' => $this->get_plugin_upgrades()		
+			));	
 
 			$screen->set_help_sidebar("<p>Please Visit us online for more Free WordPress Plugins!</p><p><a href='http://mywebsiteadvisor.com/tools/wordpress-plugins/' target='_blank'>MyWebsiteAdvisor.com</a></p><br>");
 			
@@ -733,9 +738,107 @@ class Simple_Backup_Plugin{
 			'callback' => array(&$this, 'show_plugin_tutorual')
 		);
 		$this->settings_page->add_section( $plugin_tutorial );
+		
+		
+		$upgrade_plugin = array(
+			'id' => 'upgrade_plugin',
+			'title' => __( 'Plugin Upgrades', $this->plugin_name ),
+			'callback' => array(&$this, 'show_plugin_upgrades')
+		);
+		$this->settings_page->add_section( $upgrade_plugin );
+		
 	}
 	
 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 		
+	public function get_plugin_upgrades(){
+		ob_start();
+		$this->show_plugin_upgrades();
+		return ob_get_clean();	
+	}
+	
+	
+	public function show_plugin_upgrades(){
+		
+		$html = "<style>
+			ul.upgrade_features li { list-style-type: disc; }
+			ul.upgrade_features  { margin-left:30px;}
+		</style>";
+		
+		$html .= "<script>
+		
+			function  simple_backup_upgrade(){
+        		window.open('http://mywebsiteadvisor.com/products-page/premium-wordpress-plugin/simple-backup-ultra/');
+        		return false;
+			}
+			
+			function  simple_optimizer_upgrade(){
+        		window.open('http://mywebsiteadvisor.com/products-page/premium-wordpress-plugin/simple-optimizer-ultra/');
+        		return false;
+			}		
+		</script>";
+		
+
+		$html .= "</form><h2>Upgrade to Simple Backup Ultra Today!</h2>";
+		
+		$html .= "<p><b>Premium Features include:</b></p>";
+		
+		$html .= "<ul class='upgrade_features'>";
+		$html .= "<li>Schedule Automatic WordPress Backups</li>";
+		$html .= "<li>Scheduled Automatic WordPress and Database Optimizations</li>";	
+		$html .= "<li>Recieve email notification of the scheduled backup status</li>";
+		$html .= "<li>Priority Support</li>";
+		$html .= "</ul>";
+		
+		$html .=  '<div style="padding-left: 1.5em; margin-left:5px;">';
+		$html .= "<p class='submit'><input type='submit' class='button-primary' value='Upgrade to Simple Backup Ultra &raquo;' onclick='return simple_backup_upgrade()'></p>";
+		$html .=  "</div>";
+
+
+		$html .= "<hr>";
+		
+		
+		$html .= "<h2>Also Try Simple Optimizer Ultra!</h2>";
+		$html .= "<p>Simple Optimizer can help keep your website running quickly and smoothly by cleaning up the WordPress Database of un-used and un-necessary information.</p>";
+				
+		$html .= "<p><b>Premium Features include:</b></p>";
+		
+		$html .= "<ul class='upgrade_features'>";
+		$html .= "<li>Scheduled Automatic WordPress and Database Optimizations</li>";	
+		$html .= "<li>Recieve email notification of the scheduled optimization status</li>";
+		$html .= "<li>Priority Support</li>";
+		$html .= "</ul>";
+		
+		$html .=  '<div style="padding-left: 1.5em; margin-left:5px;">';
+		$html .= "<p class='submit'><input type='submit' class='button-primary' value='Upgrade to Simple Optimizer Ultra &raquo;' onclick='return simple_optimizer_upgrade()'></p>";
+		$html .=  "</div>";
+	
+		
+
+		
+		echo $html;
+	}
+
+
+ 
+ 
+ 
+ 
+ 
+ 
  
 
 	// displays the plugin options array
