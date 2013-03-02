@@ -4,7 +4,7 @@ Contributors: MyWebsiteAdvisor, ChrisHurst
 Tags: Backup, Archive, Restore, Recover, Recovery, Optimize, Admin, Administration
 Requires at least: 3.3
 Tested up to: 3.5.1
-Stable tag: 2.6.8
+Stable tag: 2.6.9
 Donate link: http://MyWebsiteAdvisor.com/donations/
 
 
@@ -126,6 +126,10 @@ Restoring WordPress Backups Tutorial: http://mywebsiteadvisor.com/learning/softw
 == Changelog ==
 
 
+= 2.6.9 =
+* updated contextual help, removed depricated filter and updated to preferred method
+* updated plugin upgrades info tab on plugin settings page
+* added uninstall and deactivation funtions to clear plugin settings
 
 = 2.6.8 =
 * updated readme file

@@ -3,12 +3,31 @@
 Plugin Name: Simple Backup
 Plugin URI: http://MyWebsiteAdvisor.com/tools/wordpress-plugins/simple-backup/
 Description: Simple Backup System, You can create and download backups for your WordPress Website
-Version: 2.6.8
+Version: 2.6.9
 Author: MyWebsiteAdvisor
 Author URI: http://MyWebsiteAdvisor.com
 */
 
 register_activation_hook(__FILE__, 'simple_backup_activate');
+register_deactivation_hook(__FILE__, "simple_backup_deactivate");
+register_uninstall_hook(__FILE__, "simple_backup_uninstall");
+
+
+function simple_backup_deactivate(){
+	
+	delete_option('simple-backup-file-transfer');
+	delete_option('simple-backup-background-processing');	
+	
+}
+
+
+function simple_backup_uninstall(){
+	
+	delete_option('simple-backup-settings');
+	delete_option('simple-backup-file-transfer');
+	delete_option('simple-backup-background-processing');	
+	
+}
 
 
 function simple_backup_activate() {

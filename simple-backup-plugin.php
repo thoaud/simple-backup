@@ -4,7 +4,7 @@
 class Simple_Backup_Plugin{
 
 	//plugin version number
-	private $version = "2.6.8";
+	private $version = "2.6.9";
 	
 	private $debug = false;
 
@@ -21,10 +21,10 @@ class Simple_Backup_Plugin{
 	private $page_icon = "options-general"; 	
 	
 	//settings page title, to be displayed in menu and page headline
-	private $plugin_title = "Simple Backup";
+	private static $plugin_title = "Simple Backup";
 	
 	//page name
-	private $plugin_name = "simple-backup";
+	private static $plugin_name = "simple-backup";
 	
 	//will be used as option name to save all options
 	private $setting_name = "simple-backup-settings";
@@ -52,7 +52,7 @@ class Simple_Backup_Plugin{
         add_action( 'admin_menu', array(&$this, 'admin_menu') );
 		
 		//add help menu to settings page
-		add_filter( 'contextual_help', array(&$this,'admin_help'), 10, 3);	
+		//add_filter( 'contextual_help', array(&$this,'admin_help'), 10, 3);	
 		
 		// add plugin "Settings" action on plugin list
 		add_action('plugin_action_links_' . plugin_basename(SB_LOADER), array(&$this, 'add_plugin_actions'));
@@ -137,15 +137,15 @@ class Simple_Backup_Plugin{
 		$settings_sections = array(
 			array(
 				'id' => 'backup_settings',
-				'title' => __( 'Backup Settings', $this->plugin_name )
+				'title' => __( 'Backup Settings', self::$plugin_name )
 			),
 			array(
 				'id' => 'wp_optimizer_settings',
-				'title' => __( 'WordPress Optimization', $this->plugin_name )
+				'title' => __( 'WordPress Optimization', self::$plugin_name )
 			),
 			array(
 				'id' => 'db_optimizer_settings',
-				'title' => __( 'Database Optimization', $this->plugin_name )
+				'title' => __( 'Database Optimization', self::$plugin_name )
 			)
 		);
 		
@@ -153,7 +153,7 @@ class Simple_Backup_Plugin{
 		if(isset($this->opt['backup_settings']['enable_ftp_backup_system']) && "true" == $this->opt['backup_settings']['enable_ftp_backup_system']){
 			$settings_sections[] = array(
 				'id' => 'ftp_server_settings',
-				'title' => __( 'FTP Server Settings', $this->plugin_name )
+				'title' => __( 'FTP Server Settings', self::$plugin_name )
 			);
 		}
 
@@ -172,7 +172,7 @@ class Simple_Backup_Plugin{
 			'backup_settings' => array(
 				array(
                     'name' => 'enable_file_backup',
-                    'label' => __( 'File Backup', $this->plugin_name ),
+                    'label' => __( 'File Backup', self::$plugin_name ),
                     'desc' => 'Enable WordPress File Backup',
                     'type' => 'radio',
 					//'default' => 'true',
@@ -183,7 +183,7 @@ class Simple_Backup_Plugin{
                 ),
 				array(
                     'name' => 'file_compression',
-                    'label' => __( 'File Backup Format', $this->plugin_name ),
+                    'label' => __( 'File Backup Format', self::$plugin_name ),
                     'desc' => 'Files Backup Format and Compression',
                     'type' => 'select',
 					//'default' => '.tar.gz',
@@ -196,7 +196,7 @@ class Simple_Backup_Plugin{
                 ),
 				array(
                     'name' => 'enable_db_backup',
-                    'label' => __( 'Database Backup', $this->plugin_name ),
+                    'label' => __( 'Database Backup', self::$plugin_name ),
                     'desc' => 'Enable WordPress Database Backup',
                     'type' => 'radio',
 					//'default' => 'true',
@@ -208,7 +208,7 @@ class Simple_Backup_Plugin{
 				
 				array(
                     'name' => 'db_compression',
-                    'label' => __( 'Database Backup Format', $this->plugin_name ),
+                    'label' => __( 'Database Backup Format', self::$plugin_name ),
                     'desc' => 'Database Backup Format and Compression',
                     'type' => 'select',
 					//'default' => '.sql',
@@ -221,7 +221,7 @@ class Simple_Backup_Plugin{
                 ),
 				array(
                     'name' => 'enable_ftp_backup_system',
-                    'label' => __( 'FTP Storage', $this->plugin_name ),
+                    'label' => __( 'FTP Storage', self::$plugin_name ),
                     'desc' => 'Enable FTP Storage for Backup Files',
                     'type' => 'radio',
 					//'default' => 'true',
@@ -234,7 +234,7 @@ class Simple_Backup_Plugin{
 			'wp_optimizer_settings' => array(
 				array(
                     'name' => 'delete_spam_comments',
-                    'label' => __( 'Delete Spam Comments', $this->plugin_name ),
+                    'label' => __( 'Delete Spam Comments', self::$plugin_name ),
                     'desc' => 'Delete Spam Comments Before Backup (Recommended)',
                     'type' => 'radio',
 					//'default' => 'true',
@@ -245,7 +245,7 @@ class Simple_Backup_Plugin{
                 ),
 				array(
                     'name' => 'delete_unapproved_comments',
-                    'label' => __( 'Delete Un-Approved Comments', $this->plugin_name ),
+                    'label' => __( 'Delete Un-Approved Comments', self::$plugin_name ),
                     'desc' => 'Delete Un-Approved Comments Before Backup (Advanced)',
                     'type' => 'radio',
 					//'default' => 'true',
@@ -256,7 +256,7 @@ class Simple_Backup_Plugin{
                 ),
 				array(
                     'name' => 'delete_revisions',
-                    'label' => __( 'Delete Revisions', $this->plugin_name ),
+                    'label' => __( 'Delete Revisions', self::$plugin_name ),
                     'desc' => 'Delete Revisions Before Backup (Advanced)',
                     'type' => 'radio',
 					//'default' => 'true',
@@ -267,7 +267,7 @@ class Simple_Backup_Plugin{
                 ),
 				array(
                     'name' => 'delete_auto_drafts',
-                    'label' => __( 'Delete Auto Drafts', $this->plugin_name ),
+                    'label' => __( 'Delete Auto Drafts', self::$plugin_name ),
                     'desc' => 'Delete Auto Drafts Before Backup (Advanced)',
                     'type' => 'radio',
 					//'default' => 'true',
@@ -278,7 +278,7 @@ class Simple_Backup_Plugin{
                 ),
 				array(
                     'name' => 'delete_transient_options',
-                    'label' => __( 'Delete Transient Options', $this->plugin_name ),
+                    'label' => __( 'Delete Transient Options', self::$plugin_name ),
                     'desc' => 'Delete Transient Options Before Backup (Advanced)',
                     'type' => 'radio',
 					//'default' => 'true',
@@ -291,7 +291,7 @@ class Simple_Backup_Plugin{
 			'db_optimizer_settings' => array(
 				array(
                     'name' => 'optimize_database',
-                    'label' => __( 'Optimize Database', $this->plugin_name ),
+                    'label' => __( 'Optimize Database', self::$plugin_name ),
                     'desc' => 'Optimize WordPress MySQL Database Before Backup (Recommended)',
                     'type' => 'radio',
 					//'default' => 'true',
@@ -302,7 +302,7 @@ class Simple_Backup_Plugin{
                 ),
 				array(
                     'name' => 'check_database',
-                    'label' => __( 'Check Database', $this->plugin_name ),
+                    'label' => __( 'Check Database', self::$plugin_name ),
                     'desc' => 'Check WordPress MySQL Database Before Backup (Recommended)',
                     'type' => 'radio',
 					//'default' => 'true',
@@ -313,7 +313,7 @@ class Simple_Backup_Plugin{
                 ),
 				array(
                     'name' => 'repair_database',
-                    'label' => __( 'Repair Database', $this->plugin_name ),
+                    'label' => __( 'Repair Database', self::$plugin_name ),
                     'desc' => 'Repair WordPress MySQL Database Before Backup (Advanced)',
                     'type' => 'radio',
 					//'default' => 'true',
@@ -326,32 +326,32 @@ class Simple_Backup_Plugin{
 			'ftp_server_settings' => array(
 				array(
                     'name' => 'ftp_server_hostname',
-                    'label' => __( 'Server Name', $this->plugin_name ),
+                    'label' => __( 'Server Name', self::$plugin_name ),
                     'desc' => 'FTP Server Name or IP Address',
                     'type' => 'text'
                 ),
 				array(
                     'name' => 'ftp_server_port',
-                    'label' => __( 'Server Port', $this->plugin_name ),
+                    'label' => __( 'Server Port', self::$plugin_name ),
                     'desc' => 'FTP Server Port Number',
                     'type' => 'text',
 					'default' => '21'
                 ),
 				array(
                     'name' => 'ftp_server_username',
-                    'label' => __( 'Server Username', $this->plugin_name ),
+                    'label' => __( 'Server Username', self::$plugin_name ),
                     'desc' => 'FTP Server Username',
                     'type' => 'text'
                 ),
 				array(
                     'name' => 'ftp_server_password',
-                    'label' => __( 'Server Password', $this->plugin_name ),
+                    'label' => __( 'Server Password', self::$plugin_name ),
                     'desc' => 'FTP Server Password',
                     'type' => 'text'
                 ),
 				array(
                     'name' => 'ftp_server_directory',
-                    'label' => __( 'Server Directory', $this->plugin_name ),
+                    'label' => __( 'Server Directory', self::$plugin_name ),
                     'desc' => 'Directory to Store Backups on FTP Server',
                     'type' => 'text',
 					'default' => 'simple-backup'
@@ -380,7 +380,7 @@ class Simple_Backup_Plugin{
 		
 			echo '<div id="icon-'.$this->page_icon.'" class="icon32"><br /></div>';
 			
-			echo "<h2>".$this->plugin_title." Plugin Settings</h2>";
+			echo "<h2>".self::$plugin_title." Plugin Settings</h2>";
 			
 			//$this->show_backup_manager_link();
 			$this->show_do_backup_button();
@@ -485,17 +485,30 @@ class Simple_Backup_Plugin{
 
    	public function admin_menu() {
 		
-        $this->page_menu = add_options_page( $this->plugin_title, $this->plugin_title, 'manage_options',  $this->setting_name, array($this, 'plugin_settings_page') );
+        $this->page_menu = add_options_page( self::$plugin_title, self::$plugin_title, 'manage_options',  $this->setting_name, array($this, 'plugin_settings_page') );
+   
+   		global $wp_version;
+
+   		if($this->page_menu && version_compare($wp_version, '3.3', '>=')){
+			add_action("load-". $this->page_menu, array($this, 'admin_help'));	
+		}
+   
     }
 
 
-	public function admin_help($contextual_help, $screen_id, $screen){
-	
-		global $simple_backup_file_manager_page;
+	//public function admin_help($contextual_help, $screen_id, $screen){
+	public function admin_help(){
+		 $screen = get_current_screen();
+		 
+		//global $simple_backup_file_manager_page;
 		
-		if ( $screen_id == $this->page_menu || $screen_id == $simple_backup_file_manager_page ) {
-				
-			$support_the_dev = $this->display_support_us();
+		//if ( $screen_id == $this->page_menu || $screen_id == $simple_backup_file_manager_page ) {
+		//if ( $screen == $this->page_menu  ) {
+					
+					
+			//$support_the_dev = $this->display_support_us();
+			$support_the_dev =self::display_support_us();
+			
 			$screen->add_help_tab(array(
 				'id' => 'developer-support',
 				'title' => "Support the Developer",
@@ -524,25 +537,25 @@ class Simple_Backup_Plugin{
 			$screen->add_help_tab(array(
 				'id' => 'tutorial-video',
 				'title' => "Tutorial Video",
-				'content' => "<h2>{$this->plugin_title} Tutorial Video</h2><p>$video_code</p>"
+				'content' => "<h2>".self::$plugin_title." Tutorial Video</h2><p>$video_code</p>"
 			));
 			
 			$screen->add_help_tab(array(
 				'id' => 'plugin-support',
 				'title' => "Plugin Support",
-				'content' => "<h2>{$this->plugin_title} Support</h2><p>For {$this->plugin_title} Plugin Support please visit <a href='http://mywebsiteadvisor.com/support/' target='_blank'>MyWebsiteAdvisor.com</a></p>"
+				'content' => "<h2>".self::$plugin_title." Support</h2><p>For ".self::$plugin_title." Plugin Support please visit <a href='http://mywebsiteadvisor.com/support/' target='_blank'>MyWebsiteAdvisor.com</a></p>"
 			));
 			
 			
 			$screen->add_help_tab(array(
 				'id' => 'upgrade_plugin',
-				'title' => __( 'Plugin Upgrades', $this->plugin_name ),
-				'content' => $this->get_plugin_upgrades()		
+				'title' => __( 'Plugin Upgrades', self::$plugin_name ),
+				'content' => self::get_plugin_upgrades()		
 			));	
 
 			$screen->set_help_sidebar("<p>Please Visit us online for more Free WordPress Plugins!</p><p><a href='http://mywebsiteadvisor.com/tools/wordpress-plugins/' target='_blank'>MyWebsiteAdvisor.com</a></p><br>");
 			
-		}
+	//	}
 			
 		
 
@@ -658,7 +671,7 @@ class Simple_Backup_Plugin{
 			<p><a href='http://mywebsiteadvisor.com/learning/video-tutorials/simple-backup-tutorial/'  target='_blank'>Plugin Tutorial</a></p>
 			<p><a href='http://mywebsiteadvisor.com/contact-us/'  target='_blank'>Plugin Support</a></p>
 			<p><a href='http://mywebsiteadvisor.com/contact-us/'  target='_blank'>Contact Us</a></p>
-			<p><a href='http://wordpress.org/support/view/plugin-reviews/simple-security?rate=5#postform'  target='_blank'>Rate and Review This Plugin</a></p>";
+			<p><a href='http://wordpress.org/support/view/plugin-reviews/simple-backup?rate=5#postform'  target='_blank'>Rate and Review This Plugin</a></p>";
 	
 		$more_plugins = "<p><a href='http://mywebsiteadvisor.com/tools/premium-wordpress-plugins/'  target='_blank'>Premium WordPress Plugins!</a></p>
 			<p><a href='http://profiles.wordpress.org/MyWebsiteAdvisor/'  target='_blank'>Free Plugins on Wordpress.org!</a></p>
@@ -722,7 +735,7 @@ class Simple_Backup_Plugin{
 			//general debug settings
 			$plugin_debug = array(
 				'id' => 'plugin_debug',
-				'title' => __( 'Plugin Settings Debug', $this->plugin_name ),
+				'title' => __( 'Plugin Settings Debug', self::$plugin_name ),
 				'callback' => array(&$this, 'show_plugin_settings')
 			);
 	
@@ -734,7 +747,7 @@ class Simple_Backup_Plugin{
 		
 		$plugin_tutorial = array(
 			'id' => 'plugin_tutorial',
-			'title' => __( 'Plugin Tutorial Video', $this->plugin_name ),
+			'title' => __( 'Plugin Tutorial Video', self::$plugin_name ),
 			'callback' => array(&$this, 'show_plugin_tutorual')
 		);
 		$this->settings_page->add_section( $plugin_tutorial );
@@ -742,7 +755,7 @@ class Simple_Backup_Plugin{
 		
 		$upgrade_plugin = array(
 			'id' => 'upgrade_plugin',
-			'title' => __( 'Plugin Upgrades', $this->plugin_name ),
+			'title' => __( 'Plugin Upgrades', self::$plugin_name ),
 			'callback' => array(&$this, 'show_plugin_upgrades')
 		);
 		$this->settings_page->add_section( $upgrade_plugin );
@@ -766,7 +779,7 @@ class Simple_Backup_Plugin{
  		
 	public function get_plugin_upgrades(){
 		ob_start();
-		$this->show_plugin_upgrades();
+		self::show_plugin_upgrades();
 		return ob_get_clean();	
 	}
 	
@@ -785,10 +798,30 @@ class Simple_Backup_Plugin{
         		return false;
 			}
 			
-			function  simple_optimizer_upgrade(){
-        		window.open('http://mywebsiteadvisor.com/products-page/premium-wordpress-plugin/simple-optimizer-ultra/');
+			function  try_simple_optimizer(){
+        		window.open('http://wordpress.org/extend/plugins/simple-optimizer/');
         		return false;
-			}		
+			}
+			
+			function  try_simple_security(){
+        		window.open('http://wordpress.org/extend/plugins/simple-security/');
+        		return false;
+			}			
+			
+			function  simple_backup_learn_more(){
+        		window.open('http://mywebsiteadvisor.com/tools/wordpress-plugins/simple-backup/');
+        		return false;
+			}	
+			
+			function  simple_optimizer_learn_more(){
+        		window.open('http://mywebsiteadvisor.com/tools/wordpress-plugins/simple-optimizer/');
+        		return false;
+			}				
+
+			function  simple_security_learn_more(){
+        		window.open('http://mywebsiteadvisor.com/tools/wordpress-plugins/simple-security/');
+        		return false;
+			}				
 		</script>";
 		
 
@@ -804,29 +837,40 @@ class Simple_Backup_Plugin{
 		$html .= "</ul>";
 		
 		$html .=  '<div style="padding-left: 1.5em; margin-left:5px;">';
-		$html .= "<p class='submit'><input type='submit' class='button-primary' value='Upgrade to Simple Backup Ultra &raquo;' onclick='return simple_backup_upgrade()'></p>";
+		$html .= "<p class='submit'>";
+		$html .= "<input type='submit' class='button-primary' value='Upgrade to Simple Backup Ultra &raquo;' onclick='return simple_backup_upgrade()'>&nbsp;";
+		$html .= "<input type='submit' class='button-secondary' value='Learn More &raquo;' onclick='return simple_backup_learn_more()'>";
+		$html .= "</p>";
 		$html .=  "</div>";
 
 
 		$html .= "<hr>";
 		
 		
-		$html .= "<h2>Also Try Simple Optimizer Ultra!</h2>";
+		$html .= "<h2>Also Try Simple Optimizer!</h2>";
 		$html .= "<p>Simple Optimizer can help keep your website running quickly and smoothly by cleaning up the WordPress Database of un-used and un-necessary information.</p>";
-				
-		$html .= "<p><b>Premium Features include:</b></p>";
-		
-		$html .= "<ul class='upgrade_features'>";
-		$html .= "<li>Scheduled Automatic WordPress and Database Optimizations</li>";	
-		$html .= "<li>Recieve email notification of the scheduled optimization status</li>";
-		$html .= "<li>Priority Support</li>";
-		$html .= "</ul>";
 		
 		$html .=  '<div style="padding-left: 1.5em; margin-left:5px;">';
-		$html .= "<p class='submit'><input type='submit' class='button-primary' value='Upgrade to Simple Optimizer Ultra &raquo;' onclick='return simple_optimizer_upgrade()'></p>";
+		$html .= "<p class='submit'>";
+		$html .= "<input type='submit' class='button-primary' value='Try Simple Optimizer &raquo;' onclick='return try_simple_optimizer()'>&nbsp;";
+		$html .= "<input type='submit' class='button-secondary' value='Learn More &raquo;' onclick='return simple_optimizer_learn_more()'>";
+		$html .= "</p>";	
 		$html .=  "</div>";
 	
+	
+		$html .= "<hr>";
 		
+		
+		$html .= "<h2>Also Try Simple Security!</h2>";
+		$html .= "<p>Simple Security is an access log system for WordPress which can automatically block access to your website after a specified number of failed login attempts from an IP Address.</p>";
+		
+		$html .=  '<div style="padding-left: 1.5em; margin-left:5px;">';
+		$html .= "<p class='submit'>";
+		$html .= "<input type='submit' class='button-primary' value='Try Simple Security &raquo;' onclick='return try_simple_security()'>&nbsp;";
+		$html .= "<input type='submit' class='button-secondary' value='Learn More &raquo;' onclick='return simple_security_learn_more()'>";
+		$html .= "</p>";	
+		$html .=  "</div>";
+	
 
 		
 		echo $html;
@@ -908,7 +952,7 @@ class Simple_Backup_Plugin{
 	
 	public function display_support_us(){
 				
-		$string = '<p><b>Thank You for using the '.$this->plugin_title.' Plugin for WordPress!</b></p>';
+		$string = '<p><b>Thank You for using the '.self::$plugin_title.' Plugin for WordPress!</b></p>';
 		$string .= "<p>Please take a moment to <b>Support the Developer</b> by doing some of the following items:</p>";
 		
 		$rate_url = 'http://wordpress.org/support/view/plugin-reviews/' . basename(dirname(__FILE__)) . '?rate=5#postform';

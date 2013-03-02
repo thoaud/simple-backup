@@ -156,6 +156,9 @@ class Simple_Backup_Manager{
 		
 		$simple_backup_file_manager_page = add_submenu_page( 'tools.php', __('Simple Backup File Manager', 'simple_backup'), __('Backup Manager', 'simple_backup'), 'manage_options', 'backup_manager', array(&$this, 'backup_manager') );
 		
+		if($simple_backup_file_manager_page){
+			add_action("load-". $simple_backup_file_manager_page, array('Simple_Backup_Plugin', 'admin_help'));	
+		}
     }
 	
 	
