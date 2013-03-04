@@ -4,7 +4,7 @@ Contributors: MyWebsiteAdvisor, ChrisHurst
 Tags: Backup, Archive, Restore, Recover, Recovery, Optimize, Admin, Administration
 Requires at least: 3.3
 Tested up to: 3.5.1
-Stable tag: 2.6.9
+Stable tag: 2.7.0
 Donate link: http://MyWebsiteAdvisor.com/donations/
 
 
@@ -22,12 +22,12 @@ This plugin will create a directory in the root of your WordPress directory call
 If the plugin can not locate or create the directory you will receive an error message and may have to create the directory manually, the directory will also need to be writable by the web server so you may need to chmod it.
 
 
-<a href="http://mywebsiteadvisor.com/products-page/premium-wordpress-plugin/simple-backup-ultra/">**Upgrade to Simple Backup Ultra**</a> for advanced features including:
+<a href="http://mywebsiteadvisor.com/products-page/premium-wordpress-plugins/simple-backup-ultra/">**Upgrade to Simple Backup Ultra**</a> for advanced features including:
 
 * Schedule Automatic WordPress Backups
 * Scheduled Automatic WordPress and Database Optimizations
 * Recieve email notification of the scheduled backup status
-* Priority Support
+* Lifetime Priority Support and Update License
 
 
 
@@ -83,16 +83,41 @@ http://www.youtube.com/watch?v=W2YoEneu8H0&hd=1
 = Plugin doesn't work ... =
 
 Please specify as much information as you can to help us debug the problem. 
-Check in your error.log if you can. 
+Check in your error_log or debug.log if you can. 
 Please send screenshots as well as a detailed description of the problem.
 
 
-<a href="http://mywebsiteadvisor.com/products-page/premium-wordpress-plugin/simple-backup-ultra/">**Upgrade to Simple Backup Ultra**</a> for advanced features including:
+
+= FTP Server Setup =
+
+The FTP options are a common point of confusion for many people.
+The FTP System is Optional and only necessary if you have an FTP server which is seperate from your website.
+Some Web Hosting providers provide an FTP Backup server, or you could setup an FTP on your Home Computer and setup the plugin to transfer the backup files to that FTP Server.
+
+
+
+= Restoring Backups =
+
+This plugin does not contain any features to restore the backup files which it creates.
+
+Most likely if you should need to restore backups you will not have access to your website or the plugin.
+For that reason the plugin creates the backup files in standard, commonly used formats.
+
+More information on how to restore backup files can be found here:
+Restoring WordPress Backups Tutorial: http://mywebsiteadvisor.com/learning/software-tutorials/restoring-wordpress-backups/
+
+
+
+
+
+
+<a href="http://mywebsiteadvisor.com/products-page/premium-wordpress-plugins/simple-backup-ultra/">**Upgrade to Simple Backup Ultra**</a> for advanced features including:
 
 * Schedule Automatic WordPress Backups
 * Scheduled Automatic WordPress and Database Optimizations
 * Recieve email notification of the scheduled backup status
-* Priority Support
+* Lifetime Priority Support and Update License
+
 
 
 Developer Website: http://MyWebsiteAdvisor.com/
@@ -124,6 +149,12 @@ Restoring WordPress Backups Tutorial: http://mywebsiteadvisor.com/learning/softw
 
 
 == Changelog ==
+
+
+= 2.7.0 =
+* fixed filemtime warning when creating backup
+* updated readme file
+* updated FAQs in readme and in plugin help menu
 
 
 = 2.6.9 =

@@ -4,7 +4,7 @@
 class Simple_Backup_Plugin{
 
 	//plugin version number
-	private $version = "2.6.9";
+	private $version = "2.7.0";
 	
 	private $debug = false;
 
@@ -141,11 +141,11 @@ class Simple_Backup_Plugin{
 			),
 			array(
 				'id' => 'wp_optimizer_settings',
-				'title' => __( 'WordPress Optimization', self::$plugin_name )
+				'title' => __( 'WP Optimization', self::$plugin_name )
 			),
 			array(
 				'id' => 'db_optimizer_settings',
-				'title' => __( 'Database Optimization', self::$plugin_name )
+				'title' => __( 'DB Optimization', self::$plugin_name )
 			)
 		);
 		
@@ -153,7 +153,7 @@ class Simple_Backup_Plugin{
 		if(isset($this->opt['backup_settings']['enable_ftp_backup_system']) && "true" == $this->opt['backup_settings']['enable_ftp_backup_system']){
 			$settings_sections[] = array(
 				'id' => 'ftp_server_settings',
-				'title' => __( 'FTP Server Settings', self::$plugin_name )
+				'title' => __( 'FTP Settings', self::$plugin_name )
 			);
 		}
 
@@ -547,6 +547,28 @@ class Simple_Backup_Plugin{
 			));
 			
 			
+			
+			$plugin_faqs = "<p>For ".self::$plugin_title." Plugin Support please visit <a href='http://mywebsiteadvisor.com/support/' target='_blank'>MyWebsiteAdvisor.com</a></p>";
+			$plugin_faqs .= "<p><b>FTP Server Settings</b><br>The FTP options are a common point of confusion for many people.  
+The FTP System is Optional and only necessary if you have an FTP server which is seperate from your website.  
+Some Web Hosting providers provide an FTP Backup server, or you could setup an FTP on your Home Computer and setup the plugin to transfer the backup files to that FTP Server.</p>";
+			$plugin_faqs .= "<p><b>Restoring Backups</b><br>This plugin does not contain any features to restore the backup files which it creates.
+
+Most likely if you should need to restore backups you will not have access to your website or the plugin.
+For that reason the plugin creates the backup files in standard, commonly used formats.<br>
+<br>
+<b>More information on how to restore backup files can be found here:</b><br>
+Restoring WordPress Backups Tutorial:<br>
+<a href='http://mywebsiteadvisor.com/learning/software-tutorials/restoring-wordpress-backups/' target='_blank'>http://mywebsiteadvisor.com/learning/software-tutorials/restoring-wordpress-backups/</a></p>";
+	
+									
+			
+			$screen->add_help_tab(array(
+				'id' => 'plugin-faqs',
+				'title' => "Plugin FAQs",
+				'content' => "<h2>".self::$plugin_title." Frequently Asked Questions</h2>$plugin_faqs"
+			));
+			
 			$screen->add_help_tab(array(
 				'id' => 'upgrade_plugin',
 				'title' => __( 'Plugin Upgrades', self::$plugin_name ),
@@ -683,7 +705,7 @@ class Simple_Backup_Plugin{
 			<p><a href='http://MyWebsiteAdvisor.com/'  target='_blank'>Visit our Website!</a></p>";
 	
 		$upgrade = "<p>
-			<a href='http://mywebsiteadvisor.com/products-page/premium-wordpress-plugin/simple-backup-ultra/'  target='_blank'>Upgrade to Simple Backup Ultra!</a><br />
+			<a href='http://mywebsiteadvisor.com/products-page/premium-wordpress-plugins/simple-backup-ultra/'  target='_blank'>Upgrade to Simple Backup Ultra!</a><br />
 			<br />
 			<b>Features:</b><br />
 			-Automatic Backup Function<br />
@@ -794,7 +816,7 @@ class Simple_Backup_Plugin{
 		$html .= "<script>
 		
 			function  simple_backup_upgrade(){
-        		window.open('http://mywebsiteadvisor.com/products-page/premium-wordpress-plugin/simple-backup-ultra/');
+        		window.open('http://mywebsiteadvisor.com/products-page/premium-wordpress-plugins/simple-backup-ultra/');
         		return false;
 			}
 			
@@ -833,7 +855,7 @@ class Simple_Backup_Plugin{
 		$html .= "<li>Schedule Automatic WordPress Backups</li>";
 		$html .= "<li>Scheduled Automatic WordPress and Database Optimizations</li>";	
 		$html .= "<li>Recieve email notification of the scheduled backup status</li>";
-		$html .= "<li>Priority Support</li>";
+		$html .= "<li>Priority Support License</li>";
 		$html .= "</ul>";
 		
 		$html .=  '<div style="padding-left: 1.5em; margin-left:5px;">';
@@ -936,7 +958,7 @@ class Simple_Backup_Plugin{
 	 */
 	public function add_plugin_links($links, $file) {
 		if($file == plugin_basename(SB_LOADER)) {
-			$upgrade_url = 'http://mywebsiteadvisor.com/products-page/premium-wordpress-plugin/simple-backup-ultra/';
+			$upgrade_url = 'http://mywebsiteadvisor.com/products-page/premium-wordpress-plugins/simple-backup-ultra/';
 			$links[] = '<a href="'.$upgrade_url.'" target="_blank" title="Click Here to Upgrade this Plugin!">Upgrade Plugin</a>';
 			
 			$tutorial_url = 'http://mywebsiteadvisor.com/learning/video-tutorials/simple-backup-tutorial/';

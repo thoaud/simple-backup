@@ -709,7 +709,7 @@ class Simple_Backup_Manager{
 			
 			clearstatcache();
 		
-			if( filemtime($background) == time() ){
+			if( file_exists($background) && filemtime($background) == time() ){
 				echo "<div class='updated'>";
 				echo "<p><img src='".site_url()."/wp-admin/images/loading.gif' style='vertical-align: top;'>";
 				echo "  File Backup is Processing in the Background!  <a href=''>(Refresh)</a></p></div>";
