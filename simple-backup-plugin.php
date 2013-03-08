@@ -4,7 +4,7 @@
 class Simple_Backup_Plugin{
 
 	//plugin version number
-	private $version = "2.7.0";
+	private $version = "2.7.1";
 	
 	private $debug = false;
 
@@ -549,19 +549,22 @@ class Simple_Backup_Plugin{
 			
 			
 			$plugin_faqs = "<p>For ".self::$plugin_title." Plugin Support please visit <a href='http://mywebsiteadvisor.com/support/' target='_blank'>MyWebsiteAdvisor.com</a></p>";
-			$plugin_faqs .= "<p><b>FTP Server Settings</b><br>The FTP options are a common point of confusion for many people.  
-The FTP System is Optional and only necessary if you have an FTP server which is seperate from your website.  
-Some Web Hosting providers provide an FTP Backup server, or you could setup an FTP on your Home Computer and setup the plugin to transfer the backup files to that FTP Server.</p>";
-			$plugin_faqs .= "<p><b>Restoring Backups</b><br>This plugin does not contain any features to restore the backup files which it creates.
+		
+			$plugin_faqs .= "<p><b>How can I setup Automatic Weekly or Monthly Backups?</b><br>
+We offer a premium version of the plugin which includes advanced features such as Automatic Scheduled Backups!<br>
+<b><a href='http://mywebsiteadvisor.com/tools/wordpress-plugins/simple-backup/' target='_blank'>Learn More about Simple Backup Ultra</a></b></p>";
 
-Most likely if you should need to restore backups you will not have access to your website or the plugin.
+			$plugin_faqs .= "<p><b>FTP Server Settings</b><br>The FTP options are a common point of confusion for many people.  <br>
+The FTP System is Optional and only necessary if you have an FTP server which is seperate from your website.  <br>
+Some Web Hosting providers provide an FTP Backup server, or you could setup an FTP on your Home Computer and setup the plugin to transfer the backup files to that FTP Server.</p>";
+		
+			$plugin_faqs .= "<p><b>Restoring Backups</b><br>This plugin does not contain any features to restore the backup files which it creates.<br>
+Most likely if you should need to restore backups you will not have access to your website or the plugin.<br>
 For that reason the plugin creates the backup files in standard, commonly used formats.<br>
 <br>
 <b>More information on how to restore backup files can be found here:</b><br>
-Restoring WordPress Backups Tutorial:<br>
-<a href='http://mywebsiteadvisor.com/learning/software-tutorials/restoring-wordpress-backups/' target='_blank'>http://mywebsiteadvisor.com/learning/software-tutorials/restoring-wordpress-backups/</a></p>";
+<a href='http://mywebsiteadvisor.com/learning/software-tutorials/restoring-wordpress-backups/' target='_blank'>Restoring WordPress Backups Tutorial</a></p>";
 	
-									
 			
 			$screen->add_help_tab(array(
 				'id' => 'plugin-faqs',
@@ -575,7 +578,14 @@ Restoring WordPress Backups Tutorial:<br>
 				'content' => self::get_plugin_upgrades()		
 			));	
 
-			$screen->set_help_sidebar("<p>Please Visit us online for more Free WordPress Plugins!</p><p><a href='http://mywebsiteadvisor.com/tools/wordpress-plugins/' target='_blank'>MyWebsiteAdvisor.com</a></p><br>");
+
+			$screen->add_help_tab(array(
+				'id' => 'more-free-plugins',
+				'title' => "More Free Plugins",
+				'content' => "<h2>More Free Plugins from MyWebsiteAdvisor.com</h2><p>Install More Free Plugins from MyWebsiteAdvisor.com <a href='".admin_url()."plugins.php?page=MyWebsiteAdvisor' target='_blank'>Click here</a></p>"
+			));
+			
+			$screen->set_help_sidebar("<p>Please Visit us online for more Free WordPress Plugins!</p><p><a href='http://mywebsiteadvisor.com/tools/wordpress-plugins/' target='_blank'>MyWebsiteAdvisor.com</a></p><br><p>Install more FREE WordPress Plugins from MyWebsiteAdvisor.com </p><p><a href='".admin_url()."plugins.php?page=MyWebsiteAdvisor' target='_blank'>Click here</a></p>");
 			
 	//	}
 			
@@ -661,7 +671,7 @@ Restoring WordPress Backups Tutorial:<br>
 			}
 			
 			
-			$bytes = disk_free_space("."); 
+			$bytes =@disk_free_space("."); 
 			echo "<p>Disk Space Available: " . size_format( $bytes, 2 ) . " (Approx.)</p>";
 			
 			$bytes = exec("du -s " . ABSPATH . " --exclude '".ABSPATH."simple-backup/*'"); 
@@ -691,21 +701,23 @@ Restoring WordPress Backups Tutorial:<br>
 	
 		$plugin_resources = "<p><a href='http://mywebsiteadvisor.com/tools/wordpress-plugins/simple-backup/' target='_blank'>Plugin Homepage</a></p>
 			<p><a href='http://mywebsiteadvisor.com/learning/video-tutorials/simple-backup-tutorial/'  target='_blank'>Plugin Tutorial</a></p>
-			<p><a href='http://mywebsiteadvisor.com/contact-us/'  target='_blank'>Plugin Support</a></p>
+			<p><a href='http://mywebsiteadvisor.com/support/'  target='_blank'>Plugin Support</a></p>
 			<p><a href='http://mywebsiteadvisor.com/contact-us/'  target='_blank'>Contact Us</a></p>
-			<p><a href='http://wordpress.org/support/view/plugin-reviews/simple-backup?rate=5#postform'  target='_blank'>Rate and Review This Plugin</a></p>";
+			<p><b><a href='http://wordpress.org/support/view/plugin-reviews/simple-backup?rate=5#postform'  target='_blank'>Rate and Review This Plugin</a></b></p>";
 	
-		$more_plugins = "<p><a href='http://mywebsiteadvisor.com/tools/premium-wordpress-plugins/'  target='_blank'>Premium WordPress Plugins!</a></p>
+		$more_plugins = "<p><b><a href='".admin_url()."plugins.php?page=MyWebsiteAdvisor' target='_blank' title='Install More Free Plugins from MyWebsiteAdvisor.com!'>Install More Free Plugins!</a></b></p>
+			<p><a href='http://mywebsiteadvisor.com/tools/premium-wordpress-plugins/'  target='_blank'>Premium WordPress Plugins!</a></p>
+			<p><a href='http://mywebsiteadvisor.com/products-page/developer-wordpress-plugins/'  target='_blank'>Developer WordPress Plugins!</a></p>
 			<p><a href='http://profiles.wordpress.org/MyWebsiteAdvisor/'  target='_blank'>Free Plugins on Wordpress.org!</a></p>
 			<p><a href='http://mywebsiteadvisor.com/tools/wordpress-plugins/'  target='_blank'>Free Plugins on MyWebsiteAdvisor.com!</a></p>";
-	
+				
 		$follow_us = "<p><a href='http://facebook.com/MyWebsiteAdvisor/'  target='_blank'>Follow us on Facebook!</a></p>
 			<p><a href='http://twitter.com/MWebsiteAdvisor/'  target='_blank'>Follow us on Twitter!</a></p>
 			<p><a href='http://www.youtube.com/mywebsiteadvisor'  target='_blank'>Watch us on YouTube!</a></p>
 			<p><a href='http://MyWebsiteAdvisor.com/'  target='_blank'>Visit our Website!</a></p>";
 	
 		$upgrade = "<p>
-			<a href='http://mywebsiteadvisor.com/products-page/premium-wordpress-plugins/simple-backup-ultra/'  target='_blank'>Upgrade to Simple Backup Ultra!</a><br />
+			<b><a href='http://mywebsiteadvisor.com/products-page/premium-wordpress-plugins/simple-backup-ultra/'  target='_blank'>Upgrade to Simple Backup Ultra!</a></b><br />
 			<br />
 			<b>Features:</b><br />
 			-Automatic Backup Function<br />
@@ -961,6 +973,9 @@ Restoring WordPress Backups Tutorial:<br>
 			$upgrade_url = 'http://mywebsiteadvisor.com/products-page/premium-wordpress-plugins/simple-backup-ultra/';
 			$links[] = '<a href="'.$upgrade_url.'" target="_blank" title="Click Here to Upgrade this Plugin!">Upgrade Plugin</a>';
 			
+			$install_url = admin_url()."plugins.php?page=MyWebsiteAdvisor";
+			$links[] = '<a href="'.$install_url.'" target="_blank" title="Click Here to Install More Free Plugins!">More Plugins</a>';
+			
 			$tutorial_url = 'http://mywebsiteadvisor.com/learning/video-tutorials/simple-backup-tutorial/';
 			$links[] = '<a href="'.$tutorial_url.'" target="_blank" title="Click Here to View the Plugin Video Tutorial!">Tutorial Video</a>';
 			
@@ -979,10 +994,15 @@ Restoring WordPress Backups Tutorial:<br>
 		
 		$rate_url = 'http://wordpress.org/support/view/plugin-reviews/' . basename(dirname(__FILE__)) . '?rate=5#postform';
 		$string .= "<li><a href='$rate_url' target='_blank' title='Click Here to Rate and Review this Plugin on WordPress.org'>Click Here</a> to Rate and Review this Plugin on WordPress.org!</li>";
-		
+	
+		$string .= "<li><a href='http://www.youtube.com/subscription_center?add_user=MyWebsiteAdvisor' target='_blank' title='Click Here to Subscribe to our YouTube Channel'>Click Here</a> to Subscribe to our YouTube Channel!</li>";
+
 		$string .= "<li><a href='http://facebook.com/MyWebsiteAdvisor' target='_blank' title='Click Here to Follow us on Facebook'>Click Here</a> to Follow MyWebsiteAdvisor on Facebook!</li>";
 		$string .= "<li><a href='http://twitter.com/MWebsiteAdvisor' target='_blank' title='Click Here to Follow us on Twitter'>Click Here</a> to Follow MyWebsiteAdvisor on Twitter!</li>";
 		$string .= "<li><a href='http://mywebsiteadvisor.com/tools/premium-wordpress-plugins/' target='_blank' title='Click Here to Purchase one of our Premium WordPress Plugins'>Click Here</a> to Purchase Premium WordPress Plugins!</li>";
+
+
+	
 	
 		return $string;
 	}

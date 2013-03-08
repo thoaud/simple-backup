@@ -4,7 +4,7 @@ Contributors: MyWebsiteAdvisor, ChrisHurst
 Tags: Backup, Archive, Restore, Recover, Recovery, Optimize, Admin, Administration
 Requires at least: 3.3
 Tested up to: 3.5.1
-Stable tag: 2.7.0
+Stable tag: 2.7.1
 Donate link: http://MyWebsiteAdvisor.com/donations/
 
 
@@ -108,8 +108,9 @@ Restoring WordPress Backups Tutorial: http://mywebsiteadvisor.com/learning/softw
 
 
 
+= How can I setup Automatic Weekly or Monthly Backups? =
 
-
+We offer a premium version of the plugin which includes advanced features such as Automatic Scheduled Backups!
 
 <a href="http://mywebsiteadvisor.com/products-page/premium-wordpress-plugins/simple-backup-ultra/">**Upgrade to Simple Backup Ultra**</a> for advanced features including:
 
@@ -117,6 +118,14 @@ Restoring WordPress Backups Tutorial: http://mywebsiteadvisor.com/learning/softw
 * Scheduled Automatic WordPress and Database Optimizations
 * Recieve email notification of the scheduled backup status
 * Lifetime Priority Support and Update License
+
+
+
+
+Check out the [Simple Backup Plugin for WordPress Video Tutorial](http://www.youtube.com/watch?v=W2YoEneu8H0&hd=1):
+
+http://www.youtube.com/watch?v=W2YoEneu8H0&hd=1
+
 
 
 
@@ -150,11 +159,19 @@ Restoring WordPress Backups Tutorial: http://mywebsiteadvisor.com/learning/softw
 
 == Changelog ==
 
+= 2.7.1 =
+* resolved more issues with disk_free_space errors on 32 bit servers
+* updated plugin FAQs
+* updated readme file
+
 
 = 2.7.0 =
 * fixed filemtime warning when creating backup
 * updated readme file
 * updated FAQs in readme and in plugin help menu
+
+
+
 
 
 = 2.6.9 =

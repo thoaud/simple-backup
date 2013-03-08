@@ -3,7 +3,7 @@
 Plugin Name: Simple Backup
 Plugin URI: http://MyWebsiteAdvisor.com/tools/wordpress-plugins/simple-backup/
 Description: Simple Backup System, You can create and download backups for your WordPress Website
-Version: 2.7.0
+Version: 2.7.1
 Author: MyWebsiteAdvisor
 Author URI: http://MyWebsiteAdvisor.com
 */
@@ -49,6 +49,7 @@ if ( version_compare( phpversion(), '5.2', '>=') ) {
 
 	define('SB_LOADER', __FILE__);
 	
+	include_once(dirname(__FILE__) . '/simple-backup-plugin-installer.php');
 	require_once(dirname(__FILE__) . '/simple-backup-settings-page.php');
 	
 	require_once(dirname(__FILE__) . '/simple-backup-manager.php');
