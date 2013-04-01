@@ -4,7 +4,7 @@ Contributors: MyWebsiteAdvisor, ChrisHurst
 Tags: Backup, Archive, Restore, Recover, Recovery, Optimize, Admin, Administration
 Requires at least: 3.3
 Tested up to: 3.5.1
-Stable tag: 2.7.1
+Stable tag: 2.7.2
 Donate link: http://MyWebsiteAdvisor.com/donations/
 
 
@@ -158,6 +158,10 @@ Restoring WordPress Backups Tutorial: http://mywebsiteadvisor.com/learning/softw
 
 
 == Changelog ==
+
+= 2.7.2 =
+* resolved issues with downloading large files
+
 
 = 2.7.1 =
 * resolved more issues with disk_free_space errors on 32 bit servers

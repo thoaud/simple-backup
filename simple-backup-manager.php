@@ -139,7 +139,8 @@ class Simple_Backup_Manager{
 		header("Content-Length: $size");
 		header('Connection: close');  
 
-		ob_clean();
+		//ob_clean();
+		ob_end_clean();
 		flush();
 		
 		readfile($file);
