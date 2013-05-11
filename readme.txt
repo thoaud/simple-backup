@@ -4,7 +4,7 @@ Contributors: MyWebsiteAdvisor, ChrisHurst
 Tags: Backup, Archive, Restore, Recover, Recovery, Optimize, Admin, Administration
 Requires at least: 3.3
 Tested up to: 3.5.1
-Stable tag: 2.7.2
+Stable tag: 2.7.3
 Donate link: http://MyWebsiteAdvisor.com/donations/
 
 
@@ -17,6 +17,7 @@ Simple Backup Plugin for WordPress create and download backups of your WordPress
 Plugin can also optionally perform many common optimizations to wordpress and MySQL Database before backup.
 
 Requires linux style server with tar, gzip, bzip or zip for backup file creation.
+The plugin uses mysqldump for consistent and reliable database backups.
 
 This plugin will create a directory in the root of your WordPress directory called 'simple-backup' to store the backup files.
 If the plugin can not locate or create the directory you will receive an error message and may have to create the directory manually, the directory will also need to be writable by the web server so you may need to chmod it.
@@ -26,7 +27,7 @@ If the plugin can not locate or create the directory you will receive an error m
 
 * Schedule Automatic WordPress Backups
 * Scheduled Automatic WordPress and Database Optimizations
-* Recieve email notification of the scheduled backup status
+* Receive email notification of the scheduled backup status
 * Lifetime Priority Support and Update License
 
 
@@ -54,6 +55,9 @@ Requirements:
 
 * PHP 5.2+
 * WordPress 3.3+
+* Linux Style Server
+* mysqldump (for DB backup)
+* tar, zip, gzip, or bzip (for backup file compression)
 
 
 To-do:
@@ -91,7 +95,7 @@ Please send screenshots as well as a detailed description of the problem.
 = FTP Server Setup =
 
 The FTP options are a common point of confusion for many people.
-The FTP System is Optional and only necessary if you have an FTP server which is seperate from your website.
+The FTP System is Optional and only necessary if you have an FTP server which is separate from your website.
 Some Web Hosting providers provide an FTP Backup server, or you could setup an FTP on your Home Computer and setup the plugin to transfer the backup files to that FTP Server.
 
 
@@ -116,7 +120,7 @@ We offer a premium version of the plugin which includes advanced features such a
 
 * Schedule Automatic WordPress Backups
 * Scheduled Automatic WordPress and Database Optimizations
-* Recieve email notification of the scheduled backup status
+* Receive email notification of the scheduled backup status
 * Lifetime Priority Support and Update License
 
 
@@ -159,6 +163,11 @@ Restoring WordPress Backups Tutorial: http://mywebsiteadvisor.com/learning/softw
 
 == Changelog ==
 
+= 2.7.3 = 
+* updated the MyWebsiteAdvisor Plugin Installer Page to include the option to remove the installer page and menu.
+* updated links to the plugin installer to use the search by author feature when the plugin installer is disabled.
+* updated readme file description and requirements.
+
 = 2.7.2 =
 * resolved issues with downloading large files
 
@@ -179,9 +188,9 @@ Restoring WordPress Backups Tutorial: http://mywebsiteadvisor.com/learning/softw
 
 
 = 2.6.9 =
-* updated contextual help, removed depricated filter and updated to preferred method
+* updated contextual help, removed deprecated filter and updated to preferred method
 * updated plugin upgrades info tab on plugin settings page
-* added uninstall and deactivation funtions to clear plugin settings
+* added uninstall and deactivation functions to clear plugin settings
 
 = 2.6.8 =
 * updated readme file
@@ -230,7 +239,7 @@ Restoring WordPress Backups Tutorial: http://mywebsiteadvisor.com/learning/softw
 * updated plugin to use WordPress settings API
 * consolidated the plugin settings so they are all stored in one main setting, rather than individual settings in wp-options table
 * updated plugin settings page with tabs, rather than scrolling down the page
-* reorgainzed entire plugin file layout
+* reorganized entire plugin file layout
 * resolved issues with large file backups causing timeout errors
 
 
@@ -258,7 +267,7 @@ Restoring WordPress Backups Tutorial: http://mywebsiteadvisor.com/learning/softw
 * fixed several issues causing notices in debug.log
 * added plugin version number to debug info panel.
 * updated the backup file display to show the local time and date.
-* udated readme file.
+* updated readme file.
 
 
 = 2.4 =

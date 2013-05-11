@@ -4,7 +4,7 @@
 class Simple_Backup_Plugin{
 
 	//plugin version number
-	private $version = "2.7.2";
+	private $version = "2.7.3";
 	
 	private $debug = false;
 
@@ -579,13 +579,33 @@ For that reason the plugin creates the backup files in standard, commonly used f
 			));	
 
 
+			$enabled = get_option('mywebsiteadvisor_pluigin_installer_menu_disable');
+			if(!isset($enabled) || $enabled == 'true'){
+				$content = "<h2>More Free Plugins from MyWebsiteAdvisor.com</h2><p>Install More Free Plugins from MyWebsiteAdvisor.com <a href='".admin_url()."plugins.php?page=MyWebsiteAdvisor' target='_blank'>Click here</a></p>";
+			}else{
+				$content = "<h2>More Free Plugins from MyWebsiteAdvisor.com</h2><p>Install More Free Plugins from MyWebsiteAdvisor.com  <a href='".admin_url()."plugin-install.php?tab=search&type=author&s=MyWebsiteAdvisor' target='_blank'>Click here</a></p>";
+			}
+			
 			$screen->add_help_tab(array(
 				'id' => 'more-free-plugins',
 				'title' => "More Free Plugins",
-				'content' => "<h2>More Free Plugins from MyWebsiteAdvisor.com</h2><p>Install More Free Plugins from MyWebsiteAdvisor.com <a href='".admin_url()."plugins.php?page=MyWebsiteAdvisor' target='_blank'>Click here</a></p>"
+				'content' => $content
 			));
 			
-			$screen->set_help_sidebar("<p>Please Visit us online for more Free WordPress Plugins!</p><p><a href='http://mywebsiteadvisor.com/tools/wordpress-plugins/' target='_blank'>MyWebsiteAdvisor.com</a></p><br><p>Install more FREE WordPress Plugins from MyWebsiteAdvisor.com </p><p><a href='".admin_url()."plugins.php?page=MyWebsiteAdvisor' target='_blank'>Click here</a></p>");
+			
+			$help_sidebar = "<p>Please Visit us online for more Free WordPress Plugins!</p>";
+			$help_sidebar .= "<p><a href='http://mywebsiteadvisor.com/tools/wordpress-plugins/' target='_blank'>MyWebsiteAdvisor.com</a></p>";
+			$help_sidebar .= "<br>";
+			$help_sidebar .= "<p>Install more FREE WordPress Plugins from MyWebsiteAdvisor.com </p>";
+			
+			$enabled = get_option('mywebsiteadvisor_pluigin_installer_menu_disable');
+			if(!isset($enabled) || $enabled == 'true'){
+				$help_sidebar .= "<p><a href='".admin_url()."plugins.php?page=MyWebsiteAdvisor' target='_blank'>Click here</a></p>";
+			}else{
+				$help_sidebar .= "<p><a href='".admin_url()."plugin-install.php?tab=search&type=author&s=MyWebsiteAdvisor' target='_blank'>Click here</a></p>";
+			}
+			
+			$screen->set_help_sidebar($help_sidebar);
 			
 	//	}
 			
@@ -705,8 +725,17 @@ For that reason the plugin creates the backup files in standard, commonly used f
 			<p><a href='http://mywebsiteadvisor.com/contact-us/'  target='_blank'>Contact Us</a></p>
 			<p><b><a href='http://wordpress.org/support/view/plugin-reviews/simple-backup?rate=5#postform'  target='_blank'>Rate and Review This Plugin</a></b></p>";
 	
-		$more_plugins = "<p><b><a href='".admin_url()."plugins.php?page=MyWebsiteAdvisor' target='_blank' title='Install More Free Plugins from MyWebsiteAdvisor.com!'>Install More Free Plugins!</a></b></p>
-			<p><a href='http://mywebsiteadvisor.com/tools/premium-wordpress-plugins/'  target='_blank'>Premium WordPress Plugins!</a></p>
+	
+		$enabled = get_option('mywebsiteadvisor_pluigin_installer_menu_disable');
+		if(!isset($enabled) || $enabled == 'true'){
+			$more_plugins = "<p><b><a href='".admin_url()."plugins.php?page=MyWebsiteAdvisor' target='_blank' title='Install More Free Plugins from MyWebsiteAdvisor.com!'>Install More Free Plugins!</a></b></p>";
+		}else{
+			
+			$more_plugins = "<p><b><a href='".admin_url()."plugin-install.php?tab=search&type=author&s=MyWebsiteAdvisor' target='_blank' title='Install More Free Plugins from MyWebsiteAdvisor.com!'>Install More Free Plugins!</a></b></p>";
+		}
+			
+		
+		$more_plugins .= "<p><a href='http://mywebsiteadvisor.com/tools/premium-wordpress-plugins/'  target='_blank'>Premium WordPress Plugins!</a></p>
 			<p><a href='http://mywebsiteadvisor.com/products-page/developer-wordpress-plugins/'  target='_blank'>Developer WordPress Plugins!</a></p>
 			<p><a href='http://profiles.wordpress.org/MyWebsiteAdvisor/'  target='_blank'>Free Plugins on Wordpress.org!</a></p>
 			<p><a href='http://mywebsiteadvisor.com/tools/wordpress-plugins/'  target='_blank'>Free Plugins on MyWebsiteAdvisor.com!</a></p>";
