@@ -4,7 +4,7 @@ Contributors: MyWebsiteAdvisor, ChrisHurst
 Tags: Backup, Archive, Restore, Recover, Recovery, Optimize, Admin, Administration
 Requires at least: 3.3
 Tested up to: 3.5.1
-Stable tag: 2.7.3
+Stable tag: 2.7.4
 Donate link: http://MyWebsiteAdvisor.com/donations/
 
 
@@ -162,6 +162,10 @@ Restoring WordPress Backups Tutorial: http://mywebsiteadvisor.com/learning/softw
 
 
 == Changelog ==
+
+= 2.7.4 =
+* fixed bug with the MyWebsiteAdvisor Plugin Installer Page.
+
 
 = 2.7.3 = 
 * updated the MyWebsiteAdvisor Plugin Installer Page to include the option to remove the installer page and menu.

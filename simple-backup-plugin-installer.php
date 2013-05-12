@@ -415,15 +415,6 @@ if( ! class_exists('MWA_Plugin_Install_List_Table')){
 
 
 
-
-
-
-	
-
-}
-
-
-
 	//register ajax handler for disabling plugin installer menu
 	add_action('wp_ajax_update_mwa_plugin_installer_menu_option',  'update_mwa_plugin_installer_menu_disable_option');
 
@@ -439,4 +430,13 @@ if( ! class_exists('MWA_Plugin_Install_List_Table')){
 		die();
 	}
 	
+
+
+	
+
+}
+
+
+
+
 ?>
