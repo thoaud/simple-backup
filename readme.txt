@@ -165,6 +165,7 @@ Restoring WordPress Backups Tutorial: http://mywebsiteadvisor.com/learning/softw
 
 = 2.7.4 =
 * fixed bug with the MyWebsiteAdvisor Plugin Installer Page.
+* added option to the help menu, 'More Free Plugins' section to enable and disable the 'MyWebsiteAdvisor' Plugins installer menu. 
 
 
 = 2.7.3 = 

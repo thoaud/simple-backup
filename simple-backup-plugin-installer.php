@@ -304,7 +304,7 @@ if( ! class_exists('MWA_Plugin_Install_List_Table')){
 						var menu_enabled = jQuery('#display_mywebsiteadvisor_plugin_installer_menu:checked').length > 0;
 					  
 						var ajax_data = {
-							'enabled': menu_enabled,
+							'checked': menu_enabled,
 							'action': 'update_mwa_plugin_installer_menu_option', 
 							'security': '$disable_plugin_installer_nonce'
 						};
@@ -424,9 +424,9 @@ if( ! class_exists('MWA_Plugin_Install_List_Table')){
 		ob_clean();
 		check_ajax_referer( 'mywebsiteadvisor-plugin-installer-menu-disable', 'security' );
 		
-		update_option('mywebsiteadvisor_pluigin_installer_menu_disable', 'false');
+		update_option('mywebsiteadvisor_pluigin_installer_menu_disable', $_POST['checked']);
 	
-		echo "false";
+		echo  $_POST['checked'];
 		die();
 	}
 	

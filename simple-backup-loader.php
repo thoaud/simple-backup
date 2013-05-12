@@ -26,6 +26,7 @@ function simple_backup_uninstall(){
 	delete_option('simple-backup-settings');
 	delete_option('simple-backup-file-transfer');
 	delete_option('simple-backup-background-processing');	
+	delete_option('mywebsiteadvisor_pluigin_installer_menu_disable');
 	
 }
 

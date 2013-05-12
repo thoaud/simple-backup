@@ -579,18 +579,62 @@ For that reason the plugin creates the backup files in standard, commonly used f
 			));	
 
 
+
+
+			$disable_plugin_installer_nonce = wp_create_nonce("mywebsiteadvisor-plugin-installer-menu-disable");	
+		
+			$plugin_installer_ajax = " <script>
+				function update_mwa_display_plugin_installer_options(){
+					  
+						jQuery('#display_mwa_plugin_installer_label').text('Updating...');
+						
+						var option_checked = jQuery('#display_mywebsiteadvisor_plugin_installer_menu:checked').length > 0;
+					  
+						var ajax_data = {
+							'checked': option_checked,
+							'action': 'update_mwa_plugin_installer_menu_option', 
+							'security': '$disable_plugin_installer_nonce'
+						};
+						  
+						jQuery.ajax({
+							type: 'POST',
+							url:  ajaxurl,
+							data: ajax_data,
+							success: function(data){
+								if(data == 'true'){
+									jQuery('#display_mwa_plugin_installer_label').text(' MyWebsiteAdvisor Plugin Installer Menu Enabled!');
+								}
+								if(data == 'false'){
+									jQuery('#display_mwa_plugin_installer_label').text(' MyWebsiteAdvisor Plugin Installer Menu Disabled!');
+								}
+								//alert(data);
+								//location.reload();
+							}
+						});  
+				  }</script>";
+
+
+
+			$checked = "";
 			$enabled = get_option('mywebsiteadvisor_pluigin_installer_menu_disable');
 			if(!isset($enabled) || $enabled == 'true'){
+				$checked = "checked='checked'";
 				$content = "<h2>More Free Plugins from MyWebsiteAdvisor.com</h2><p>Install More Free Plugins from MyWebsiteAdvisor.com <a href='".admin_url()."plugins.php?page=MyWebsiteAdvisor' target='_blank'>Click here</a></p>";
 			}else{
+				$checked = "";
 				$content = "<h2>More Free Plugins from MyWebsiteAdvisor.com</h2><p>Install More Free Plugins from MyWebsiteAdvisor.com  <a href='".admin_url()."plugin-install.php?tab=search&type=author&s=MyWebsiteAdvisor' target='_blank'>Click here</a></p>";
 			}
 			
+			$content .=  $plugin_installer_ajax . "
+       	<p><input type='checkbox' $checked id='display_mywebsiteadvisor_plugin_installer_menu' name='display_mywebsiteadvisor_plugin_installer_menu' onclick='update_mwa_display_plugin_installer_options()' /> <label id='display_mwa_plugin_installer_label' for='display_mywebsiteadvisor_plugin_installer_menu' > Check here to display the MyWebsiteAdvisor Plugin Installer page in the Plugins menu.</label></p>";
+
 			$screen->add_help_tab(array(
 				'id' => 'more-free-plugins',
 				'title' => "More Free Plugins",
 				'content' => $content
 			));
+			
+			
 			
 			
 			$help_sidebar = "<p>Please Visit us online for more Free WordPress Plugins!</p>";
