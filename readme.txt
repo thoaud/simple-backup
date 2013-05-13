@@ -4,7 +4,7 @@ Contributors: MyWebsiteAdvisor, ChrisHurst
 Tags: Backup, Archive, Restore, Recover, Recovery, Optimize, Admin, Administration
 Requires at least: 3.3
 Tested up to: 3.5.1
-Stable tag: 2.7.5
+Stable tag: 2.7.6
 Donate link: http://MyWebsiteAdvisor.com/donations/
 
 
@@ -162,6 +162,9 @@ Restoring WordPress Backups Tutorial: http://mywebsiteadvisor.com/learning/softw
 
 
 == Changelog ==
+
+= 2.7.6 =
+* fixed version number
 
 = 2.7.5 =
 * improved the backup directory creation and .htaccess creation systems
