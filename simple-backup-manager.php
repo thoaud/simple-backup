@@ -80,34 +80,51 @@ class Simple_Backup_Manager{
 	
 	
 	public function create_backup_directory(){
-
-		$bk_dir = ABSPATH."simple-backup";
+		if( isset($_GET['page']) && ($_GET['page'] == "backup_manager" || $_GET['page'] == "simple-backup-settings" ) ){
+			$bk_dir = ABSPATH."simple-backup";
+				
+			if(!is_dir($bk_dir)){
+				if(mkdir($bk_dir)){
+					echo "<div class='updated'><p>Successfully Created backup directory!<br>$bk_dir</p></div>";
+				}
+			}
 			
-		if(!is_dir($bk_dir)){
-			mkdir($bk_dir);
-		}
+			
+			if(!is_dir($bk_dir)){
+				echo "<div class='error'><p>Can not access: $bk_dir</p></div>";
+				return;
+			}
+
+			if(!is_writeable($bk_dir)){
+				echo "<div class='error'><p>Can not write to Backup Directory: $bk_dir <br>Please be sure that the directory has is Write Permission.</p></div>";
+				return;
+			}			
 		
-		if(!is_dir($bk_dir)){
-			echo "<div class='error'><p>Can not access: $bk_dir</p></div>";
-		}
-		
+
+			
+			//check for .htaccess file and create one if it does not exist.
+			$htaccess_name = "$bk_dir/.htaccess";
+			
+			if ( !is_file( $htaccess_name ) ) {
+			// open the .htaccess file for editing
 	
-		//check for .htaccess file and create one if it does not exist.
-		$htaccess_name = "$bk_dir/.htaccess";
-		
-		// open the .htaccess file for editing
-		if(!$file_handle = fopen($htaccess_name, 'r')){
-			$file_handle = fopen($htaccess_name, 'w');
-			fwrite($file_handle, "order deny,allow\n");
-			fwrite($file_handle, "deny from all\n");
-			fwrite($file_handle, "allow from none\n");
-			fclose($file_handle);
-		}
-		
-		if(!$file_handle = fopen($htaccess_name, 'r')){
-			echo "<div class='error'><p>Can not create .htaccess file to secure backup directory</p></div>";
-		}
+				$htaccess = "order deny,allow\n\r";
+				$htaccess .= "deny from all\n\r";
+				$htaccess .= "allow from none\n\r";
+				
+				$file_handle = @ fopen( $htaccess_name, 'w+' );
+				@ fwrite( $file_handle, $htaccess );
+				@ fclose( $file_handle );
+				@ chmod( $file_handle, 0665 );
+				
+				echo "<div class='updated'><p>Successfully Created .htaccess file to secure backup directory!</p></div>";
 	
+			}
+			
+			if ( !is_file( $htaccess_name ) ) {
+				echo "<div class='error'><p>Can not create .htaccess file to secure backup directory</p></div>";
+			}
+		}
 	}
 		
 	
@@ -174,23 +191,32 @@ class Simple_Backup_Manager{
 		
 		if(!is_dir($bk_dir)){
 			echo "Can not access: $bk_dir<br>";
+			return;
 		}
 		
 		
+		if(!is_writeable($bk_dir)){
+			echo "<div class='error'><p>Can not write to Backup Directory: $bk_dir <br>Please be sure that the directory has is Write Permission.</p></div>";
+			return;
+		}	
 		
 
 		//check for .htaccess file and create one if it does not exist.
 		$htaccess_name = "$bk_dir/.htaccess";
 		
+		if ( !is_file( $htaccess_name ) ) {
 		// open the .htaccess file for editing
-		if(!$file_handle = fopen($htaccess_name, 'r')){
-			$file_handle = fopen($htaccess_name, 'w');
-			fwrite($file_handle, "order deny,allow\n");
-			fwrite($file_handle, "deny from all\n");
-			fwrite($file_handle, "allow from none\n");
-			fclose($file_handle);
+
+			$htaccess = "order deny,allow\n\r";
+			$htaccess .= "deny from all\n\r";
+			$htaccess .= "allow from none\n\r";
+			
+			$file_handle = @ fopen( $htaccess_name, 'w+' );
+			@ fwrite( $file_handle, $htaccess );
+			@ fclose( $file_handle );
+			@ chmod( $file_handle, 0665 );
+
 		}
-		
 		
 
 		
@@ -606,11 +632,19 @@ class Simple_Backup_Manager{
 		}
 
 
-		$tz = get_option('timezone_string') ? get_option('timezone_string') : "UTC+".get_option('gmt_offset');
+		//$tz = get_option('timezone_string') ? get_option('timezone_string') : "UTC+".get_option('gmt_offset');
+
+		$tz = get_option('timezone_string');
+		$offset = get_option('gmt_offset');
+		
+		if($tz == ''){
+			 $tz = timezone_name_from_abbr('', $offset * 3600, 1);
+		}
 
 		try {
 			$date = new DateTime("@".time());
 			$date->setTimezone(new DateTimeZone($tz)); 
+
 		} catch (Exception $e) {
 			echo '<div class="error" style="padding:10px;">';
 			echo "ERROR: <br />";
@@ -639,7 +673,8 @@ class Simple_Backup_Manager{
 				try {
 					
 					$date = new DateTime("@".filectime($filePath));
-					$date->setTimezone(new DateTimeZone(get_option('timezone_string'))); 
+					//$date->setTimezone(new DateTimeZone(get_option('timezone_string'))); 
+					$date->setTimezone( new DateTimeZone($tz) ); 
 				} catch (Exception $e) {
 				
 

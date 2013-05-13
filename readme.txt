@@ -4,7 +4,7 @@ Contributors: MyWebsiteAdvisor, ChrisHurst
 Tags: Backup, Archive, Restore, Recover, Recovery, Optimize, Admin, Administration
 Requires at least: 3.3
 Tested up to: 3.5.1
-Stable tag: 2.7.4
+Stable tag: 2.7.5
 Donate link: http://MyWebsiteAdvisor.com/donations/
 
 
@@ -20,7 +20,7 @@ Requires linux style server with tar, gzip, bzip or zip for backup file creation
 The plugin uses mysqldump for consistent and reliable database backups.
 
 This plugin will create a directory in the root of your WordPress directory called 'simple-backup' to store the backup files.
-If the plugin can not locate or create the directory you will receive an error message and may have to create the directory manually, the directory will also need to be writable by the web server so you may need to chmod it.
+If the plugin can not locate or create the directory you will receive an error message and may have to create the directory manually, the directory will also need to be writeable by the web server so you may need to chmod it.
 
 
 <a href="http://mywebsiteadvisor.com/products-page/premium-wordpress-plugins/simple-backup-ultra/">**Upgrade to Simple Backup Ultra**</a> for advanced features including:
@@ -162,6 +162,11 @@ Restoring WordPress Backups Tutorial: http://mywebsiteadvisor.com/learning/softw
 
 
 == Changelog ==
+
+= 2.7.5 =
+* improved the backup directory creation and .htaccess creation systems
+* updated the timezone to work with timezone offsets, however named timezones are still preferred because timezone offsets are not as accurate.
+
 
 = 2.7.4 =
 * fixed bug with the MyWebsiteAdvisor Plugin Installer Page.
