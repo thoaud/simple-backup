@@ -4,7 +4,7 @@
 class Simple_Backup_Plugin{
 
 	//plugin version number
-	private $version = "2.7.6";
+	private $version = "2.7.7";
 	
 	private $debug = false;
 
@@ -738,10 +738,11 @@ For that reason the plugin creates the backup files in standard, commonly used f
 			$bytes =@disk_free_space("."); 
 			echo "<p>Disk Space Available: " . size_format( $bytes, 2 ) . " (Approx.)</p>";
 			
-			$bytes = exec("du -s " . ABSPATH . " --exclude '".ABSPATH."simple-backup/*'"); 
-			$size = explode("	", $bytes);
-			echo "<p>WordPress File Size: " . size_format(($size[0] * 1024)) . " (Approx.)</p>";
-				
+			if(function_exists('exec')){
+				$bytes = exec("du -s " . ABSPATH . " --exclude '".ABSPATH."simple-backup/*'"); 
+				$size = explode("	", $bytes);
+				echo "<p>WordPress File Size: " . size_format(($size[0] * 1024)) . " (Approx.)</p>";
+			}
 	
 			global $wpdb;
 			$status_rows = $wpdb->get_results( "SHOW TABLE STATUS" );

@@ -3,8 +3,8 @@ Name: Simple Backup
 Contributors: MyWebsiteAdvisor, ChrisHurst
 Tags: Backup, Archive, Restore, Recover, Recovery, Optimize, Admin, Administration
 Requires at least: 3.3
-Tested up to: 3.5.1
-Stable tag: 2.7.6
+Tested up to: 3.6
+Stable tag: 2.7.7
 Donate link: http://MyWebsiteAdvisor.com/donations/
 
 
@@ -58,6 +58,7 @@ Requirements:
 * Linux Style Server
 * mysqldump (for DB backup)
 * tar, zip, gzip, or bzip (for backup file compression)
+* exec and passthru functions (to call the linux backup commands)
 
 
 To-do:
@@ -162,6 +163,11 @@ Restoring WordPress Backups Tutorial: http://mywebsiteadvisor.com/learning/softw
 
 
 == Changelog ==
+
+= 2.7.7 =
+* added check for php exec() function around the exec('du') which calculates the size of the WP install
+* updated requirements section in readme to indicate that exec and passthru functions are required for the plugin to work properly.
+
 
 = 2.7.6 =
 * fixed version number
