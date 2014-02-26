@@ -3,8 +3,8 @@ Name: Simple Backup
 Contributors: MyWebsiteAdvisor, ChrisHurst
 Tags: Backup, Archive, Restore, Recover, Recovery, Optimize, Admin, Administration
 Requires at least: 3.3
-Tested up to: 3.6
-Stable tag: 2.7.7
+Tested up to: 3.8.1
+Stable tag: 2.7.8
 Donate link: http://MyWebsiteAdvisor.com/donations/
 
 
@@ -73,6 +73,15 @@ To-do:
 2. Activate the plugin through the 'Plugins' menu in WordPress.
 3. Go to Simple Backup Plugin settings and enable Simple Backup Plugin.
 
+4. Optional - .htaccess Security
+	Create a file named .htaccess in the "simple-backup/" directory which stores the backup files.
+	Add the following three lines of text to the file:
+	
+	order deny,allow
+	deny from all
+	allow from none
+	
+	
 
 Check out the [Simple Backup Plugin for WordPress Video Tutorial](http://www.youtube.com/watch?v=W2YoEneu8H0&hd=1):
 
@@ -163,6 +172,14 @@ Restoring WordPress Backups Tutorial: http://mywebsiteadvisor.com/learning/softw
 
 
 == Changelog ==
+
+
+
+= 2.7.8 =
+* verified compatibility with WordPress version 3.8.1
+* added option to automatically create the .htaccess file to secure the backup directory
+* fixed several small issues causing warnings and notices in debug.log
+
 
 = 2.7.7 =
 * added check for php exec() function around the exec('du') which calculates the size of the WP install

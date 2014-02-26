@@ -429,7 +429,7 @@ class Simple_Backup_FTP_Tools{
 			
 				//attempt to return to the root
 				foreach($dirs as $dir){
-					ftp_cdup($ftp_connection);
+					@ftp_cdup($ftp_connection);
 				}
 					
 				$data = self::ftp_recursive_file_listing($ftp_connection, $dir);
@@ -525,10 +525,13 @@ class Simple_Backup_FTP_Tools{
 
 		
 		$files = array();
-		foreach($data[$this->directory] as $item){
-			$files[] = $item;
+		
+		if(is_array($data) && count($data) > 0){
+			foreach($data[$this->directory] as $item){
+				$files[] = $item;
+			}
 		}
-
+		
 		//print_r($files);
 		return $files;
 	

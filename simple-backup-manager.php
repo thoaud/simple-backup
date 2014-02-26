@@ -101,29 +101,34 @@ class Simple_Backup_Manager{
 			}			
 		
 
-			
-			//check for .htaccess file and create one if it does not exist.
-			$htaccess_name = "$bk_dir/.htaccess";
-			
-			if ( !is_file( $htaccess_name ) ) {
-			// open the .htaccess file for editing
-	
-				$htaccess = "order deny,allow\n\r";
-				$htaccess .= "deny from all\n\r";
-				$htaccess .= "allow from none\n\r";
+
+			if(isset($this->opt['backup_settings']['enable_htaccess_auto_security']) && "true" == $this->opt['backup_settings']['enable_htaccess_auto_security']){
 				
-				$file_handle = @ fopen( $htaccess_name, 'w+' );
-				@ fwrite( $file_handle, $htaccess );
-				@ fclose( $file_handle );
-				@ chmod( $file_handle, 0665 );
+				//check for .htaccess file and create one if it does not exist.
+				$htaccess_name = "$bk_dir/.htaccess";
 				
-				echo "<div class='updated'><p>Successfully Created .htaccess file to secure backup directory!</p></div>";
-	
+				if ( !is_file( $htaccess_name ) ) {
+				// open the .htaccess file for editing
+		
+					$htaccess = "order deny,allow\n\r";
+					$htaccess .= "deny from all\n\r";
+					$htaccess .= "allow from none\n\r";
+					
+					$file_handle = @ fopen( $htaccess_name, 'w+' );
+					@ fwrite( $file_handle, $htaccess );
+					@ fclose( $file_handle );
+					@ chmod( $file_handle, 0665 );
+					
+					echo "<div class='updated'><p>Successfully Created .htaccess file to secure backup directory!</p></div>";
+		
+				}
+				
+				if ( !is_file( $htaccess_name ) ) {
+					echo "<div class='error'><p>Can not create .htaccess file to secure backup directory</p></div>";
+				}
+			
 			}
 			
-			if ( !is_file( $htaccess_name ) ) {
-				echo "<div class='error'><p>Can not create .htaccess file to secure backup directory</p></div>";
-			}
 		}
 	}
 		
@@ -201,24 +206,28 @@ class Simple_Backup_Manager{
 		}	
 		
 
-		//check for .htaccess file and create one if it does not exist.
-		$htaccess_name = "$bk_dir/.htaccess";
-		
-		if ( !is_file( $htaccess_name ) ) {
-		// open the .htaccess file for editing
 
-			$htaccess = "order deny,allow\n\r";
-			$htaccess .= "deny from all\n\r";
-			$htaccess .= "allow from none\n\r";
+		if(isset($this->opt['backup_settings']['enable_htaccess_auto_security']) && "true" == $this->opt['backup_settings']['enable_htaccess_auto_security']){
 			
-			$file_handle = @ fopen( $htaccess_name, 'w+' );
-			@ fwrite( $file_handle, $htaccess );
-			@ fclose( $file_handle );
-			@ chmod( $file_handle, 0665 );
-
-		}
+				
+			//check for .htaccess file and create one if it does not exist.
+			$htaccess_name = "$bk_dir/.htaccess";
+			
+			if ( !is_file( $htaccess_name ) ) {
+			// open the .htaccess file for editing
+	
+				$htaccess = "order deny,allow\n\r";
+				$htaccess .= "deny from all\n\r";
+				$htaccess .= "allow from none\n\r";
+				
+				$file_handle = @ fopen( $htaccess_name, 'w+' );
+				@ fwrite( $file_handle, $htaccess );
+				@ fclose( $file_handle );
+				@ chmod( $file_handle, 0665 );
+	
+			}
 		
-
+		}
 		
 		
 		

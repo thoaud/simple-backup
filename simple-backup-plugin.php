@@ -4,7 +4,7 @@
 class Simple_Backup_Plugin{
 
 	//plugin version number
-	private $version = "2.7.7";
+	private $version = "2.7.8";
 	
 	private $debug = false;
 
@@ -222,7 +222,18 @@ class Simple_Backup_Plugin{
 				array(
                     'name' => 'enable_ftp_backup_system',
                     'label' => __( 'FTP Storage', self::$plugin_name ),
-                    'desc' => 'Enable FTP Storage for Backup Files',
+                    'desc' => 'Enable FTP Storage for Backup Files.<br>(This is only necessary if you have a seperate FTP Server you need to copy your files to.)',
+                    'type' => 'radio',
+					//'default' => 'true',
+                    'options' => array(
+                        'true' => 'Enabled',
+                        'false' => 'Disabled'
+                    )
+                ),
+				array(
+                    'name' => 'enable_htaccess_auto_security',
+                    'label' => __( '.htaccess Security', self::$plugin_name ),
+                    'desc' => 'Enable Automatic .htaccess Security for the Backup Directory.<br>(You can disable this option and manually create the .htaccess file, see the readme.txt for more information.)',
                     'type' => 'radio',
 					//'default' => 'true',
                     'options' => array(
