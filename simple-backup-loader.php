@@ -1,9 +1,9 @@
 <?php
 /*
 Plugin Name: Simple Backup
-Plugin URI: http://MyWebsiteAdvisor.com/tools/wordpress-plugins/simple-backup/
+Plugin URI: http://MyWebsiteAdvisor.com/plugins/simple-backup/
 Description: Simple Backup System, You can create and download backups for your WordPress Website
-Version: 2.7.8
+Version: 2.7.9
 Author: MyWebsiteAdvisor
 Author URI: http://MyWebsiteAdvisor.com
 */

@@ -4,7 +4,7 @@
 class Simple_Backup_Plugin{
 
 	//plugin version number
-	private $version = "2.7.8";
+	private $version = "2.7.9";
 	
 	private $debug = false;
 
@@ -563,7 +563,7 @@ class Simple_Backup_Plugin{
 		
 			$plugin_faqs .= "<p><b>How can I setup Automatic Weekly or Monthly Backups?</b><br>
 We offer a premium version of the plugin which includes advanced features such as Automatic Scheduled Backups!<br>
-<b><a href='http://mywebsiteadvisor.com/tools/wordpress-plugins/simple-backup/' target='_blank'>Learn More about Simple Backup Ultra</a></b></p>";
+<b><a href='http://mywebsiteadvisor.com/plugins/simple-backup/' target='_blank'>Learn More about Simple Backup Ultra</a></b></p>";
 
 			$plugin_faqs .= "<p><b>FTP Server Settings</b><br>The FTP options are a common point of confusion for many people.  <br>
 The FTP System is Optional and only necessary if you have an FTP server which is seperate from your website.  <br>
@@ -649,7 +649,7 @@ For that reason the plugin creates the backup files in standard, commonly used f
 			
 			
 			$help_sidebar = "<p>Please Visit us online for more Free WordPress Plugins!</p>";
-			$help_sidebar .= "<p><a href='http://mywebsiteadvisor.com/tools/wordpress-plugins/' target='_blank'>MyWebsiteAdvisor.com</a></p>";
+			$help_sidebar .= "<p><a href='http://mywebsiteadvisor.com/plugins/' target='_blank'>MyWebsiteAdvisor.com</a></p>";
 			$help_sidebar .= "<br>";
 			$help_sidebar .= "<p>Install more FREE WordPress Plugins from MyWebsiteAdvisor.com </p>";
 			
@@ -775,7 +775,7 @@ For that reason the plugin creates the backup files in standard, commonly used f
 	
 	private function get_settings_sidebar(){
 	
-		$plugin_resources = "<p><a href='http://mywebsiteadvisor.com/tools/wordpress-plugins/simple-backup/' target='_blank'>Plugin Homepage</a></p>
+		$plugin_resources = "<p><a href='http://mywebsiteadvisor.com/plugins/simple-backup/' target='_blank'>Plugin Homepage</a></p>
 			<p><a href='http://mywebsiteadvisor.com/learning/video-tutorials/simple-backup-tutorial/'  target='_blank'>Plugin Tutorial</a></p>
 			<p><a href='http://mywebsiteadvisor.com/support/'  target='_blank'>Plugin Support</a></p>
 			<p><a href='http://mywebsiteadvisor.com/contact-us/'  target='_blank'>Contact Us</a></p>
@@ -791,10 +791,9 @@ For that reason the plugin creates the backup files in standard, commonly used f
 		}
 			
 		
-		$more_plugins .= "<p><a href='http://mywebsiteadvisor.com/tools/premium-wordpress-plugins/'  target='_blank'>Premium WordPress Plugins!</a></p>
-			<p><a href='http://mywebsiteadvisor.com/products-page/developer-wordpress-plugins/'  target='_blank'>Developer WordPress Plugins!</a></p>
+		$more_plugins .= "<p><a href='http://mywebsiteadvisor.com/plugins/'  target='_blank'>Premium WordPress Plugins!</a></p>
 			<p><a href='http://profiles.wordpress.org/MyWebsiteAdvisor/'  target='_blank'>Free Plugins on Wordpress.org!</a></p>
-			<p><a href='http://mywebsiteadvisor.com/tools/wordpress-plugins/'  target='_blank'>Free Plugins on MyWebsiteAdvisor.com!</a></p>";
+			<p><a href='http://mywebsiteadvisor.com/plugins/'  target='_blank'>Free Plugins on MyWebsiteAdvisor.com!</a></p>";
 				
 		$follow_us = "<p><a href='http://facebook.com/MyWebsiteAdvisor/'  target='_blank'>Follow us on Facebook!</a></p>
 			<p><a href='http://twitter.com/MWebsiteAdvisor/'  target='_blank'>Follow us on Twitter!</a></p>
@@ -802,7 +801,7 @@ For that reason the plugin creates the backup files in standard, commonly used f
 			<p><a href='http://MyWebsiteAdvisor.com/'  target='_blank'>Visit our Website!</a></p>";
 	
 		$upgrade = "<p>
-			<b><a href='http://mywebsiteadvisor.com/products-page/premium-wordpress-plugins/simple-backup-ultra/'  target='_blank'>Upgrade to Simple Backup Ultra!</a></b><br />
+			<b><a href='http://mywebsiteadvisor.com/plugins/simple-backup/'  target='_blank'>Upgrade to Simple Backup Ultra!</a></b><br />
 			<br />
 			<b>Features:</b><br />
 			-Automatic Backup Function<br />
@@ -913,7 +912,7 @@ For that reason the plugin creates the backup files in standard, commonly used f
 		$html .= "<script>
 		
 			function  simple_backup_upgrade(){
-        		window.open('http://mywebsiteadvisor.com/products-page/premium-wordpress-plugins/simple-backup-ultra/');
+        		window.open('http://mywebsiteadvisor.com/plugins/simple-backup/');
         		return false;
 			}
 			
@@ -928,17 +927,17 @@ For that reason the plugin creates the backup files in standard, commonly used f
 			}			
 			
 			function  simple_backup_learn_more(){
-        		window.open('http://mywebsiteadvisor.com/tools/wordpress-plugins/simple-backup/');
+        		window.open('http://mywebsiteadvisor.com/plugins/simple-backup/');
         		return false;
 			}	
 			
 			function  simple_optimizer_learn_more(){
-        		window.open('http://mywebsiteadvisor.com/tools/wordpress-plugins/simple-optimizer/');
+        		window.open('http://mywebsiteadvisor.com/plugins/simple-optimizer/');
         		return false;
 			}				
 
 			function  simple_security_learn_more(){
-        		window.open('http://mywebsiteadvisor.com/tools/wordpress-plugins/simple-security/');
+        		window.open('http://mywebsiteadvisor.com/plugins/simple-security/');
         		return false;
 			}				
 		</script>";
@@ -1055,7 +1054,7 @@ For that reason the plugin creates the backup files in standard, commonly used f
 	 */
 	public function add_plugin_links($links, $file) {
 		if($file == plugin_basename(SB_LOADER)) {
-			$upgrade_url = 'http://mywebsiteadvisor.com/products-page/premium-wordpress-plugins/simple-backup-ultra/';
+			$upgrade_url = 'http://mywebsiteadvisor.com/plugins/simple-backup/';
 			$links[] = '<a href="'.$upgrade_url.'" target="_blank" title="Click Here to Upgrade this Plugin!">Upgrade Plugin</a>';
 			
 			$install_url = admin_url()."plugins.php?page=MyWebsiteAdvisor";
@@ -1084,7 +1083,7 @@ For that reason the plugin creates the backup files in standard, commonly used f
 
 		$string .= "<li><a href='http://facebook.com/MyWebsiteAdvisor' target='_blank' title='Click Here to Follow us on Facebook'>Click Here</a> to Follow MyWebsiteAdvisor on Facebook!</li>";
 		$string .= "<li><a href='http://twitter.com/MWebsiteAdvisor' target='_blank' title='Click Here to Follow us on Twitter'>Click Here</a> to Follow MyWebsiteAdvisor on Twitter!</li>";
-		$string .= "<li><a href='http://mywebsiteadvisor.com/tools/premium-wordpress-plugins/' target='_blank' title='Click Here to Purchase one of our Premium WordPress Plugins'>Click Here</a> to Purchase Premium WordPress Plugins!</li>";
+		$string .= "<li><a href='http://mywebsiteadvisor.com/plugins/' target='_blank' title='Click Here to Purchase one of our Premium WordPress Plugins'>Click Here</a> to Purchase Premium WordPress Plugins!</li>";
 
 
 	

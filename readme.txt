@@ -3,8 +3,8 @@ Name: Simple Backup
 Contributors: MyWebsiteAdvisor, ChrisHurst
 Tags: Backup, Archive, Restore, Recover, Recovery, Optimize, Admin, Administration
 Requires at least: 3.3
-Tested up to: 3.8.1
-Stable tag: 2.7.8
+Tested up to: 4.1
+Stable tag: 2.7.9
 Donate link: http://MyWebsiteAdvisor.com/donations/
 
 
@@ -13,7 +13,7 @@ Simple Tools to Optimize and Backup Your WordPress Website.
 
 == Description ==
 
-Simple Backup Plugin for WordPress create and download backups of your WordPress website.
+Simple Backup Plugin for WordPress can backup and download your WordPress website and MySQL Database.
 Plugin can also optionally perform many common optimizations to wordpress and MySQL Database before backup.
 
 Requires linux style server with tar, gzip, bzip or zip for backup file creation.
@@ -23,7 +23,7 @@ This plugin will create a directory in the root of your WordPress directory call
 If the plugin can not locate or create the directory you will receive an error message and may have to create the directory manually, the directory will also need to be writeable by the web server so you may need to chmod it.
 
 
-<a href="http://mywebsiteadvisor.com/products-page/premium-wordpress-plugins/simple-backup-ultra/">**Upgrade to Simple Backup Ultra**</a> for advanced features including:
+<a href="http://mywebsiteadvisor.com/plugins/simple-backup/">**Upgrade to Simple Backup Ultra**</a> for advanced features including:
 
 * Schedule Automatic WordPress Backups
 * Scheduled Automatic WordPress and Database Optimizations
@@ -43,7 +43,7 @@ Developer Website: http://MyWebsiteAdvisor.com/
 
 Plugin Support: http://MyWebsiteAdvisor.com/support/
 
-Plugin Page: http://MyWebsiteAdvisor.com/tools/wordpress-plugins/simple-backup/
+Plugin Page: http://MyWebsiteAdvisor.com/plugins/simple-backup/
 
 Tutorial: http://mywebsiteadvisor.com/learning/video-tutorials/simple-backup-tutorial/
 
@@ -126,7 +126,7 @@ Restoring WordPress Backups Tutorial: http://mywebsiteadvisor.com/learning/softw
 
 We offer a premium version of the plugin which includes advanced features such as Automatic Scheduled Backups!
 
-<a href="http://mywebsiteadvisor.com/products-page/premium-wordpress-plugins/simple-backup-ultra/">**Upgrade to Simple Backup Ultra**</a> for advanced features including:
+<a href="http://mywebsiteadvisor.com/plugins/simple-backup/">**Upgrade to Simple Backup Ultra**</a> for advanced features including:
 
 * Schedule Automatic WordPress Backups
 * Scheduled Automatic WordPress and Database Optimizations
@@ -147,7 +147,7 @@ Developer Website: http://MyWebsiteAdvisor.com/
 
 Plugin Support: http://MyWebsiteAdvisor.com/support/
 
-Plugin Page: http://MyWebsiteAdvisor.com/tools/wordpress-plugins/simple-backup/
+Plugin Page: http://MyWebsiteAdvisor.com/plugins/simple-backup/
 
 Tutorial: http://mywebsiteadvisor.com/learning/video-tutorials/simple-backup-tutorial/
 
@@ -172,6 +172,10 @@ Restoring WordPress Backups Tutorial: http://mywebsiteadvisor.com/learning/softw
 
 
 == Changelog ==
+
+= 2.7.9 =
+* verified compatibility with WordPress version 4.1
+* updated links in readme and plugin for support, updates, etc
 
 
 
