@@ -404,6 +404,8 @@ class Simple_Backup_FTP_Tools{
 			}else{	
 				//echo "<div class='updated success'><p>&#10004; Logged in to FTP Server as User: {$this->user}</p></div>";
 
+				ftp_pasv($ftp_connection,TRUE);
+				
 				$root_dirs = ftp_nlist($ftp_connection, ".");
 				
 				$dir = trim($this->directory, "/");
@@ -479,6 +481,8 @@ class Simple_Backup_FTP_Tools{
 				echo "<div class='error'><p>&#10008; ERROR: Could not log in to FTP Server as User: {$this->user}</p></div>";
 			}else{	
 				echo "<div class='updated success'><p>&#10004; Logged in to FTP Server as User: {$this->user}</p></div>";
+			
+				ftp_pasv($ftp_connection,TRUE);
 			
 				$root_dirs = ftp_nlist($ftp_connection, ".");
 				

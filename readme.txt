@@ -4,7 +4,7 @@ Contributors: MyWebsiteAdvisor, ChrisHurst
 Tags: Backup, Archive, Restore, Recover, Recovery, Optimize, Admin, Administration
 Requires at least: 3.3
 Tested up to: 4.1
-Stable tag: 2.7.9
+Stable tag: 2.7.10
 Donate link: http://MyWebsiteAdvisor.com/donations/
 
 
@@ -173,22 +173,27 @@ Restoring WordPress Backups Tutorial: http://mywebsiteadvisor.com/learning/softw
 
 == Changelog ==
 
+
+= 2.7.10 =
+* fixed issues with FTP system
+* fixed issue with socket based connections to MySQL Database
+* fixed broken link in plugin admin
+* moved plugin screenshots to /assets SVN directory to reduce plugin download file size
+* added plugin icon 
+
+
 = 2.7.9 =
 * verified compatibility with WordPress version 4.1
 * updated links in readme and plugin for support, updates, etc
-
-
 
 = 2.7.8 =
 * verified compatibility with WordPress version 3.8.1
 * added option to automatically create the .htaccess file to secure the backup directory
 * fixed several small issues causing warnings and notices in debug.log
 
-
 = 2.7.7 =
 * added check for php exec() function around the exec('du') which calculates the size of the WP install
 * updated requirements section in readme to indicate that exec and passthru functions are required for the plugin to work properly.
-
 
 = 2.7.6 =
 * fixed version number
@@ -197,11 +202,9 @@ Restoring WordPress Backups Tutorial: http://mywebsiteadvisor.com/learning/softw
 * improved the backup directory creation and .htaccess creation systems
 * updated the timezone to work with timezone offsets, however named timezones are still preferred because timezone offsets are not as accurate.
 
-
 = 2.7.4 =
 * fixed bug with the MyWebsiteAdvisor Plugin Installer Page.
 * added option to the help menu, 'More Free Plugins' section to enable and disable the 'MyWebsiteAdvisor' Plugins installer menu. 
-
 
 = 2.7.3 = 
 * updated the MyWebsiteAdvisor Plugin Installer Page to include the option to remove the installer page and menu.
@@ -211,12 +214,10 @@ Restoring WordPress Backups Tutorial: http://mywebsiteadvisor.com/learning/softw
 = 2.7.2 =
 * resolved issues with downloading large files
 
-
 = 2.7.1 =
 * resolved more issues with disk_free_space errors on 32 bit servers
 * updated plugin FAQs
 * updated readme file
-
 
 = 2.7.0 =
 * fixed filemtime warning when creating backup

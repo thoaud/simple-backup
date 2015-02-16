@@ -4,7 +4,7 @@
 class Simple_Backup_Plugin{
 
 	//plugin version number
-	private $version = "2.7.9";
+	private $version = "2.7.10";
 	
 	private $debug = false;
 
@@ -1057,7 +1057,7 @@ For that reason the plugin creates the backup files in standard, commonly used f
 			$upgrade_url = 'http://mywebsiteadvisor.com/plugins/simple-backup/';
 			$links[] = '<a href="'.$upgrade_url.'" target="_blank" title="Click Here to Upgrade this Plugin!">Upgrade Plugin</a>';
 			
-			$install_url = admin_url()."plugins.php?page=MyWebsiteAdvisor";
+			$install_url = admin_url()."plugin-install.php?tab=search&type=author&s=MyWebsiteAdvisor";
 			$links[] = '<a href="'.$install_url.'" target="_blank" title="Click Here to Install More Free Plugins!">More Plugins</a>';
 			
 			$tutorial_url = 'http://mywebsiteadvisor.com/learning/video-tutorials/simple-backup-tutorial/';

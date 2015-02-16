@@ -496,7 +496,15 @@ class Simple_Backup_Manager{
 	
 		$bk_dir = ABSPATH."simple-backup";
 		
-		$base_bk_command = "mysqldump --single-transaction -u ".DB_USER." -p'".DB_PASSWORD."' ".DB_NAME." -h ".DB_HOST;
+		$port_or_socket = $this->port_or_socket(DB_HOST);
+		$socket = array_key_exists("socket", $port_or_socket) ? $port_or_socket['socket'] : null;
+		
+		if(null == $socket){
+			$base_bk_command = "mysqldump --single-transaction -u ".DB_USER." -p'".DB_PASSWORD."' ".DB_NAME." -h ".DB_HOST;
+		}else{
+			$base_bk_command = "mysqldump --single-transaction -u ".DB_USER." -p'".DB_PASSWORD."' ".DB_NAME." --protocol=socket -S $socket";		
+		}
+		
 		
 		$db_compression = $this->opt['backup_settings']['db_compression'];
 		
@@ -550,6 +558,44 @@ class Simple_Backup_Manager{
 		flush();
 				
 	}
+	
+	
+	
+	
+	
+	function port_or_socket($host){
+		
+		$return = array();
+		
+		$port_or_socket = strstr( $host, ':' );
+		
+		if ( ! empty( $port_or_socket ) ) {
+			$host = substr( $host, 0, strpos( $host, ':' ) );
+			$return['host'] = $host;
+			
+			$port_or_socket = substr( $port_or_socket, 1 );
+			if ( 0 !== strpos( $port_or_socket, '/' ) ) {
+				$port = intval( $port_or_socket );
+				$return['port'] = $port;
+				
+				$maybe_socket = strstr( $port_or_socket, ':' );
+				if ( ! empty( $maybe_socket ) ) {
+					$socket = substr( $maybe_socket, 1 );
+					$return['socket'] = $socket;
+				}
+			} else {
+				$socket = $port_or_socket;
+				$return['socket'] = $socket;
+			}
+		}
+		
+		return $return;
+		
+	}
+	
+	
+	
+	
 	
 	
 	public function performWebsiteBackup(){
