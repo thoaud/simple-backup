@@ -3,8 +3,8 @@ Name: Simple Backup
 Contributors: MyWebsiteAdvisor, ChrisHurst
 Tags: Backup, Archive, Restore, Recover, Recovery, Optimize, Admin, Administration
 Requires at least: 3.3
-Tested up to: 4.1
-Stable tag: 2.7.10
+Tested up to: 4.2.2
+Stable tag: 2.7.11
 Donate link: http://MyWebsiteAdvisor.com/donations/
 
 
@@ -172,6 +172,11 @@ Restoring WordPress Backups Tutorial: http://mywebsiteadvisor.com/learning/softw
 
 
 == Changelog ==
+
+
+= 2.7.11 =
+* fixed vulnerability with backup file downloads system
+* verified compatibility with WordPress version 4.2.2
 
 
 = 2.7.10 =

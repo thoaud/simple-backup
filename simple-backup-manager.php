@@ -148,9 +148,18 @@ class Simple_Backup_Manager{
 	
 		$bk_dir = ABSPATH."simple-backup";
 		
+		$filename = ltrim($filename, ".\/");
+		
+		
+		
 		//unlink($bk_dir . $filename);
 		$file = "$bk_dir/$filename";
 		//$url = "ftp://{$this->user}:{$this->pass}@{$this->server}/{$this->directory}/$filename";
+		
+		if(!file_exists($file)){
+			die("Access Denied!");
+		}
+			
 		
 		clearstatcache();
 		$size = filesize($file);
@@ -166,6 +175,8 @@ class Simple_Backup_Manager{
 		flush();
 		
 		readfile($file);
+		
+		
 		
 		die();
 	
